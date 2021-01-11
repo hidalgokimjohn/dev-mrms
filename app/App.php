@@ -68,7 +68,7 @@ class App
     public function logout()
     {
         session_destroy();
-        header('location: ../');
+        header('location: /');
     }
 
     public function log($u, $e, $d, $f, $target_id)
