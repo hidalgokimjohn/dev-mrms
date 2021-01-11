@@ -152,7 +152,7 @@ class Dqa
                 m.fk_cycle,
                 lib_cadt.cadt_name,
                 lib_cadt.id,
-                tbl_dqa.id
+                m.id
             FROM
                 tbl_dqa AS m
             INNER JOIN users AS u1 ON (u1.username = m.responsible_person)
