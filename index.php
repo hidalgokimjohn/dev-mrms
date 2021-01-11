@@ -308,7 +308,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                     "targets": 1,
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<div class=" font-bold"><a href="index.php?p=review&dqa_id=' + data[9] + '">ID: '+pad(data[15]) + htmlspecialchars(data[2]) + '</a></div>';
+                        return '<div class=" font-bold"><a href="index.php?p=review&dqa_id=' + data[9] + '">'+ htmlspecialchars(data[2]) + '</a></div>';
                     },
                 },
                 {
