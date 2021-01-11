@@ -35,6 +35,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/app/Ceac.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
