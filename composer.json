@@ -1,0 +1,7 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.2",
+      "ext-mysqli": "*",
+        "stevenmaguire/oauth2-keycloak": "^2.2"
+    }
+}

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/app/Ceac.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/vendor/league/oauth2-client" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/vendor/stevenmaguire/oauth2-keycloak" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/vendor/firebase/php-jwt" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="1mmEi8QitorzprldDDVDx8KnYtM" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/ajax" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mrms\resources\ajax" />
+      <recent name="C:\xampp\htdocs\mrms\resources\views" />
+      <recent name="C:\xampp\htdocs\mrms\app" />
+      <recent name="C:\xampp\htdocs\mrms\resources" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="" />
+      <created>1610090490860</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1610090490860</updated>
+      <workItem from="1610090492011" duration="1902000" />
+      <workItem from="1610092439158" duration="885000" />
+      <workItem from="1610093358112" duration="51216000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="644" y="82" key="#Inspections" timestamp="1610093272000">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="644" y="82" key="#Inspections/0.0.1536.834@0.0.1536.834" timestamp="1610093272000" />
+    <state x="361" y="75" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610092193484">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="361" y="75" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1610092193484" />
+    <state x="522" y="260" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1610092774513">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="522" y="260" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.834@0.0.1536.834" timestamp="1610092774513" />
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610093303469">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610093303469" />
+    <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1025" height="208" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
+    <state width="1025" height="208" key="GridCell.Tab.0.center" timestamp="1610092377627">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1025" height="208" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
+    <state width="1025" height="208" key="GridCell.Tab.0.left" timestamp="1610092377627">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1025" height="208" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
+    <state width="1025" height="208" key="GridCell.Tab.0.right" timestamp="1610092377627">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1025" height="208" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
+    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610203030143">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610203030143" />
+    <state x="277" y="62" key="SettingsEditor" timestamp="1610093133613">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="277" y="62" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1610093133613" />
+    <state width="600" height="440" key="javadoc.popup" timestamp="1610196640176">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="600" height="440" key="javadoc.popup/0.0.1536.834@0.0.1536.834" timestamp="1610196640176" />
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610205612445">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610205612445" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/App.php</url>
+          <line>64</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
