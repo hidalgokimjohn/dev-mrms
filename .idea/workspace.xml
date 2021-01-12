@@ -19,7 +19,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="">
+    <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/login/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index2.php" afterDir="false" />
     </list>
@@ -118,7 +118,7 @@
       <workItem from="1610354402012" duration="745000" />
       <workItem from="1610368332972" duration="12679000" />
       <workItem from="1610426162606" duration="9033000" />
-      <workItem from="1610443841372" duration="2220000" />
+      <workItem from="1610443841372" duration="2326000" />
     </task>
     <servers />
   </component>
@@ -159,6 +159,10 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="isso" />
+    <option name="LAST_COMMIT_MESSAGE" value="isso" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="644" y="82" key="#Inspections" timestamp="1610093272000">
       <screen x="0" y="0" width="1536" height="834" />
@@ -172,10 +176,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="522" y="260" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.834@0.0.1536.834" timestamp="1610092774513" />
-    <state x="384" y="0" key="CommitChangelistDialog2" timestamp="1610338548087">
+    <state x="384" y="0" key="CommitChangelistDialog2" timestamp="1610446095055">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610338548087" />
+    <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610446095055" />
     <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610353485093">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
