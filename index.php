@@ -123,6 +123,8 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                                 class="align-middle">NCDDP</span>
                     </a>
                     <ul id="ncddp" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
+                        <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
+                        </li>
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Municipality</a>
                         </li>
                     </ul>
@@ -133,6 +135,8 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                                 class="align-middle">IPCDD</span>
                     </a>
                     <ul id="ipcdd" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
+                        <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
+                        </li>
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">CADT</a></li>
                     </ul>
                 </li>
@@ -218,7 +222,8 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                         <?php
                         ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/mov_uploading.php') : '';
                         ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/mov_uploading_2021.php') : '';
-                        ($_GET['m'] == 'dqa') ? include('resources/views/dataQualityAssessment.php') : '';
+                        ($_GET['m'] == 'dqa') ? include('resources/views/tblDqa.php') : '';
+                        ($_GET['m'] == 'view_dqa') ? include('resources/views/viewDqaItems.php') : '';
                         ?>
                     </div>
                 </div>
@@ -258,101 +263,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
 <script src="resources/js/datatables.js"></script>
-
 <!--Initialization-->
-<script>
-    // DataTables with Column Search by Text Inputs
-    document.addEventListener("DOMContentLoaded", function () {
-        // Setup - add a text input to each footer cell
-        $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
-        $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
-            if (i !== 0) {
-            var title = $(this).text();
-            $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
-            $('input', this).on('keyup change', function (e) {
-                if (tbl_dqa.column(i).search() !== this.value) {
-                    tbl_dqa.column(i).search(this.value).draw();
-                }
-            });
-            }
-        });
-        var tbl_dqa = $('#tbl_dqa').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-            order: [[ 5, "desc" ]],
-            columnDefs: [
-                {orderable: false, targets: 0}
-            ],
-            ajax: {
-                url: "resources/ajax/tbl_dqaConducted.php",
-                type: "POST",
-                dataType: 'json',
-                error: function () {
-                    $("post_list_processing").css("display", "none");
-                }
-            },
-            language: {
-                "emptyTable": "<b>This looks empty, to put some records click the blue button plus in the top left corner.</b>"
-            },
-            columnDefs: [{
-                "targets": 0,
-                "data": null,
-                "render": function (data, type, row) {
-                    return '<button class="btn btn-danger btn-sm"> Delete</button> <span><button class="btn btn-primary btn-sm"> Edit</button></span>';
-/*
-                    return '<a href="#"><button class="btn btn-primary btn-sm"><span class="far fa-trash-alt"></span></button></a> <button class="btn btn-primary btn-sm"><a href="#modal-edit-dqa-ui" data-toggle="modal" data-dqaguid="' + data[11] + '"> <i class="far fa-edit"></i></a></button></div>';
-*/
-                },
-            },
-                {
-                    "targets": 1,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class=" font-bold"><a href="index.php?p=review&dqa_id=' + data[9] + '">ID: #'+ pad(data[14],4) +' '+ htmlspecialchars(data[2]) + '</a></div>';
-                    },
-                },
-                {
-                    "targets": 2,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        if (data[1] === null) {
-                            return '<div class="text-uppercase">' + data[14] + '</div>';
-                        } else {
-                            return '<div class="text-uppercase">' + data[1] + '</div>';
-                        }
-                    },
-                },
-                {
-                    "targets": 3,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[3] + '</div>';
-                    },
-                },
-                {
-                    "targets": 4,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[4] + '</div>';
-                    },
-                }, {
-                    "targets": 5,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[0] + '</div>';
-                    },
-                }
-            ],
-        });
-    });
-    function htmlspecialchars(string) {
-        return $('<span>').text(string).html()
-    }
-    function pad (str, max) {
-        str = str.toString();
-        return str.length < max ? pad("0" + str, max) : str;
-    }
-
-</script>
+<script src="resources/js/dqa.js"></script>
 </body>
 </html>
