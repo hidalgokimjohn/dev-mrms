@@ -265,5 +265,10 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
 <script src="resources/js/datatables.js"></script>
 <!--Initialization-->
 <script src="resources/js/dqa.js"></script>
+<script>
+    new Choices(document.querySelector(".choices-single"));
+    new Choices(document.querySelector(".choicesCycle"));
+    new Choices(document.querySelector(".choicesAc"));
+</script>
 </body>
 </html>

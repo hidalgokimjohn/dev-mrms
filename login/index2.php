@@ -4,9 +4,9 @@
 	include_once('../app/Auth.php');
 	include_once('../app/User.php');
 	$auth = new app\Auth();
-	if ($auth->loggedIn()) {
+	/*if ($auth->loggedIn()) {
         $auth->redirectTo('../index.php');
-	}
+	}*/
 	$app = new \app\App();
 	$user = new \app\User();
 	$auth->maintenance();
@@ -17,9 +17,9 @@
     $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
         'authServerUrl'         => 'http://auth.caraga.dswd.gov.ph:8080/auth',
         'realm'                 => 'entdswd.local',
-        'clientId'              => 'focrg-apps',
-        'clientSecret'          => '2921c9a5-8331-4da6-811d-0728055315b8',
-        'redirectUri'           => 'http://apps2.caraga.dswd.gov.ph/kc-movs/v2/login',
+        'clientId'              => 'kalahi-apps',
+        'clientSecret'          => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
+        'redirectUri'           => 'http://crg-kcapps-svr/mrms/login',
         'encryptionAlgorithm'   => 'RS256', // optional
     ]);
 
