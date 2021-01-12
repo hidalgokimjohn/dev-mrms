@@ -4,7 +4,8 @@
     </div>
     <div class="card-body">
         <a href="index.php?p=modules&m=dqa" class="btn btn-primary mt-n1"><i class="fas fa-arrow-left"></i> Back</a>
-        <div class="table-responsive">
+            <a href="index.php?p=modules&m=dqa" class="btn btn-primary mt-n1"><i class="fas fa-plus"></i> Add files</a>
+            <div class="table-responsive">
             <br/>
             <table id="tbl_viewDqaItems" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
                 <thead>
