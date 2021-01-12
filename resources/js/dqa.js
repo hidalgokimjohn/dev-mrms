@@ -178,6 +178,11 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         ],
     });
+
+    //Save DQA
+    $(document).on("click", 'btn_saveDqa', function (e) {
+        alert('s');
+    });
 });
 
 
