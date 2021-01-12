@@ -1,15 +1,16 @@
 <?php
+session_start();
 	include_once('../app/Database.php');
 	include_once('../app/App.php');
 	include_once('../app/Auth.php');
 	include_once('../app/User.php');
-	$auth = new app\Auth();
-	/*if ($auth->loggedIn()) {
+	/*$auth = new app\Auth();
+	if ($auth->loggedIn()) {
         $auth->redirectTo('../index.php');
 	}*/
 	$app = new \app\App();
 	$user = new \app\User();
-	$auth->maintenance();
+	//$auth->maintenance();
 
 //	require_once ('../../vendor/stevenmaguire/oauth2-keycloak/src/Provider/Keycloak.php');
     require '../vendor/autoload.php';
@@ -19,7 +20,7 @@
         'realm'                 => 'entdswd.local',
         'clientId'              => 'kalahi-apps',
         'clientSecret'          => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-        'redirectUri'           => 'http://crg-kcapps-svr/mrms/login',
+        'redirectUri'           => 'http://crg-kcapps-svr/dev-mrms/login/index2.php',
         'encryptionAlgorithm'   => 'RS256', // optional
     ]);
 
