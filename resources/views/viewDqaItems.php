@@ -12,9 +12,9 @@
                     <th style="width: 400px;">Filename</th>
                     <th style="width: 500px;">Form</th>
                     <th style="width: 200px;">Date Added</th>
-                    <th>Uploader</th>
-                    <th class="">Reviewer</th>
-                    <th class="">Status</th>
+                    <th style="width: 100px;">Uploader</th>
+                    <th style="width: 100px;">Reviewer</th>
+                    <th style="width: 100px;">Status</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
