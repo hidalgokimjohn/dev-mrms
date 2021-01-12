@@ -185,35 +185,15 @@ class Upload
         }
     }
 
-    public function dqa_items()
+    public function viewDqaItems()
     {
         $mysql = $this->connectDatabase();
-        $dqa_id = $mysql->real_escape_string($_GET['dqa_id']);
-        $params = $_REQUEST;
-        $columns = array(0 => 'tbl_dqa_list.created_at', 1 => 'form_uploaded.original_filename', 2 => 'personal_info.first_name', 3 => 'form_uploaded.with_findings', 4 => 'form_uploaded.reviewed_by', 5 => 'tbl_dqa.deadline_for_compliance', 6 => 'days_overdue');
-        $where_con = $sqlTot = $sqlRec = "";
-
-        if (!empty($params['search']['value'])) {
-            $where_con .= " AND (tbl_dqa_list.created_at LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR form_uploaded.original_filename LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR form_uploaded.is_reviewed LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR form_uploaded.with_findings LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR form_uploaded.is_findings_complied LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR lib_form.form_name LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR lib_barangay.brgy_name LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR form_uploaded.file_id LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR personal_info.last_name LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR lib_municipality.mun_name LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR lib_cadt.cadt_name LIKE '%" . $params['search']['value'] . "%'";
-            $where_con .= " OR personal_info.first_name LIKE '%" . $params['search']['value'] . "%') GROUP BY form_uploaded.file_id ";
-        } else {
-            $where_con .= " GROUP BY form_uploaded.file_id ";
-        }
+        $dqaId = $_GET['dqaId'];
         $q = "SELECT
                 lib_municipality.mun_name,
                 lib_barangay.brgy_name,
                 CONCAT(lib_form.form_name,IF (lib_barangay.brgy_name IS NOT NULL,', ',''),COALESCE (lib_barangay.brgy_name, '')) AS forms,
-                form_uploaded.original_filename,
+                form_uploaded.original_filename,    
                 CONCAT(personal_info.first_name,' ',personal_info.last_name) AS fullname,
                 personal_info.first_name,
                 personal_info.last_name,
@@ -238,28 +218,12 @@ class Upload
             LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
             LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
             where
-             tbl_dqa.dqa_guid='$dqa_id' AND tbl_dqa_list.is_delete='0' AND form_uploaded.is_deleted='0'";
-        $sqlTot .= $q;
-        $sqlRec .= $q;
-
-        if (isset($where_con) && $where_con != '') {
-            $sqlTot .= $where_con;
-            $sqlRec .= $where_con;
-
+             tbl_dqa.dqa_guid='$dqaId' AND tbl_dqa_list.is_delete='0' AND form_uploaded.is_deleted='0'";
+        $result = $mysql->query($q) or die($mysql->error);
+        while ($row = $result->fetch_row()) {
+            $data[] = $row;
         }
-
-        $sqlRec .= " ORDER BY " . $columns[$params['order'][0]['column']] . ' ' . $params['order'][0]['dir'] . " LIMIT " . $params['start'] . ", " . $params['length'] . " ";
-        $query_tot = $mysql->query($sqlTot) or die($mysql->error);
-        $total_records = $query_tot->num_rows;
-        $query_records = $mysql->query($sqlRec) or die($mysql->error);
-        if ($query_records->num_rows > 0) {
-            while ($row = $query_records->fetch_row()) {
-                $data[] = $row;
-            }
-        } else {
-            $data = '';
-        }
-        $json_data = array("draw" => intval($params['draw']), "recordsTotal" => intval($total_records), "recordsFiltered" => intval($total_records), "data" => $data);
+        $json_data = array("data" => $data);
         echo json_encode($json_data);
     }
 

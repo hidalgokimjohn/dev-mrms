@@ -17,10 +17,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/ajax/dqaItems.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Auth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dataQualityAssessment.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +50,8 @@
     <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/js/dqa.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Upload.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -110,7 +116,10 @@
       <workItem from="1610093358112" duration="51216000" />
       <workItem from="1610337716399" duration="820000" />
       <workItem from="1610338649277" duration="3252000" />
-      <workItem from="1610346492879" duration="565000" />
+      <workItem from="1610346492879" duration="1980000" />
+      <workItem from="1610354402012" duration="745000" />
+      <workItem from="1610368332972" duration="12679000" />
+      <workItem from="1610426162606" duration="267000" />
     </task>
     <servers />
   </component>
@@ -168,10 +177,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610338548087" />
-    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610338771939">
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610353485093">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610338771939" />
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610353485093" />
     <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -200,10 +209,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.1536.834@0.0.1536.834" timestamp="1610196640176" />
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610340976794">
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610407717878">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610340976794" />
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610407717878" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
