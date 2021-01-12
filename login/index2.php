@@ -20,7 +20,7 @@ session_start();
         'realm'                 => 'entdswd.local',
         'clientId'              => 'kalahi-apps',
         'clientSecret'          => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-        'redirectUri'           => 'http://crg-kcapps-svr/dev-mrms/login/index2.php',
+        'redirectUri'           => 'http://crg-kcapps-svr/dev-mrms/login/',
         'encryptionAlgorithm'   => 'RS256', // optional
     ]);
 
