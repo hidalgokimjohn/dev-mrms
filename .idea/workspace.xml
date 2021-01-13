@@ -20,8 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
+      <change afterPath="$PROJECT_DIR$/resources/ajax/editDqaTitle.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/jquery-3.5.1.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Dqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Dqa.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/login/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/saveDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/saveDqa.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/tblDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,8 +56,10 @@
     <setting file="file://$PROJECT_DIR$/app/Ceac.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/User.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/js/dqa.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/ajax/saveDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Upload.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
@@ -118,7 +129,7 @@
       <workItem from="1610354402012" duration="745000" />
       <workItem from="1610368332972" duration="12679000" />
       <workItem from="1610426162606" duration="9033000" />
-      <workItem from="1610443841372" duration="2326000" />
+      <workItem from="1610443841372" duration="27499000" />
     </task>
     <servers />
   </component>
@@ -180,10 +191,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610446095055" />
-    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610353485093">
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610459996547">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610353485093" />
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610459996547" />
     <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -212,10 +223,14 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.1536.834@0.0.1536.834" timestamp="1610196640176" />
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610444269599">
+    <state x="425" y="189" key="run.anything.popup" timestamp="1610525858203">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610444269599" />
+    <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610529062012">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610529062012" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -224,6 +239,12 @@
           <url>file://$PROJECT_DIR$/app/App.php</url>
           <line>64</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/resources/js/dqa.js</url>
+          <line>40</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

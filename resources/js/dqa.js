@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var tbl_dqa = $('#tbl_dqa').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-        order: [[5, "desc"]],
+        order: [[1, "desc"]],
         columnDefs: [
             {orderable: false, targets: 0}
         ],
@@ -38,17 +38,14 @@ document.addEventListener("DOMContentLoaded", function () {
             "targets": 0,
             "data": null,
             "render": function (data, type, row) {
-                return '<button class="btn btn-danger btn-sm"> Delete</button> <span><button class="btn btn-primary btn-sm"> Edit</button></span>';
-                /*
-                                    return '<a href="#"><button class="btn btn-primary btn-sm"><span class="far fa-trash-alt"></span></button></a> <button class="btn btn-primary btn-sm"><a href="#modal-edit-dqa-ui" data-toggle="modal" data-dqaguid="' + data[11] + '"> <i class="far fa-edit"></i></a></button></div>';
-                */
+                return '<button class="btn btn-danger btn-sm"> Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="'+data[2]+'"> Edit</button></span>';
             },
         },
             {
                 "targets": 1,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class=" font-bold"><a href="index.php?p=modules&m=view_dqa&dqaid=' + data[9] + '">ID: #' + pad(data[14], 4) + ' ' + htmlspecialchars(data[2]) + '</a></div>';
+                    return '<div class=" font-bold"><a href="index.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>ID: #' + pad(data[14], 4) + '</strong> ' + htmlspecialchars(data[2]) + '</a></div>';
                 },
             },
             {
@@ -178,13 +175,78 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         ],
     });
-
     //Save DQA
-    $(document).on("click", 'btn_saveDqa', function (e) {
-        alert('s');
-    });
-});
+    $("form#formCreateDqa").submit(function (event) {
+        event.preventDefault();
+        var btn = this;
+        $('#btn_saveDqa').prop('disabled', true);
+        $('.text_saveDqa').text(' Saving...');
+        var formData = new FormData($(this)[0]);
+        $.ajax({
+            url: 'resources/ajax/saveDqa.php',
+            type: 'POST',
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                if(returndata=='created'){
+                    notyf.success({
+                        message: '<strong>DQA </strong>successfully created',
+                        duration: 10000,
+                        ripple: true,
+                        dismissible: true
+                    });
+                    tbl_dqa.ajax.reload();
 
+                }else{
+                    notyf.error({
+                        message: 'Something went wrong. Please try again',
+                        duration: 10000,
+                        ripple: true,
+                        dismissible: true
+                    });
+                }
+                $('#btn_saveDqa').prop('disabled', false);
+                $('.text_saveDqa').text(' Save');
+            }
+        });
+    });
+    //EditShowModal
+    var editDqaTitle = document.getElementById('editDqaTitle');
+    if(editDqaTitle){
+        editDqaTitle.addEventListener('shown.bs.modal', function (e) {
+            var dqaId = $(e.relatedTarget).data('dqaguid');
+            var dqaTitle =$(e.relatedTarget).data('dqatitle');
+            var newDdaTitle = $('.dqaTitle').val();
+            $('.dqaTitle').val(dqaTitle);
+            if (dqaId !== '') {
+                $.ajax({
+                    type: "post",
+                    url: "resources/ajax/editDqaTitle.php",
+                    data: {
+                        "dqaId": dqaId,
+                        "dqaTitle":newDdaTitle
+                    },
+                    success: function (data) {
+
+                    }
+                });
+            }
+        });
+        editDqaTitle.addEventListener('hidden.bs.modal',function (e){
+            $('#editDqaTitle form')[0].reset();
+        });
+    }
+    var createDqa = document.getElementById('formCreateDqa');
+    if(createDqa){
+        createDqa.addEventListener('hidden.bs.modal',function (e){
+            $('#formCreateDqa form')[0].reset();
+        });
+    }
+
+});
 
 function htmlspecialchars(string) {
     return $('<span>').text(string).html()

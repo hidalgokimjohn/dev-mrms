@@ -207,7 +207,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                             <a class="dropdown-item" href="#"><i class="align-middle mr-1"
                                                                  data-feather="help-circle"></i> Help Center</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Log out</a>
+                            <a class="dropdown-item" href="login/logout.php">Log out</a>
                         </div>
                     </li>
                 </ul>
@@ -259,16 +259,22 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
         </footer>
     </div>
 </div>
-
+<script src="resources/js/jquery-3.5.1.min.js"></script>
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script src="resources/js/datatables.js"></script>
 <!--Initialization-->
+
 <script src="resources/js/dqa.js"></script>
 <script>
-    new Choices(document.querySelector(".choices-single"));
-    new Choices(document.querySelector(".choicesCycle"));
-    new Choices(document.querySelector(".choicesAc"));
+    var m = url.searchParams.get("m");
+    if(m=='dqa'){
+        new Choices(document.querySelector(".choices-single"));
+        new Choices(document.querySelector(".choicesCycle"));
+        new Choices(document.querySelector(".choicesAc"));
+        new Choices(document.querySelector(".editChoicesAc"));
+    }
 </script>
 </body>
 </html>

@@ -1,13 +1,12 @@
 <?php
-session_start();
 	include_once('../app/Database.php');
 	include_once('../app/App.php');
 	include_once('../app/Auth.php');
 	include_once('../app/User.php');
 	$auth = new app\Auth();
-	if ($auth->loggedIn()) {
+	/*if ($auth->loggedIn()) {
         $auth->redirectTo('../index.php');
-	}
+	}*/
 	$app = new \app\App();
 	$user = new \app\User();
 	//$auth->maintenance();
@@ -20,8 +19,7 @@ session_start();
         'realm'                 => 'entdswd.local',
         'clientId'              => 'kalahi-apps',
         'clientSecret'          => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-        'redirectUri'           => 'http://crg-kcapps-svr/dev-mrms/login/',
-        'encryptionAlgorithm'   => 'RS256', // optional
+        'redirectUri'           => 'http://crg-kcapps-svr/dev-mrms/login/index2.php'
     ]);
 
 if (!isset($_GET['code'])) {
@@ -56,7 +54,7 @@ if (!isset($_GET['code'])) {
         $user_sso = $provider->getResourceOwner($token);
 
         if($user->sso_isExist($user_sso)){
-            header("location: ../Nccdp/dashboard.php");
+            $auth->redirectTo('../index.php');
         }else{
             $user->register_sso($user_sso);
         }
