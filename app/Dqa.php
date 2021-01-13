@@ -24,18 +24,17 @@ class Dqa
 
     public function create_dqa()
     {
-
         $mysql = $this->connectDatabase();
         $ceac = new Ceac();
         $dqa_gui = $ceac->v4();
-        $post_d_conducted = $_POST['date_conducted'];
+        /*$post_d_conducted = $_POST['date_conducted'];
         $post_doc = $_POST['date_of_compliance'];
         $date_conducted = new \DateTime($post_d_conducted);
-        $date_of_comp = new \DateTime($post_doc);
-        $d1 = $date_conducted->format('Y-m-d');
-        $d2 = $date_of_comp->format('Y-m-d');
+        $date_of_comp = new \DateTime($post_doc);*/
+        //$d1 = $date_conducted->format('Y-m-d');
+        //$d2 = $date_of_comp->format('Y-m-d');
 
-        if (strlen($_POST['city']) == 9) {
+        if (strlen($_POST['municipality']) == 9) {
             $q = $mysql->prepare("INSERT INTO `tbl_dqa` (`dqa_guid`, `fk_psgc_mun`, `fk_cycle`, `title`, `responsible_person`, `conducted_by`, `created_at`,`dqa_status`)
 			VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
         } else {
@@ -43,7 +42,7 @@ class Dqa
 			VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
         }
 
-        $q->bind_param('siisss', $dqa_gui, $_POST['city'], $_POST['cycle'], $_POST['dqa_title'], $_POST['staff'], $_SESSION['username']);
+        $q->bind_param('siisss', $dqa_gui, $_POST['municipality'], $_POST['cycle'], $_POST['dqaTitle'], $_POST['staff'], $_SESSION['username']);
         $q->execute();
         if ($q->affected_rows > 0) {
             return true;

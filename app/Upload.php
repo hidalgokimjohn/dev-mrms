@@ -192,7 +192,7 @@ class Upload
         $q = "SELECT
                 lib_municipality.mun_name,
                 lib_barangay.brgy_name,
-                CONCAT(lib_form.form_name,IF (lib_barangay.brgy_name IS NOT NULL,', ',''),COALESCE (lib_barangay.brgy_name, '')) AS forms,
+                CONCAT(lib_form.form_name,IF (lib_barangay.brgy_name IS NOT NULL,', ',''),COALESCE (lib_barangay.brgy_name,'')) AS forms,
                 form_uploaded.original_filename,    
                 CONCAT(personal_info.first_name,' ',personal_info.last_name) AS fullname,
                 personal_info.first_name,
