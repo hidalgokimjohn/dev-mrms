@@ -5,9 +5,9 @@ include_once('../app/Auth.php');
 include_once('../app/User.php');
 
 $auth = new app\Auth();
-if ($auth->loggedIn()) {
+/*if ($auth->loggedIn()) {
     $auth->redirectTo('../index.php');
-}
+}*/
 $app = new \app\App();
 $user = new \app\User();
 $auth->maintenance();
