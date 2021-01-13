@@ -84,18 +84,18 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2021">2021
                                         <span
-                                                class="sidebar-badge badge bg-secondary">NYS</span></a>
+                                            class="sidebar-badge badge bg-secondary">NYS</span></a>
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2020">2020
                                         <span
-                                                class="sidebar-badge badge bg-success">On-Going</span></a>
+                                            class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_reviewed', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
+                                class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('exec_db', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
+                                class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -107,10 +107,10 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
                         <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
+                                class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
+                                class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
                         </li>
                     </ul>
                 </li>
@@ -120,7 +120,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                 <li class="sidebar-item">
                     <a data-target="#ncddp" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                                class="align-middle">NCDDP</span>
+                            class="align-middle">NCDDP</span>
                     </a>
                     <ul id="ncddp" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -132,7 +132,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                 <li class="sidebar-item">
                     <a data-target="#ipcdd" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                                class="align-middle">IPCDD</span>
+                            class="align-middle">IPCDD</span>
                     </a>
                     <ul id="ipcdd" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -192,7 +192,7 @@ if ($_SESSION['pic_url'] == 'default.jpg' && $_GET['p'] !== 'account') {
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
                             <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
-                                    class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
+                                class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
