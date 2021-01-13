@@ -20,8 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
+      <change afterPath="$PROJECT_DIR$/authenticate/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Auth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/index2.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/register.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +55,7 @@
     <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/User.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/authenticate/index.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/js/dqa.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/ajax/saveDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Upload.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
@@ -81,7 +88,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/login" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../dev.mrms" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -121,7 +128,8 @@
       <workItem from="1610354402012" duration="745000" />
       <workItem from="1610368332972" duration="12679000" />
       <workItem from="1610426162606" duration="9033000" />
-      <workItem from="1610443841372" duration="31906000" />
+      <workItem from="1610443841372" duration="32038000" />
+      <workItem from="1610535303233" duration="7444000" />
     </task>
     <servers />
   </component>
@@ -183,10 +191,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610446095055" />
-    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610459996547">
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610538144072">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610459996547" />
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610538144072" />
     <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -203,10 +211,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="1025" height="208" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610203030143">
+    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610541324284">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610203030143" />
+    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610541324284" />
     <state x="277" y="62" key="SettingsEditor" timestamp="1610338784595">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -219,10 +227,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610529062012">
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1610537866223">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610529062012" />
+    <state x="431" y="155" width="672" height="678" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610537866223" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -235,7 +243,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/resources/js/dqa.js</url>
           <line>40</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
