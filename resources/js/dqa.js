@@ -38,18 +38,24 @@ document.addEventListener("DOMContentLoaded", function () {
             "targets": 0,
             "data": null,
             "render": function (data, type, row) {
-                return '<button class="btn btn-danger btn-sm"> Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="'+data[2]+'"> Edit</button></span>';
+                return '<button class="btn btn-danger btn-sm">Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="'+data[2]+'">Edit</button></span>';
+            },
+        },{
+            "targets": 1,
+            "data": null,
+            "render": function (data, type, row) {
+                return '#' + pad(data[14], 4);
             },
         },
             {
-                "targets": 1,
+                "targets": 2,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class=" font-bold"><a href="index.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>ID: #' + pad(data[14], 4) + '</strong> ' + htmlspecialchars(data[2]) + '</a></div>';
+                    return '<div class=" font-bold"><a href="index.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>'+ htmlspecialchars(data[2]) + '</strong></a></div>';
                 },
             },
             {
-                "targets": 2,
+                "targets": 3,
                 "data": null,
                 "render": function (data, type, row) {
                     if (data[1] === null) {
@@ -60,20 +66,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             },
             {
-                "targets": 3,
+                "targets": 4,
                 "data": null,
                 "render": function (data, type, row) {
                     return '<div class="text-capitalize">' + data[3] + '</div>';
                 },
             },
             {
-                "targets": 4,
+                "targets": 5,
                 "data": null,
                 "render": function (data, type, row) {
                     return '<div class="text-capitalize">' + data[4] + '</div>';
                 },
             }, {
-                "targets": 5,
+                "targets": 6,
                 "data": null,
                 "render": function (data, type, row) {
                     return '<div class="text-capitalize">' + data[0] + '</div>';

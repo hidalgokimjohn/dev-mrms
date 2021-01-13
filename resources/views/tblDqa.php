@@ -13,6 +13,7 @@
                 <tr class="border-bottom-0">
 
                     <th style="width: 90px;"></th>
+                    <th style="width: 50px;">DQA #</th>
                     <th style="width: 230px;">Title</th>
                     <th>City</th>
                     <th title="Responsible Person">Responsible Person</th>
