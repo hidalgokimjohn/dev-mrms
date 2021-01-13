@@ -66,7 +66,8 @@ if (!isset($_GET['code'])) {
         $user_sso = $provider->getResourceOwner($token);
 
         if($user->sso_isExist($user_sso)){
-            $auth->redirectTo('index.php');
+            echo 'ok';
+            //$auth->redirectTo('index.php');
         }else{
             $user->register_sso($user_sso);
         }
