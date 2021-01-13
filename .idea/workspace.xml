@@ -20,17 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
-      <change afterPath="$PROJECT_DIR$/resources/ajax/editDqaTitle.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/jquery-3.5.1.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Dqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Dqa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/login/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/ajax/saveDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/saveDqa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/tblDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +84,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/ajax" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/login" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -103,6 +97,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mrms\login" />
       <recent name="C:\xampp\htdocs\mrms\resources\ajax" />
       <recent name="C:\xampp\htdocs\mrms\resources\views" />
       <recent name="C:\xampp\htdocs\mrms\app" />
@@ -129,7 +124,7 @@
       <workItem from="1610354402012" duration="745000" />
       <workItem from="1610368332972" duration="12679000" />
       <workItem from="1610426162606" duration="9033000" />
-      <workItem from="1610443841372" duration="27499000" />
+      <workItem from="1610443841372" duration="28913000" />
     </task>
     <servers />
   </component>

@@ -585,11 +585,15 @@ class User
     public function register_sso($user_sso){
         $mysql = $this->connectDatabase();
         $oauth = $user->getId();
-        $username = $user->getUname();
-        $lname = $user->getLname();
-        $fname = $user->getFname();
+        //$username = $user->getUname();
+        $username='';
+        $lname='';
+        $fname='';
+        //$lname = $user->getLname();
+        //$fname = $user->getFname();
         $name = $user->getName();
         $email = $user->getEmail();
+
 
         $user = $username;
         $pass = "default";
