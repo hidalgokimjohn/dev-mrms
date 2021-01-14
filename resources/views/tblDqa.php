@@ -3,9 +3,12 @@
         <h5 class="card-title mb-0">Data Quality Assessment</h5>
     </div>
     <div class="card-body">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateDqa">
-            <span class="fa fa-plus"></span> Created DQA
-        </button>
+        <a href="#modalCreateDqa" data-toggle="modal">
+            <button type="button" class="btn btn-primary">
+                <span class="fa fa-plus"></span> Created DQA
+            </button>
+        </a>
+
         <div class="table-responsive">
             <br/>
             <table id="tbl_dqa" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
@@ -13,7 +16,7 @@
                 <tr class="border-bottom-0">
 
                     <th style="width: 90px;"></th>
-                    <th style="width: 50px;">DQA #</th>
+                    <th style="width: 80px;">DQA #</th>
                     <th style="width: 230px;">Title</th>
                     <th>City</th>
                     <th title="Responsible Person">Responsible Person</th>
@@ -36,7 +39,7 @@
                 </div>
                 <div class="modal-body m-3">
                     <label for="choicesMun" class="form-label">Municipality</label>
-                        <select id="choicesMun" class="form-control choices-single" name="municipality" required>
+                    <select id="choicesMun" class="form-control choices-single" name="municipality" required>
                         <option value="">Select Municipality</option>
                         <?php
                         $cities = $city->implementingCity();
@@ -77,10 +80,10 @@
                     <input type="text" class="form-control" placeholder="Enter your title" name="dqaTitle" required>
                 </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="btn_saveDqa"> <span class="fa fa-save"></span> <span class="text_saveDqa">Save</span></button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn_saveDqa"> <span class="fa fa-save"></span> <span class="text_saveDqa">Save</span></button>
+                </div>
             </form>
         </div>
     </div>
@@ -108,12 +111,11 @@
                     <input type="text" class="form-control dqaTitle" placeholder="Enter your title" name="dqaTitle" required>
                 </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="btn_editDqaTitle"> <span class="fa fa-save"></span> <span class="text_editDqaTitle">Save changes</span></button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btn_editDqaTitle"> <span class="fa fa-save"></span> <span class="text_editDqaTitle">Save changes</span></button>
+                </div>
             </form>
         </div>
     </div>
 </div>
-

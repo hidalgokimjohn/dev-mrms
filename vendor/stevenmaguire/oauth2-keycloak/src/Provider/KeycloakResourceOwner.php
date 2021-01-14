@@ -30,7 +30,7 @@ class KeycloakResourceOwner implements ResourceOwnerInterface
      */
     public function getId()
     {
-        return $this->response['sub'] ?: null;
+        return $this->response['employeeID'] ?: null;
     }
 
     /**
@@ -52,6 +52,22 @@ class KeycloakResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['name'] ?: null;
     }
+
+    public function getLname()
+    {
+        return $this->response['family_name'] ?: null;
+    }
+
+    public function getFname()
+    {
+        return $this->response['given_name'] ?: null;
+    }
+
+    public function getUname()
+    {
+        return $this->response['sAMAccountName'] ?: null;
+    }
+
 
     /**
      * Return all of the owner details available as an array.
