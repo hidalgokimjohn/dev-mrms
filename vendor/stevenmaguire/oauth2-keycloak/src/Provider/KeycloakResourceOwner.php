@@ -65,7 +65,7 @@ class KeycloakResourceOwner implements ResourceOwnerInterface
 
     public function getUname()
     {
-        return $this->response['sAMAccountName'] ?: null;
+        return $this->response['preferred_username'] ?: null;
     }
 
 
