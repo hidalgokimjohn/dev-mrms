@@ -220,11 +220,20 @@ $(document).ready(function () {
         });
     });
 
-    $('#modalCreateDqa').on('show.bs.modal', '',function (e) {
-        console.log('fucku');
+    /*$('#modalCreateDqa').on('show.bs.modal',function (e) {
+        console.log('pakshit!');
+    });*/
+
+    $(document).on('show.bs.modal','#modalCreateDqa',function (){
+       alert('omg wow');
     });
 
-    editDqaTitle = document.getElementById('editDqaTitle');
+    /*var modalCreateDqa = document.getElementById('modalCreateDqa');
+    modalCreateDqa.addEventListener('show.bs.modal',function (e){
+       console.log('asd');
+    });*/
+
+    /*editDqaTitle = document.getElementById('editDqaTitle');
     if(editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
             var dqaId = $(e.relatedTarget).data('dqaguid');
@@ -245,7 +254,7 @@ $(document).ready(function () {
                 });
             }
         });
-    }
+    }*/
 
 });
 
