@@ -7,6 +7,8 @@ include_once('app/User.php');
 include_once('app/City.php');
 include_once('app/Ceac.php');
 include_once('app/Dqa.php');
+require 'vendor/autoload.php';
+
 $app = new \app\App();
 $auth = new \app\Auth();
 $user = new \app\User();
