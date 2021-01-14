@@ -1,4 +1,5 @@
 <?php
+
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -39,11 +40,9 @@ $app->notif_for_compliance();
     <link rel="canonical" href="https://demo.adminkit.io/pages-blank.html"/>
 
     <title><?php echo(isset($_GET['p']) ? ucfirst($app->p_title($_GET['p'])) : 'MRMS | Home') ?></title>
-
     <link href="resources/css/app.css" rel="stylesheet">
 
     <!-- BEGIN SETTINGS -->
-    <script src="resources/js/settings.js"></script>
     <!-- END SETTINGS -->
 </head>
 <!--
@@ -255,22 +254,26 @@ $app->notif_for_compliance();
         </footer>
     </div>
 </div>
-<script src="resources/js/jquery-3.5.1.min.js"></script>
+</body>
+
+<script src="resources/js/jquery-3.5.1.js"></script>
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script src="resources/js/datatables.js"></script>
 <!--Initialization-->
+<script type="text/javascript" src="resources/js/dqa.js"></script>
 
-<script src="resources/js/dqa.js"></script>
 <script>
-    var m = url.searchParams.get("m");
-    if(m=='dqa'){
-        new Choices(document.querySelector(".choices-single"));
-        new Choices(document.querySelector(".choicesCycle"));
-        new Choices(document.querySelector(".choicesAc"));
-        new Choices(document.querySelector(".editChoicesAc"));
-    }
+        $(document).ready(function () {
+        var m = url.searchParams.get("m");
+        if(m=='dqa'){
+            new Choices(document.querySelector(".choices-single"));
+            new Choices(document.querySelector(".choicesCycle"));
+            new Choices(document.querySelector(".choicesAc"));
+            new Choices(document.querySelector(".editChoicesAc"));
+        }
+    });
+/*    */
 </script>
-</body>
 </html>

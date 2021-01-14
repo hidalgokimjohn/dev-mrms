@@ -11,5 +11,5 @@ $dqa = new \app\Dqa();
 $user = new \app\User();
 $upload = new \app\Upload();
 if ($auth->loggedIn()) {
-
+    echo 'edit_success';
 }
