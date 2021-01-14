@@ -247,7 +247,6 @@ $(document).ready(function () {
         });
     }
 
-
 });
 
 function htmlspecialchars(string) {
