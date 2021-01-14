@@ -20,7 +20,7 @@ $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
     'realm' => 'entdswd.local',
     'clientId' => 'kalahi-apps',
     'clientSecret' => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-    'redirectUri' => 'http://crg-kcapps-svr/mrms/index.php'
+    'redirectUri' => 'http://crg-kcapps-svr/mrms'
 ]);
 
 if (!isset($_GET['code'])) {
@@ -37,41 +37,43 @@ if (!isset($_GET['code'])) {
     unset($_SESSION['oauth2state']);
     exit('Invalid state, make sure HTTP sessions are enabled.');
 
-}
-else {
+} else {
 
 // Try to get an access token (using the authorization coe grant)
-try {
-    $token = $provider->getAccessToken('authorization_code', [
-        'code' => $_GET['code']
-    ]);
-} catch (Exception $e) {
-    exit('Failed to get access token: ' . $e->getMessage());
-}
-
-// Optional: Now you have a token you can look up a users profile data
-try {
-
-    // We got an access token, let's now get the user's details
-    $user_sso = $provider->getResourceOwner($token);
-
-    if ($user->sso_isExist($user_sso)) {
-        $auth->redirectTo('index.php');
-    } else {
-        $user->register_sso($user_sso);
+    try {
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+    } catch (Exception $e) {
+        exit('Failed to get access token: ' . $e->getMessage());
     }
 
-    //1. check nya ang naka session database
+// Optional: Now you have a token you can look up a users profile data
+    try {
 
-    //2. pag walay user unya oauth wala nag exist, e create nya
+        // We got an access token, let's now get the user's details
+        $user_sso = $provider->getResourceOwner($token);
 
-    //3. go to urlshit
+        if ($user->sso_isExist($user_sso)) {
+            echo 'omg wow';
+            //$auth->redirectTo('index.php');
+        } else {
+            echo 'wow';
+            //$user->register_sso($user_sso);
+        }
 
-    // Use these details to create a new profile
-    printf('Hello %s!', $user->getName());
+        //1. check nya ang naka session database
 
-} catch (Exception $e) {
-    exit('Failed to get resource owner: ' . $e->getMessage());
+        //2. pag walay user unya oauth wala nag exist, e create nya
+
+        //3. go to urlshit
+
+        // Use these details to create a new profile
+        printf('Hello %s!', $user->getName());
+
+    } catch (Exception $e) {
+        exit('Failed to get resource owner: ' . $e->getMessage());
+    }
 }
 
 // Use this to interact with an API on the users behalf
@@ -137,18 +139,18 @@ $app->notif_for_compliance();
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2021">2021
                                         <span
-                                            class="sidebar-badge badge bg-secondary">NYS</span></a>
+                                                class="sidebar-badge badge bg-secondary">NYS</span></a>
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2020">2020
                                         <span
-                                            class="sidebar-badge badge bg-success">On-Going</span></a>
+                                                class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_reviewed', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
+                                    class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('exec_db', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
+                                    class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -160,10 +162,10 @@ $app->notif_for_compliance();
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
                         <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
+                                    class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
+                                    class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
                         </li>
                     </ul>
                 </li>
@@ -173,7 +175,7 @@ $app->notif_for_compliance();
                 <li class="sidebar-item">
                     <a data-target="#ncddp" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                            class="align-middle">NCDDP</span>
+                                class="align-middle">NCDDP</span>
                     </a>
                     <ul id="ncddp" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -185,7 +187,7 @@ $app->notif_for_compliance();
                 <li class="sidebar-item">
                     <a data-target="#ipcdd" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                            class="align-middle">IPCDD</span>
+                                class="align-middle">IPCDD</span>
                     </a>
                     <ul id="ipcdd" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -245,7 +247,7 @@ $app->notif_for_compliance();
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
                             <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
-                                class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
+                                    class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
@@ -323,15 +325,15 @@ $app->notif_for_compliance();
 <script type="text/javascript" src="resources/js/dqa.js"></script>
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
         var m = url.searchParams.get("m");
-        if(m=='dqa'){
+        if (m == 'dqa') {
             new Choices(document.querySelector(".choices-single"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));
         }
     });
-/*    */
+    /*    */
 </script>
 </html>
