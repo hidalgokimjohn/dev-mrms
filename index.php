@@ -1,4 +1,18 @@
 <?php
+include_once('app/Database.php');
+include_once('app/App.php');
+include_once('app/Auth.php');
+include_once('app/User.php');
+include_once('app/City.php');
+include_once('app/Ceac.php');
+include_once('app/Dqa.php');
+$app = new \app\App();
+$authen = new \app\Auth();
+$user = new \app\User();
+$city = new \app\City();
+$ceac = new \app\Ceac();
+$dqa = new \app\Dqa();
+
 session_start();
 require 'vendor/autoload.php';
 $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
@@ -46,7 +60,7 @@ if (!isset($_GET['code'])) {
         // We got an access token, let's now get the user's details
         $user_sso = $provider->getResourceOwner($token);
 
-        var_dump($user_sso);
+        var_dump($user->sso_isExist($user_sso));
         die();
 
         if ($user->sso_isExist($user_sso)) {
