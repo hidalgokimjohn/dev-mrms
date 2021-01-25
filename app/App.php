@@ -22,6 +22,49 @@ class App
         return $database->getConnection();
     }
 
+    public function login_sso($user, $pass)
+    {
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+					users.username,
+					users.`password`,
+					lib_user_positions.user_position,
+					lib_user_positions.user_position_abbrv,
+					lib_user_positions.user_group,
+					users.`status`,
+                    personal_info.first_name,
+                    personal_info.last_name,
+                    personal_info.pic_url
+					FROM
+					users
+					INNER JOIN personal_info ON personal_info.fk_username = users.username
+					INNER JOIN lib_user_positions ON users.fk_position = lib_user_positions.id
+					WHERE users.username = ?");
+        $q->bind_param('s', $user);
+        $q->execute();
+
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if (password_verify($pass, $row['password'])) {
+                session_regenerate_id();
+                $_SESSION['user_status'] = $row['status'];
+                $_SESSION['login'] = 'logged_in';
+                $_SESSION['username'] = $row['username'];
+                $_SESSION['user_position'] = $row['user_position'];
+                $_SESSION['user_position_abbrv'] = $row['user_position_abbrv'];
+                $_SESSION['user_lvl'] = $row['user_group'];
+                $_SESSION['pic_url'] = $row['pic_url'];
+                $_SESSION['user_fullname'] = $row['first_name'] . ' ' . $row['last_name'];
+
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     public function login($user, $pass)
     {
         $mysql = $this->connectDatabase();
@@ -42,10 +85,7 @@ class App
 					WHERE users.username = ? AND users.status='active'");
         $q->bind_param('s', $user);
         $q->execute();
-/*
 
-        var_dump('abotshit');
-        die();*/
         $result = $q->get_result();
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();

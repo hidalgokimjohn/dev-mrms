@@ -22,7 +22,6 @@ if (!isset($_GET['code'])) {
     $authUrl = $provider->getAuthorizationUrl();
     $_SESSION['oauth2state'] = $provider->getState();
 
-    //var_dump($authUrl);
     header('Location: ' . $authUrl);
     exit;
 
@@ -35,8 +34,6 @@ if (!isset($_GET['code'])) {
     exit('Invalid state, make sure HTTP sessions are enabled.');
 
 } else {
-
-
     // Try to get an access token (using the authorization coe grant)
     try {
         $token = $provider->getAccessToken('authorization_code', [
@@ -52,13 +49,11 @@ if (!isset($_GET['code'])) {
         // We got an access token, let's now get the user's details
         $user_sso = $provider->getResourceOwner($token);
 
-        //var_dump($user->sso_isExist($user_sso));
-        //die();
-
         if ($user->sso_isExist($user_sso)) {
             $user_sso = $user_sso->toArray();
             $oauth = $user_sso['sub'];
             $_SESSION['mrms_auth'] = $oauth;
+
             //IPASA SA LOGIN NGA FUNCTION FOR  SESSION
         } else {
             $user->register_sso($user_sso);
