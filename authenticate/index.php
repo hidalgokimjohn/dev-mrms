@@ -66,7 +66,7 @@ if (!isset($_GET['code'])) {
             $oauth = $user_sso['sub'];
             $_SESSION['mrms_auth'] = $oauth;
         }
-        
+
     } catch (Exception $e) {
         exit('Failed to get resource owner: ' . $e->getMessage());
     }
