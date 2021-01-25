@@ -224,16 +224,12 @@ $(document).ready(function () {
         console.log('pakshit!');
     });*/
 
-    $(document).onclick('show.bs.modal','#modalCreateDqa',function (){
-       alert('omg wow');
-    });
-
-    /*var modalCreateDqa = document.getElementById('modalCreateDqa');
+    var modalCreateDqa = document.getElementById('modalCreateDqa');
     modalCreateDqa.addEventListener('show.bs.modal',function (e){
        console.log('asd');
-    });*/
+    });
 
-    /*editDqaTitle = document.getElementById('editDqaTitle');
+    editDqaTitle = document.getElementById('editDqaTitle');
     if(editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
             var dqaId = $(e.relatedTarget).data('dqaguid');
@@ -254,7 +250,7 @@ $(document).ready(function () {
                 });
             }
         });
-    }*/
+    }
 
 });
 
