@@ -88,23 +88,14 @@ if(!$_SESSION['login']){
                 $user->register_sso($user_sso);
 
             }
-            //header('location: index.php');
 
-            //1. check nya ang naka session database
-
-            //2. pag walay user unya oauth wala nag exist, e create nya
-
-            //3. go to urlshit
-
-            // Use these details to create a new profile
-            printf('Hello %s!', $user->getName());
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
 
         // Use this to interact with an API on the users behalf
-        echo $token->getToken();
+
     }
 
 }
