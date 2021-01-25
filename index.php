@@ -88,8 +88,8 @@ if(!$_SESSION['login']){
                 $user->register_sso($user_sso);
             }
 
-            var_dump('Welcome!');
-            die();
+//            var_dump('Welcome!');
+//            die();
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }

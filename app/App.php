@@ -42,6 +42,10 @@ class App
 					WHERE users.username = ? AND users.status='active'");
         $q->bind_param('s', $user);
         $q->execute();
+
+
+        var_dump('abotshit');
+        die();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
