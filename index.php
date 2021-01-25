@@ -65,10 +65,28 @@ if (!isset($_GET['code'])) {
 
         if ($user->sso_isExist($user_sso)) {
             //$auth->redirectTo('../index.php');
+            //KUHAIN NYA ANG USERNAME UG PASSWORD BASED SA OAUATH PARAM
+            $user_sso = $user_sso->toArray();
+            $oauth = $user_sso['sub'];
+
+            $q = "SELECT
+            users.username,
+            users.password
+            FROM
+            users where oauth_client='$oauth'";
+            $result = $mysql->query($q);
+            $row = $result->fetch_assoc();
+
+            $username = $row['username'];
+            $password = $row['password'];
+            $app->login($username,$password);
+
+            //IPASA SA LOGIN NGA FUNCTION FOR  SESSION
         } else {
             $user->register_sso($user_sso);
 
         }
+        header('location: index.php');
 
         //1. check nya ang naka session database
 
