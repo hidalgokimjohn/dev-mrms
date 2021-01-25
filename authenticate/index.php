@@ -67,8 +67,9 @@ if (!isset($_GET['code'])) {
             $_SESSION['mrms_auth'] = $oauth;
         }
 
-//            var_dump('Welcome!');
-//            die();
+
+            var_dump($_SESSION['mrms_auth']);
+           die();
     } catch (Exception $e) {
         exit('Failed to get resource owner: ' . $e->getMessage());
     }
