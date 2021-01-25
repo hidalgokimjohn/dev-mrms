@@ -579,8 +579,7 @@ class User
 
         $result = $mysql->query($q);
         $row = $result->fetch_assoc();
-        var_dump($row['oauth_client']);
-        die();
+
         if ($row['oauth_client']) {
             return 1;
         } else {
