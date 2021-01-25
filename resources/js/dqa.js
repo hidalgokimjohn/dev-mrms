@@ -224,7 +224,7 @@ $(document).ready(function () {
         console.log('pakshit!');
     });*/
 
-    $(document).on('show.bs.modal','#modalCreateDqa',function (){
+    $(document).onclick('show.bs.modal','#modalCreateDqa',function (){
        alert('omg wow');
     });
 

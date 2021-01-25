@@ -20,7 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
+      <change afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authenticate/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +90,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -97,10 +103,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mrms\resources\views" />
       <recent name="C:\xampp\htdocs\mrms\resources\js" />
       <recent name="C:\xampp\htdocs\mrms\login" />
       <recent name="C:\xampp\htdocs\mrms\resources\ajax" />
-      <recent name="C:\xampp\htdocs\mrms\resources\views" />
       <recent name="C:\xampp\htdocs\mrms\app" />
     </key>
   </component>
@@ -127,7 +133,11 @@
       <workItem from="1610443841372" duration="32038000" />
       <workItem from="1610535303233" duration="20213000" />
       <workItem from="1610594008631" duration="2343000" />
-      <workItem from="1610620270959" duration="2073000" />
+      <workItem from="1610620270959" duration="5022000" />
+      <workItem from="1611016715119" duration="4621000" />
+      <workItem from="1611280823785" duration="1916000" />
+      <workItem from="1611292841582" duration="39000" />
+      <workItem from="1611534689255" duration="802000" />
     </task>
     <servers />
   </component>
@@ -209,10 +219,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="1025" height="208" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610541324284">
+    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610632418177">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610541324284" />
+    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610632418177" />
     <state x="277" y="62" key="SettingsEditor" timestamp="1610338784595">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -229,10 +239,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1610621668250">
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611534750824">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1610621668250" />
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611534750824" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
