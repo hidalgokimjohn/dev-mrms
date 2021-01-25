@@ -1,29 +1,5 @@
 <?php
 session_start();
-include_once('app/Database.php');
-include_once('app/App.php');
-include_once('app/Auth.php');
-include_once('app/User.php');
-include_once('app/City.php');
-include_once('app/Ceac.php');
-include_once('app/Dqa.php');
-$app = new \app\App();
-$authen = new \app\Auth();
-$user = new \app\User();
-$city = new \app\City();
-$ceac = new \app\Ceac();
-$dqa = new \app\Dqa();
-
-//If not logged in to go login-page
-/*if (!$auth->loggedIn()) {
-    $auth->redirectTo('login/index.php');
-}*/
-
-//$auth->maintenance();
-//$user->info($_SESSION['username']);
-$app->notif_for_compliance();
-
-
 require 'vendor/autoload.php';
 $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
     'authServerUrl' => 'http://auth.caraga.dswd.gov.ph:8080/auth',
