@@ -15,6 +15,7 @@ $user = new \app\User();
 if($_SESSION['mrms_auth']){
     header('location: ../index.php');
 }
+var_dump($_SESSION['mrms_auth']);
 //$auth->maintenance();
 ?>
 <!DOCTYPE html>
