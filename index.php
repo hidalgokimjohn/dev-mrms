@@ -41,6 +41,7 @@ if(!$_SESSION['login']){
         echo $_SESSION['oauth2state'] . " get oauth<br>";
         echo $_SESSION['state'] . " get state: <br>";
         unset($_SESSION['oauth2state']);
+        
         exit('Invalid state, make sure HTTP sessions are enabled.');
 
     } else {
