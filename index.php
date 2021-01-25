@@ -86,10 +86,10 @@ if(!$_SESSION['login']){
                 //IPASA SA LOGIN NGA FUNCTION FOR  SESSION
             } else {
                 $user->register_sso($user_sso);
-
             }
 
-
+            var_dump('Welcome!');
+            die();
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
