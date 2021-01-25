@@ -19,6 +19,7 @@ if(!$_SESSION['mrms_auth']){
     header('location: login/index.php');
 }
 
+var_dump($_SESSION['mrms_auth']);
 
 ?>
 <!DOCTYPE html>
