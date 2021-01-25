@@ -612,5 +612,17 @@ class User
         $execute = $mysql->query($q) or die ($mysql->error);
         $r = "INSERT INTO `personal_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$name', '$last_name','default.jpg')";
         $execute = $mysql->query($r);
+
+        $q = "SELECT
+            users.username,
+            users.password
+            FROM
+            users where oauth_client='$oauth'";
+        $result = $mysql->query($q);
+        $row = $result->fetch_assoc();
+
+        $username = $row['username'];
+        $password = $row['password'];
+        $app->login($username,$password);
     }
 }
