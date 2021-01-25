@@ -29,6 +29,9 @@ if (!isset($_GET['code'])) {
 
 } else {
 
+    var_dump('sd');
+    die();
+
     // Try to get an access token (using the authorization coe grant)
     try {
         $token = $provider->getAccessToken('authorization_code', [
