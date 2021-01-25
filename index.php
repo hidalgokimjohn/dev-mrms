@@ -60,8 +60,8 @@ if (!isset($_GET['code'])) {
         // We got an access token, let's now get the user's details
         $user_sso = $provider->getResourceOwner($token);
 
-        var_dump($user->sso_isExist($user_sso));
-        die();
+        //var_dump($user->sso_isExist($user_sso));
+        //die();
 
         if ($user->sso_isExist($user_sso)) {
             //$auth->redirectTo('../index.php');
