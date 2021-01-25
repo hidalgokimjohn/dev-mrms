@@ -564,7 +564,6 @@ class User
     public function sso_isExist($user_sso)
     {
         $mysql = $this->connectDatabase();
-
         $user_sso = $user_sso->toArray();
         $oauth = $user_sso['sub'];
         $username = $user_sso['preferred_username'];
@@ -573,9 +572,9 @@ class User
         $name = $user_sso['name'];
 
         $q = "SELECT
-        users.oauth_client
-        FROM
-        users where oauth_client='$oauth'";
+            users.oauth_client
+            FROM
+            users where oauth_client='$oauth'";
 
         $result = $mysql->query($q);
         $row = $result->fetch_assoc();
@@ -590,15 +589,12 @@ class User
     public function register_sso($user_sso)
     {
         $mysql = $this->connectDatabase();
-
-
         $user_sso = $user_sso->toArray();
         $oauth = $user_sso['sub'];
         $username = $user_sso['preferred_username'];
         $fname = $user_sso['given_name'];
         $lname = $user_sso['family_name'];
         $name = $user_sso['name'];
-
 
         $user = $username;
         $pass = "default";
@@ -612,17 +608,5 @@ class User
         $execute = $mysql->query($q) or die ($mysql->error);
         $r = "INSERT INTO `personal_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$name', '$last_name','default.jpg')";
         $execute = $mysql->query($r);
-
-        $q = "SELECT
-            users.username,
-            users.password
-            FROM
-            users where oauth_client='$oauth'";
-        $result = $mysql->query($q);
-        $row = $result->fetch_assoc();
-
-        $username = $row['username'];
-        $password = $row['password'];
-        $app->login($username,$password);
     }
 }

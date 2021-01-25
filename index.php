@@ -25,27 +25,18 @@ if(!$_SESSION['mrms_auth']){
     ]);
 
     if (!isset($_GET['code'])) {
-
         // If we don't have an authorization code then get one
         $authUrl = $provider->getAuthorizationUrl();
         $_SESSION['oauth2state'] = $provider->getState();
 
-        //var_dump($authUrl);
         header('Location: '.$authUrl);
         exit;
-
 // Check given state against previously stored one to mitigate CSRF attack
     } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-        echo $_SESSION['oauth2state'] . " get oauth<br>";
-        echo $_SESSION['state'] . " get state: <br>";
+
         unset($_SESSION['oauth2state']);
-
         exit('Invalid state, make sure HTTP sessions are enabled.');
-
     } else {
-
-
-
         // Try to get an access token (using the authorization coe grant)
         try {
             $token = $provider->getAccessToken('authorization_code', [
@@ -61,23 +52,21 @@ if(!$_SESSION['mrms_auth']){
             // We got an access token, let's now get the user's details
             $user_sso = $provider->getResourceOwner($token);
 
-            //var_dump($user->sso_isExist($user_sso));
-            //die();
-
             if ($user->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
                 $_SESSION['mrms_auth'] = $oauth;
-                //IPASA SA LOGIN NGA FUNCTION FOR  SESSION
+                $app->login_sso($user_sso['preferred_username']);
             } else {
                 $user->register_sso($user_sso);
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
                 $_SESSION['mrms_auth'] = $oauth;
+                $app->login_sso($user_sso['preferred_username']);
             }
 
-//            var_dump('Welcome!');
-//            die();
+
+
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
@@ -85,7 +74,6 @@ if(!$_SESSION['mrms_auth']){
     }
 }
 
-var_dump($_SESSION['mrms_auth']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
