@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../app/Database.php');
 include_once('../app/App.php');
 include_once('../app/User.php');
@@ -6,7 +7,6 @@ $app = new \app\App();
 $user = new \app\User();
 
 require '../vendor/autoload.php';
-
 
 $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
     'authServerUrl' => 'http://auth.caraga.dswd.gov.ph:8080/auth',
@@ -66,10 +66,7 @@ if (!isset($_GET['code'])) {
             $oauth = $user_sso['sub'];
             $_SESSION['mrms_auth'] = $oauth;
         }
-
-
-            var_dump($_SESSION['mrms_auth']);
-           die();
+        
     } catch (Exception $e) {
         exit('Failed to get resource owner: ' . $e->getMessage());
     }
