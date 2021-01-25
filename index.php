@@ -1,16 +1,36 @@
 <?php
+session_start();
+include_once('app/Database.php');
+include_once('app/App.php');
+include_once('app/Auth.php');
+include_once('app/User.php');
+include_once('app/City.php');
+include_once('app/Ceac.php');
+include_once('app/Dqa.php');
+$app = new \app\App();
+$authen = new \app\Auth();
+$user = new \app\User();
+$city = new \app\City();
+$ceac = new \app\Ceac();
+$dqa = new \app\Dqa();
+
+//If not logged in to go login-page
+/*if (!$auth->loggedIn()) {
+    $auth->redirectTo('login/index.php');
+}*/
+
+//$auth->maintenance();
+//$user->info($_SESSION['username']);
+$app->notif_for_compliance();
+
 
 require 'vendor/autoload.php';
-
-
-
-
 $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
     'authServerUrl' => 'http://auth.caraga.dswd.gov.ph:8080/auth',
     'realm' => 'entdswd.local',
     'clientId' => 'kalahi-apps',
     'clientSecret' => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-    'redirectUri' => 'http://crg-kcapps-svr/mrms'
+    'redirectUri' => 'http://crg-kcapps-svr/mrms/index.php'
 ]);
 
 if (!isset($_GET['code'])) {
@@ -18,18 +38,22 @@ if (!isset($_GET['code'])) {
     // If we don't have an authorization code then get one
     $authUrl = $provider->getAuthorizationUrl();
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
+    echo $_SESSION['oauth2state'] . " get oauth<br>";
+    echo $_SESSION['state'] . " get oauth<br>";
+    //var_dump($authUrl);
+    header('Location: '.$authUrl);
     exit;
 
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-
+    session_start();
+    echo $_SESSION['oauth2state'] . " get oauth";
     unset($_SESSION['oauth2state']);
     exit('Invalid state, make sure HTTP sessions are enabled.');
-
+    die();
 } else {
 
-// Try to get an access token (using the authorization coe grant)
+    // Try to get an access token (using the authorization coe grant)
     try {
         $token = $provider->getAccessToken('authorization_code', [
             'code' => $_GET['code']
@@ -38,21 +62,17 @@ if (!isset($_GET['code'])) {
         exit('Failed to get access token: ' . $e->getMessage());
     }
 
-// Optional: Now you have a token you can look up a users profile data
+    // Optional: Now you have a token you can look up a users profile data
     try {
 
         // We got an access token, let's now get the user's details
         $user_sso = $provider->getResourceOwner($token);
 
-        var_dump($user_sso);
-        die();
-       /* if ($user->sso_isExist($user_sso)) {
-            echo 'omg wow';
-            //$auth->redirectTo('index.php');
+        if ($user->sso_isExist($user_sso)) {
+            //$auth->redirectTo('../index.php');
         } else {
-            echo 'wow';
-            //$user->register_sso($user_sso);
-        }*/
+            $user->register_sso($user_sso);
+        }
 
         //1. check nya ang naka session database
 
@@ -66,14 +86,12 @@ if (!isset($_GET['code'])) {
     } catch (Exception $e) {
         exit('Failed to get resource owner: ' . $e->getMessage());
     }
+
+    // Use this to interact with an API on the users behalf
+    echo $token->getToken();
 }
 
-// Use this to interact with an API on the users behalf
-echo $token->getToken();
 
-$auth->maintenance();
-$user->info($_SESSION['username']);
-$app->notif_for_compliance();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,18 +149,18 @@ $app->notif_for_compliance();
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2021">2021
                                         <span
-                                                class="sidebar-badge badge bg-secondary">NYS</span></a>
+                                            class="sidebar-badge badge bg-secondary">NYS</span></a>
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2020">2020
                                         <span
-                                                class="sidebar-badge badge bg-success">On-Going</span></a>
+                                            class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_reviewed', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
+                                class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('exec_db', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
+                                class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -154,10 +172,10 @@ $app->notif_for_compliance();
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
                         <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
+                                class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
+                                class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
                         </li>
                     </ul>
                 </li>
@@ -167,7 +185,7 @@ $app->notif_for_compliance();
                 <li class="sidebar-item">
                     <a data-target="#ncddp" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                                class="align-middle">NCDDP</span>
+                            class="align-middle">NCDDP</span>
                     </a>
                     <ul id="ncddp" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -179,7 +197,7 @@ $app->notif_for_compliance();
                 <li class="sidebar-item">
                     <a data-target="#ipcdd" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                                class="align-middle">IPCDD</span>
+                            class="align-middle">IPCDD</span>
                     </a>
                     <ul id="ipcdd" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -239,7 +257,7 @@ $app->notif_for_compliance();
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
                             <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
-                                    class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
+                                class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
@@ -267,8 +285,8 @@ $app->notif_for_compliance();
                 <div class="row">
                     <div class="col-12">
                         <?php
-                        ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/mov_uploading.php') : '';
-                        ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/mov_uploading_2021.php') : '';
+                        ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/movUploadingStatus.php') : '';
+                        ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/movUploadingStatus_2021.php') : '';
                         ($_GET['m'] == 'dqa') ? include('resources/views/tblDqa.php') : '';
                         ($_GET['m'] == 'view_dqa') ? include('resources/views/viewDqaItems.php') : '';
                         ?>
@@ -317,15 +335,15 @@ $app->notif_for_compliance();
 <script type="text/javascript" src="resources/js/dqa.js"></script>
 
 <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
         var m = url.searchParams.get("m");
-        if (m == 'dqa') {
+        if(m=='dqa'){
             new Choices(document.querySelector(".choices-single"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));
         }
     });
-    /*    */
+/*    */
 </script>
 </html>
