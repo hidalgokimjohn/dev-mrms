@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -128,7 +129,7 @@ if(!$_SESSION['mrms_auth']){
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
-                                <form method="post" action="home.php">
+                                <form method="post">
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
                                         <input class="form-control form-control-lg" type="text" name="username"
@@ -172,7 +173,7 @@ if(!$_SESSION['mrms_auth']){
                                             if ($app->login($_POST['username'], $_POST['password'])) {
                                                 $user->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
-                                                header('location: home.php');
+                                                header('location: churva.php');
                                                 exit;
                                             } else {
                                                 echo '<br><div class="alert alert-danger alert-dismissible" role="alert">
