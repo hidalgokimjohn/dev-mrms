@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -128,7 +129,7 @@ if(!$_SESSION['mrms_auth']){
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
-                                <form method="post" action="home.php">
+                                <form method="post">
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
                                         <input class="form-control form-control-lg" type="text" name="username"
