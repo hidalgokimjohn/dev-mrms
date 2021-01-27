@@ -64,15 +64,14 @@ if(!$_SESSION['mrms_auth']){
                 $_SESSION['mrms_auth'] = $oauth;
                 $app->login_sso($user_sso['preferred_username']);
             }
-
-
-
+            
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
         // Use this to interact with an API on the users behalf
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +88,6 @@ if(!$_SESSION['mrms_auth']){
     <link rel="shortcut icon" href="resources/img/icons/icon-48x48.png"/>
 
     <link rel="canonical" href="https://demo.adminkit.io/pages-blank.html"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css"/>
 
     <title><?php echo(isset($_GET['p']) ? ucfirst($app->p_title($_GET['p'])) : 'MRMS | Home') ?></title>
     <link href="resources/css/app.css" rel="stylesheet">
@@ -131,18 +129,18 @@ if(!$_SESSION['mrms_auth']){
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2021">2021
                                         <span
-                                            class="sidebar-badge badge bg-secondary">NYS</span></a>
+                                                class="sidebar-badge badge bg-secondary">NYS</span></a>
                                     <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2020">2020
                                         <span
-                                            class="sidebar-badge badge bg-success">On-Going</span></a>
+                                                class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_reviewed', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
+                                    class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('exec_db', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
+                                    class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -154,10 +152,10 @@ if(!$_SESSION['mrms_auth']){
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
                         <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
+                                    class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
+                                    class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
                         </li>
                     </ul>
                 </li>
@@ -167,7 +165,7 @@ if(!$_SESSION['mrms_auth']){
                 <li class="sidebar-item">
                     <a data-target="#ncddp" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                            class="align-middle">NCDDP</span>
+                                class="align-middle">NCDDP</span>
                     </a>
                     <ul id="ncddp" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -179,7 +177,7 @@ if(!$_SESSION['mrms_auth']){
                 <li class="sidebar-item">
                     <a data-target="#ipcdd" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle" data-feather="corner-right-down"></i> <span
-                            class="align-middle">IPCDD</span>
+                                class="align-middle">IPCDD</span>
                     </a>
                     <ul id="ipcdd" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Search</a>
@@ -237,9 +235,9 @@ if(!$_SESSION['mrms_auth']){
                             <i class="align-middle" data-feather="settings"></i>
                         </a>
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                            <img src="resources/img/avatars/avatar.jpg"
+                            <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
-                                class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
+                                    class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
@@ -312,17 +310,12 @@ if(!$_SESSION['mrms_auth']){
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
-
-<!--<script src="resources/js/datatables.js"></script>-->
+<script src="resources/js/datatables.js"></script>
 <!--Initialization-->
 <script type="text/javascript" src="resources/js/dqa.js"></script>
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
         var m = url.searchParams.get("m");
         if(m=='dqa'){
             new Choices(document.querySelector(".choices-single"));
@@ -331,5 +324,6 @@ if(!$_SESSION['mrms_auth']){
             new Choices(document.querySelector(".editChoicesAc"));
         }
     });
+    /*    */
 </script>
 </html>
