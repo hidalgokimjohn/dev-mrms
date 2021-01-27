@@ -172,12 +172,8 @@ if(!$_SESSION['mrms_auth']){
                                             if ($app->login($_POST['username'], $_POST['password'])) {
                                                 $user->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
-                                                if ($_SESSION['user_lvl'] == 'user') {
-                                                    $auth->redirectTo('home.php');
-                                                }
-                                                if ($_SESSION['user_lvl'] == 'admin') {
-                                                    $auth->redirectTo('home.php');
-                                                }
+                                                header('location: home.php');
+                                                exit;
                                             } else {
                                                 echo '<br><div class="alert alert-danger alert-dismissible" role="alert">
 											<div class="alert-icon">
