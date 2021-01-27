@@ -606,7 +606,7 @@ class User
         $hash = password_hash($pass, PASSWORD_DEFAULT);
         $q = "INSERT INTO `users` (`username`, `password`, `email_address`, `status`, `created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) VALUES ('$user', '$hash', '$email', 'pending', now(),'$scenario','$oauth','$oauth')";
         $execute = $mysql->query($q) or die ($mysql->error);
-        $r = "INSERT INTO `personal_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$name', '$last_name','default.jpg')";
+        $r = "INSERT INTO `personal_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$fname', '$last_name','default.jpg')";
         $execute = $mysql->query($r);
     }
 }
