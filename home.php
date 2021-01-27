@@ -72,20 +72,20 @@ if(!$auth->loggedIn()){
                                 Uploading</a>
                             <ul id="multi-2" class="sidebar-dropdown list-unstyled collapse show">
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2021">2021
+                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading_2021">2021
                                         <span
                                                 class="sidebar-badge badge bg-secondary">NYS</span></a>
-                                    <a class="sidebar-link" href="index.php?p=dashboards&m=mov_uploading_2020">2020
+                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading_2020">2020
                                         <span
                                                 class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
                             </ul>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_reviewed', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
+                                    class="sidebar-link" href="home.php?p=dashboards&m=mov_reviewed">MOV Reviewed</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('exec_db', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=dashboards&m=exec_db">Executive Dashboard</a>
+                                    class="sidebar-link" href="home.php?p=dashboards&m=exec_db">Executive Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -97,10 +97,10 @@ if(!$auth->loggedIn()){
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
                         <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=dqa">Data Quality Assessment</a>
+                                    class="sidebar-link" href="home.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="index.php?p=modules&m=mov_checklist">MOV Checklist</a>
+                                    class="sidebar-link" href="home.php?p=modules&m=mov_checklist">MOV Checklist</a>
                         </li>
                     </ul>
                 </li>
