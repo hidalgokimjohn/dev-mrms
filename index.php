@@ -56,10 +56,10 @@ if(!$_SESSION['mrms_auth']){
             var_dump($user_sso);
 
             if ($users->sso_isExist($user_sso)) {
-                die();
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
-                $_SESSION['mrms_auth'] = $oauth;
+                echo $_SESSION['mrms_auth'] = $oauth;
+                echo '<br>';
                 $app->login_sso($user_sso['preferred_username']);
             } else {
                /* $user->register_sso($user_sso);
