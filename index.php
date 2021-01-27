@@ -173,10 +173,10 @@ if(!$_SESSION['mrms_auth']){
                                                 $user->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
                                                 if ($_SESSION['user_lvl'] == 'user') {
-                                                    $auth->redirectTo('../index.php');
+                                                    $auth->redirectTo('home.php');
                                                 }
                                                 if ($_SESSION['user_lvl'] == 'admin') {
-                                                    $auth->redirectTo('../index.php');
+                                                    $auth->redirectTo('home.php');
                                                 }
                                             } else {
                                                 echo '<br><div class="alert alert-danger alert-dismissible" role="alert">
