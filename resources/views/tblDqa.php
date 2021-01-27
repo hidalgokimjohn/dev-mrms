@@ -11,7 +11,9 @@
 
         <div class="table-responsive">
             <br/>
-            <table id="tbl_dqa" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
+            <table id="tbl_dqa"
+                   class="table border-bottom border-top border-left border-right table-striped table-hover"
+                   style="width:100%">
                 <thead>
                 <tr class="border-bottom-0">
 
@@ -82,7 +84,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn_saveDqa"> <span class="fa fa-save"></span> <span class="text_saveDqa">Save</span></button>
+                    <button type="submit" class="btn btn-primary" id="btn_saveDqa"><span class="fa fa-save"></span>
+                        <span class="text_saveDqa">Save</span></button>
                 </div>
             </form>
         </div>
@@ -108,14 +111,18 @@
                         ?>
                     </select>
                     <label class="form-label">Title</label>
-                    <input type="text" class="form-control dqaTitle" placeholder="Enter your title" name="dqaTitle" required>
+                    <input type="text" class="form-control dqaTitle" placeholder="Enter your title" name="dqaTitle"
+                           required>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="btn_editDqaTitle"> <span class="fa fa-save"></span> <span class="text_editDqaTitle">Save changes</span></button>
+                    <button type="submit" class="btn btn-primary" id="btn_editDqaTitle"><span class="fa fa-save"></span>
+                        <span class="text_editDqaTitle">Save changes</span></button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+

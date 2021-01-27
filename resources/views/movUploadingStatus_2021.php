@@ -6,8 +6,8 @@
         <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
             <div class="d-table-cell align-middle">
                 <div class="text-center">
-                    <h1 class="display-1 font-weight-bold">NYS</h1>
-                    <p class="h1">Implementation is still on process</p>
+                    <h1 class="display-4 font-weight-bold">KC-AF / CBRC</h1>
+                    <p class="h1">On Process</p>
                 </div>
             </div>
         </div>
