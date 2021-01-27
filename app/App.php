@@ -32,6 +32,7 @@ class App
             lib_user_positions.user_group,
             users.`status`,
             personal_info.first_name,
+            personal_info.last_name,
             personal_info.pic_url
             FROM
             users
@@ -51,7 +52,7 @@ class App
                 $_SESSION['user_position_abbrv'] = $row['user_position_abbrv'];
                 $_SESSION['user_lvl'] = $row['user_group'];
                 $_SESSION['pic_url'] = $row['pic_url'];
-                $_SESSION['user_fullname'] = $row['first_name'];
+                $_SESSION['user_fullname'] = $row['first_name']. ' '.$row['last_name'];
         } else {
             return false;
         }

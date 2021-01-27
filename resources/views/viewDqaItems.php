@@ -3,7 +3,7 @@
         <h5 class="card-title mb-0">Data Quality Assessment / Items</h5>
     </div>
     <div class="card-body">
-        <a href="index.php?p=modules&m=dqa" data-toggle="modal">
+        <a href="home.php?p=modules&m=dqa" data-toggle="modal">
             <button type="button" class="btn btn-primary">
                 <span class="fa fa-arrow-left"></span> Back
             </button>

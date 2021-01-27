@@ -180,9 +180,9 @@ if(!$auth->loggedIn()){
                             <i class="align-middle" data-feather="settings"></i>
                         </a>
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                            <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
+                            <img src="resources/img/avatars/default.jpg"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
-                                    class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
+                                    class="text-dark text-capitalize"><?php echo strtolower($_SESSION['user_fullname']); ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"

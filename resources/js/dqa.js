@@ -47,14 +47,14 @@ $(document).ready(function () {
             "targets": 1,
             "data": null,
             "render": function (data, type, row) {
-                return '#' + pad(data[14], 4);
+                return '<strong>#' + pad(data[14], 4)+'</strong>';
             },
         },
             {
                 "targets": 2,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class=" font-bold"><a href="index.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
+                    return '<div class=" font-bold"><a href="home.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
                 },
             },
             {
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 "data": null,
                 "render": function (data, type, row) {
                     if (data[1] === null) {
-                        return '<div class="text-uppercase">' + data[14] + '</div>';
+                        return '<div class="text-uppercase">' + data[12] + '</div>';
                     } else {
                         return '<div class="text-uppercase">' + data[1] + '</div>';
                     }
@@ -127,7 +127,7 @@ $(document).ready(function () {
             "targets": 0,
             "data": null,
             "render": function (data, type, row) {
-                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' + data[3] + '</b></a>';
+                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' +titleCase(data[3]) + '</b></a>';
 
             },
         },
@@ -226,7 +226,7 @@ $(document).ready(function () {
             "targets": 0,
             "data": null,
             "render": function (data, type, row) {
-                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' + data[3] + '</b></a>';
+                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' + titleCase(data[3]) + '</b></a>';
 
             },
         },
@@ -375,4 +375,14 @@ function htmlspecialchars(string) {
 function pad(str, max) {
     str = str.toString();
     return str.length < max ? pad("0" + str, max) : str;
+}
+function titleCase(str) {
+    var splitStr = str.toUpperCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        // You do not need to check if i is larger than splitStr length, as your for does that for you
+        // Assign it back to the array
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    }
+    // Directly return the joined string
+    return splitStr.join(' ');
 }
