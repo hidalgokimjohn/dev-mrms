@@ -64,7 +64,6 @@ if(!$_SESSION['mrms_auth']){
                 $_SESSION['mrms_auth'] = $oauth;
                 $app->login_sso($user_sso['preferred_username']);
             }
-
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
