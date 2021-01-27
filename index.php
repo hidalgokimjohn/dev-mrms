@@ -8,7 +8,7 @@ include_once('app/Ceac.php');
 include_once('app/Dqa.php');
 $app = new \app\App();
 $authen = new \app\Auth();
-$users = new \app\User();
+$user = new \app\User();
 $city = new \app\City();
 $ceac = new \app\Ceac();
 $dqa = new \app\Dqa();
@@ -53,7 +53,7 @@ if(!$_SESSION['mrms_auth']){
             // We got an access token, let's now get the user's details
             $user_sso = $provider->getResourceOwner($token);
 
-            if ($users->sso_isExist($user_sso)) {
+            if ($user->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
                 $_SESSION['mrms_auth'] = $oauth;
