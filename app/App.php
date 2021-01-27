@@ -103,7 +103,7 @@ class App
     public function logout()
     {
         session_destroy();
-        header('location: http://auth.caraga.dswd.gov.ph:8080/auth/realms/entdswd.local/protocol/openid-connect/logout?redirect_uri=http://crg-kcapps-svr/mrms');
+        header('http://auth.caraga.dswd.gov.ph:8080/auth/realms/entdswd.local/protocol/openid-connect/logout?redirect_uri=http://crg-kcapps-svr/mrms/index.php');
         exit;
     }
 
