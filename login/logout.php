@@ -5,6 +5,9 @@
 	session_start();
 	$app->log($_SESSION['username'], 'logout', 'has logged out', null, null);
     $app->logout();
+    header('http://auth.caraga.dswd.gov.ph:8080/auth/realms/entdswd.local/protocol/openid-connect/logout?redirect_uri=http://crg-kcapps-svr/mrms/index.php');
+    exit;
+
 
 
 
