@@ -21,8 +21,16 @@
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/dqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/dqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/tblDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/viewDqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/.htaccess" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +141,9 @@
       <workItem from="1611016715119" duration="4621000" />
       <workItem from="1611280823785" duration="1916000" />
       <workItem from="1611292841582" duration="39000" />
-      <workItem from="1611534689255" duration="18843000" />
+      <workItem from="1611534689255" duration="29790000" />
+      <workItem from="1611641307446" duration="2187000" />
+      <workItem from="1611664645635" duration="3399000" />
     </task>
     <servers />
   </component>
@@ -195,10 +205,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610446095055" />
-    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1610551276322">
+    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1611570797835">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1610551276322" />
+    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1611570797835" />
     <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -235,9 +245,9 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611554413356">
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611715955376">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611554413356" />
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611715955376" />
   </component>
 </project>

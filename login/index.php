@@ -5,18 +5,15 @@ include_once('../app/App.php');
 include_once('../app/Auth.php');
 include_once('../app/User.php');
 
-/*$auth = new app\Auth();
+$auth = new app\Auth();
 if ($auth->loggedIn()) {
     $auth->redirectTo('../index.php');
-}*/
+}
 
 $app = new \app\App();
 $user = new \app\User();
-if($_SESSION['mrms_auth']){
-    header('location: ../index.php');
-}
-var_dump($_SESSION['mrms_auth']);
-//$auth->maintenance();
+
+$auth->maintenance();
 ?>
 <!DOCTYPE html>
 <html lang="en">
