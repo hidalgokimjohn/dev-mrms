@@ -20,7 +20,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
+
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+
+      <change afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authenticate/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/dqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/dqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/tbl_dqaConducted.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/tbl_dqaConducted.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/tblDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/viewDqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/.htaccess" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/stevenmaguire/oauth2-keycloak/src/Provider/KeycloakResourceOwner.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/stevenmaguire/oauth2-keycloak/src/Provider/KeycloakResourceOwner.php" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
