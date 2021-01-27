@@ -128,7 +128,7 @@ if(!$_SESSION['mrms_auth']){
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
-                                <form method="post">
+                                <form method="post" action="home.php">
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
                                         <input class="form-control form-control-lg" type="text" name="username"
