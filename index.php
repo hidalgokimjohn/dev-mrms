@@ -58,8 +58,7 @@ if(!$_SESSION['mrms_auth']){
             if ($users->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
-                echo $_SESSION['mrms_auth'] = $oauth;
-                echo '<br>';
+                $_SESSION['mrms_auth'] = $oauth;
                 $app->login_sso($user_sso['preferred_username']);
             } else {
                $user->register_sso($user_sso);
