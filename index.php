@@ -52,8 +52,8 @@ if(!$_SESSION['mrms_auth']){
 
             // We got an access token, let's now get the user's details
             $user_sso = $provider->getResourceOwner($token);
-            echo 'ok siya<br>';
-            var_dump($user_sso);
+            /*echo 'ok siya<br>';
+            var_dump($user_sso);*/
 
             if ($users->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
@@ -69,7 +69,7 @@ if(!$_SESSION['mrms_auth']){
                 $app->login_sso($user_sso['preferred_username']);
             }
 
-            echo $_SESSION['mrms_auth'];
+            //echo $_SESSION['mrms_auth'];
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
