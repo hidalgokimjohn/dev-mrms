@@ -27,7 +27,7 @@ if(!$_SESSION['mrms_auth']){
         'realm' => 'entdswd.local',
         'clientId' => 'kalahi-apps',
         'clientSecret' => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
-        'redirectUri' => 'http://172.26.158.122/mrms/index.php'
+        'redirectUri' => 'http://crg-kcapps-svr/mrms/index.php'
     ]);
 
     if (!isset($_GET['code'])) {

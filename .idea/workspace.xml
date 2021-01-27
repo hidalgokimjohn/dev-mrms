@@ -21,16 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Upload.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/ajax/dqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/dqaItems.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/movUploadingStatus_2021.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/tblDqa.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tblDqa.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/viewDqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/.htaccess" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +134,7 @@
       <workItem from="1611292841582" duration="39000" />
       <workItem from="1611534689255" duration="29790000" />
       <workItem from="1611641307446" duration="2187000" />
-      <workItem from="1611664645635" duration="3399000" />
+      <workItem from="1611664645635" duration="3967000" />
     </task>
     <servers />
   </component>
