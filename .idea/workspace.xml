@@ -20,7 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login/logout.php" beforeDir="false" afterPath="$PROJECT_DIR$/login/logout.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,9 +238,9 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611727021335">
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611729278103">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611727021335" />
+    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611729278103" />
   </component>
 </project>
