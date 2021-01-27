@@ -485,15 +485,16 @@ class User
         user_city_coverage
         where user_city_coverage.fk_username='$username' LIMIT 1";
         $result = $mysql->query($q) or die($mysql->error);
-        if ($result->num_rows>0) {
+        if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['fk_psgc_mun'];
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function userTeams($psgc_mun){
+    public function userTeams($psgc_mun)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
             CONCAT(personal_info.first_name,' ',personal_info.last_name) as fullName,
@@ -510,7 +511,7 @@ class User
             WHERE user_city_coverage.fk_psgc_mun='$psgc_mun' AND lib_user_positions.user_position_abbrv IN ('AC','CEF')";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result) {
-            while($row = $result->fetch_assoc()){
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
             return $data;
@@ -527,15 +528,16 @@ class User
         user_cadt_coverage
         where user_cadt_coverage.fk_username='$username' LIMIT 1";
         $result = $mysql->query($q) or die($mysql->error);
-        if ($result->num_rows>0) {
+        if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['fk_cadt'];
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function userTeams_ipcdd($cadt){
+    public function userTeams_ipcdd($cadt)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
             CONCAT(personal_info.first_name,' ',personal_info.last_name) as fullName,
@@ -552,53 +554,52 @@ class User
             WHERE user_cadt_coverage.fk_cadt='$cadt' AND lib_user_positions.user_position_abbrv IN ('AC','CEF')";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result) {
-            while($row = $result->fetch_assoc()){
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
             return $data;
         }
     }
 
-    public function sso_isExist($user){
+    public function sso_isExist($user_sso)
+    {
         $mysql = $this->connectDatabase();
-        $oauth = $user->getId();
-        $username = $user->getUname();
-        $lname = $user->getLname();
-        $fname = $user->getFname();
-        $name = $user->getName();
-        $email = $user->getEmail();
+        $user_sso = $user_sso->toArray();
+        $oauth = $user_sso['sub'];
+        $username = $user_sso['preferred_username'];
+        $fname = $user_sso['given_name'];
+        $lname = $user_sso['family_name'];
+        $name = $user_sso['name'];
 
-        $q="SELECT
-        users.oauth_client
-        FROM
-        users where oauth_client='$oauth'";
+        $q = "SELECT
+            users.oauth_client
+            FROM
+            users where oauth_client='$oauth'";
 
         $result = $mysql->query($q);
         $row = $result->fetch_assoc();
-        if($row['oauth_client']){
+
+        if ($row['oauth_client']) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public function register_sso($user_sso){
+    public function register_sso($user_sso)
+    {
         $mysql = $this->connectDatabase();
-        $oauth = $user->getId();
-        //$username = $user->getUname();
-        $username='';
-        $lname='';
-        $fname='';
-        //$lname = $user->getLname();
-        //$fname = $user->getFname();
-        $name = $user->getName();
-        $email = $user->getEmail();
-
+        $user_sso = $user_sso->toArray();
+        $oauth = $user_sso['sub'];
+        $username = $user_sso['preferred_username'];
+        $fname = $user_sso['given_name'];
+        $lname = $user_sso['family_name'];
+        $name = $user_sso['name'];
 
         $user = $username;
         $pass = "default";
         $name = $name;
-        $email = $email;
+        $email = '';
         $last_name = $lname;
         $scenario = 'oauth_create';
 

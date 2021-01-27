@@ -220,9 +220,14 @@ class Upload
             where
              tbl_dqa.dqa_guid='$dqaId' AND tbl_dqa_list.is_delete='0' AND form_uploaded.is_deleted='0'";
         $result = $mysql->query($q) or die($mysql->error);
-        while ($row = $result->fetch_row()) {
-            $data[] = $row;
+        if($result->num_rows>0){
+            while ($row = $result->fetch_row()) {
+                $data[] = $row;
+            }
+        }else{
+            $data='';
         }
+
         $json_data = array("data" => $data);
         echo json_encode($json_data);
     }

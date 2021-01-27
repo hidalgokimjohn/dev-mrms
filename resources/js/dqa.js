@@ -26,13 +26,16 @@ $(document).ready(function () {
         ajax: {
             url: "resources/ajax/tbl_dqaConducted.php",
             type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
             dataType: 'json',
             error: function () {
                 $("post_list_processing").css("display", "none");
             }
         },
         language: {
-            "emptyTable": "<b>This looks empty, to put some records click the blue button plus in the top left corner.</b>"
+            "emptyTable": "<b>No records found. Click add files to create one.</b>"
         },
         columnDefs: [{
             "targets": 0,
@@ -109,13 +112,16 @@ $(document).ready(function () {
         ajax: {
             url: "resources/ajax/dqaItems.php?dqaId=" + dqaId,
             type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
             dataType: 'json',
             error: function () {
                 $("post_list_processing").css("display", "none");
             }
         },
         language: {
-            "emptyTable": "<b>This looks empty, to put some records click the blue button plus in the top left corner.</b>"
+            "emptyTable": "<b>No records found. Click add files to create one.</b>"
         },
         "columnDefs": [{
             "targets": 0,
@@ -182,6 +188,106 @@ $(document).ready(function () {
         ],
     });
 
+    //DQA AddFiles Table
+    $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
+    $('#tbl_addFiles thead tr:eq(1) th').each(function (i) {
+
+        var title = $(this).text();
+        $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+        $('input', this).on('keyup change', function (e) {
+            if (tbl_addFiles.column(i).search() !== this.value) {
+                tbl_addFiles.column(i).search(this.value).draw();
+            }
+        });
+
+    });
+    var tbl_addFiles = $('#tbl_addFiles').DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        order: [[2, "desc"]],
+        columnDefs: [
+            {orderable: false, targets: 0}
+        ],
+        ajax: {
+            url: "resources/ajax/dqaItems.php?dqaId=" + dqaId,
+            type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
+            dataType: 'json',
+            error: function () {
+                $("post_list_processing").css("display", "none");
+            }
+        },
+        language: {
+            "emptyTable": "<b>No records found. Click add files to create one.</b>"
+        },
+        "columnDefs": [{
+            "targets": 0,
+            "data": null,
+            "render": function (data, type, row) {
+                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' + data[3] + '</b></a>';
+
+            },
+        },
+            {
+                "targets": 1,
+                "data": null,
+                "render": function (data, type, row) {
+                    return data[2];
+
+                },
+            },
+            {
+                "targets": 2,
+                "data": null,
+                "render": function (data, type, row) {
+                    return data[15];
+                },
+            },
+            {
+                "targets": 3,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<div class="text-capitalize">' + data[4] + '</div>';
+                },
+            }, {
+                "targets": 4,
+                "data": null,
+                "render": function (data, type, row) {
+                    if (data[7] !== null) {
+                        return '<span class="text-capitalize">' + data[7] + '</span>';
+                    } else {
+                        return 'n/a';
+                    }
+
+                },
+            }, {
+                "targets": 5,
+                "data": null,
+                "render": function (data, type, row) {
+                    complied = '';
+                    stat = '';
+                    if (data[8] == 'for review') {
+                        stat += '<div class="badge bg-secondary text-center"><span class="fa fa-exclamation-circle"></span> For review</div>';
+                    }
+                    if (data[9] == 'with findings') {
+                        if (data[10] == 'complied') {
+                            stat += '<div class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</div>'
+                        } else {
+                            stat += '<div class="badge bg-danger text-center"><span class="fa fa-thumbs-down"></span> With findings</div>';
+                        }
+                    }
+                    if (data[9] == 'no findings') {
+                        stat += '   <div class="badge bg-primary"><span class="fa fa-thumbs-up"></span> No findings</div>';
+                    }
+                    return stat;
+                },
+            },
+        ],
+    });
+
+
     $("form#formCreateDqa").submit(function (event) {
         event.preventDefault();
         var btn = this;
@@ -220,12 +326,24 @@ $(document).ready(function () {
         });
     });
 
-    $('#modalCreateDqa').on('show.bs.modal', '',function (e) {
-        console.log('fucku');
-    });
+    const modalCreateDqa = document.getElementById('modalCreateDqa');
+    const modalAddFiles = document.getElementById('modalAddFiles');
+    if (modalCreateDqa) {
+        modalCreateDqa.addEventListener('show.bs.modal', function (e) {
+        });
+    }
+    if (modalAddFiles) {
+        modalAddFiles.addEventListener('show.bs.modal', function (e) {
+        });
+    }
 
-    editDqaTitle = document.getElementById('editDqaTitle');
-    if(editDqaTitle) {
+    /* var modalAddFiles = document.getElementById('modalCreateDqa');
+     modalCreateDqa.addEventListener('show.bs.modal',function (e){
+
+     });*/
+
+    const editDqaTitle = document.getElementById('editDqaTitle');
+    if (editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
             var dqaId = $(e.relatedTarget).data('dqaguid');
             var dqaTitle = $(e.relatedTarget).data('dqatitle');
@@ -234,6 +352,7 @@ $(document).ready(function () {
             if (dqaId !== '') {
                 $.ajax({
                     type: "post",
+                    processData: false,
                     url: "resources/ajax/editDqaTitle.php",
                     data: {
                         "dqaId": dqaId,

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('../app/Database.php');
 include_once('../app/App.php');
 include_once('../app/Auth.php');
@@ -8,8 +9,10 @@ $auth = new app\Auth();
 if ($auth->loggedIn()) {
     $auth->redirectTo('../index.php');
 }
+
 $app = new \app\App();
 $user = new \app\User();
+
 $auth->maintenance();
 ?>
 <!DOCTYPE html>

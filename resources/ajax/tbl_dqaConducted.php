@@ -6,6 +6,4 @@ include_once("../../app/Ceac.php");
 include_once("../../app/Dqa.php");
 $auth = new \app\Auth();
 $dqa = new \app\Dqa();
-if ($auth->loggedIn()) {
-    $dqa->tbl_dqaConducted();
-}
+$dqa->tbl_dqaConducted();

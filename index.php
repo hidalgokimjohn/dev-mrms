@@ -1,5 +1,4 @@
 <?php
-
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -8,20 +7,71 @@ include_once('app/City.php');
 include_once('app/Ceac.php');
 include_once('app/Dqa.php');
 $app = new \app\App();
-$auth = new \app\Auth();
+$authen = new \app\Auth();
 $user = new \app\User();
 $city = new \app\City();
 $ceac = new \app\Ceac();
 $dqa = new \app\Dqa();
 
-//If not logged in to go login-page
-if (!$auth->loggedIn()) {
-    $auth->redirectTo('login/index.php');
+require 'vendor/autoload.php';
+
+if(!$_SESSION['mrms_auth']){
+    $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
+        'authServerUrl' => 'http://auth.caraga.dswd.gov.ph:8080/auth',
+        'realm' => 'entdswd.local',
+        'clientId' => 'kalahi-apps',
+        'clientSecret' => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
+        'redirectUri' => 'http://crg-kcapps-svr/mrms/index.php'
+    ]);
+
+    if (!isset($_GET['code'])) {
+        // If we don't have an authorization code then get one
+        $authUrl = $provider->getAuthorizationUrl();
+        $_SESSION['oauth2state'] = $provider->getState();
+
+        header('Location: '.$authUrl);
+        exit;
+// Check given state against previously stored one to mitigate CSRF attack
+    } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
+
+        unset($_SESSION['oauth2state']);
+        exit('Invalid state, make sure HTTP sessions are enabled.');
+    } else {
+        // Try to get an access token (using the authorization coe grant)
+        try {
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $_GET['code']
+            ]);
+        } catch (Exception $e) {
+            exit('Failed to get access token: ' . $e->getMessage());
+        }
+
+        // Optional: Now you have a token you can look up a users profile data
+        try {
+
+            // We got an access token, let's now get the user's details
+            $user_sso = $provider->getResourceOwner($token);
+
+            if ($user->sso_isExist($user_sso)) {
+                $user_sso = $user_sso->toArray();
+                $oauth = $user_sso['sub'];
+                $_SESSION['mrms_auth'] = $oauth;
+               // $app->login_sso($user_sso['preferred_username']);
+            } else {
+                $user->register_sso($user_sso);
+                $user_sso = $user_sso->toArray();
+                $oauth = $user_sso['sub'];
+                $_SESSION['mrms_auth'] = $oauth;
+                //$app->login_sso($user_sso['preferred_username']);
+            }
+
+        } catch (Exception $e) {
+            exit('Failed to get resource owner: ' . $e->getMessage());
+        }
+        // Use this to interact with an API on the users behalf
+    }
 }
 
-$auth->maintenance();
-$user->info($_SESSION['username']);
-$app->notif_for_compliance();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +88,7 @@ $app->notif_for_compliance();
     <link rel="shortcut icon" href="resources/img/icons/icon-48x48.png"/>
 
     <link rel="canonical" href="https://demo.adminkit.io/pages-blank.html"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css"/>
 
     <title><?php echo(isset($_GET['p']) ? ucfirst($app->p_title($_GET['p'])) : 'MRMS | Home') ?></title>
     <link href="resources/css/app.css" rel="stylesheet">
@@ -185,7 +236,7 @@ $app->notif_for_compliance();
                             <i class="align-middle" data-feather="settings"></i>
                         </a>
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                            <img src="../../Storage/image/profile_pictures/thumbnails/<?php echo $user->pic_url; ?>"
+                            <img src="resources/img/avatars/avatar.jpg"
                                  class="avatar img-fluid rounded mr-1" alt="userImage"/> <span
                                 class="text-dark text-capitalize"><?php echo $user->first_name . ' ' . $user->last_name; ?></span>
                         </a>
@@ -215,8 +266,8 @@ $app->notif_for_compliance();
                 <div class="row">
                     <div class="col-12">
                         <?php
-                        ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/mov_uploading.php') : '';
-                        ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/mov_uploading_2021.php') : '';
+                        ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/movUploadingStatus.php') : '';
+                        ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/movUploadingStatus_2021.php') : '';
                         ($_GET['m'] == 'dqa') ? include('resources/views/tblDqa.php') : '';
                         ($_GET['m'] == 'view_dqa') ? include('resources/views/viewDqaItems.php') : '';
                         ?>
@@ -260,7 +311,12 @@ $app->notif_for_compliance();
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script src="resources/js/datatables.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
+
+<!--<script src="resources/js/datatables.js"></script>-->
 <!--Initialization-->
 <script type="text/javascript" src="resources/js/dqa.js"></script>
 
@@ -274,6 +330,5 @@ $app->notif_for_compliance();
             new Choices(document.querySelector(".editChoicesAc"));
         }
     });
-/*    */
 </script>
 </html>
