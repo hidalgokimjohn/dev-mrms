@@ -12,7 +12,7 @@ $users = new \app\User();
 $city = new \app\City();
 $ceac = new \app\Ceac();
 $dqa = new \app\Dqa();
-
+session_start();
 require 'vendor/autoload.php';
 
 if(!$_SESSION['mrms_auth']){
