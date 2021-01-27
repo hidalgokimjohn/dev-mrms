@@ -102,9 +102,8 @@ class App
 
     public function logout()
     {
+        unset($_SESSION['oauth2state']);
         session_destroy();
-        header('http://auth.caraga.dswd.gov.ph:8080/auth/realms/entdswd.local/protocol/openid-connect/logout?redirect_uri=http://crg-kcapps-svr/mrms/index.php');
-        exit;
     }
 
     public function log($u, $e, $d, $f, $target_id)
