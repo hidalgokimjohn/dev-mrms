@@ -28,7 +28,8 @@ if(!$_SESSION['mrms_auth']){
         // If we don't have an authorization code then get one
         $authUrl = $provider->getAuthorizationUrl();
         $_SESSION['oauth2state'] = $provider->getState();
-
+        var_dump($authUrl);
+        die();
         header('Location: '.$authUrl);
         exit;
 // Check given state against previously stored one to mitigate CSRF attack
@@ -64,7 +65,7 @@ if(!$_SESSION['mrms_auth']){
                 $_SESSION['mrms_auth'] = $oauth;
                 $app->login_sso($user_sso['preferred_username']);
             }
-            
+
         } catch (Exception $e) {
             exit('Failed to get resource owner: ' . $e->getMessage());
         }
