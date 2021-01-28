@@ -3,12 +3,15 @@
         <h5 class="card-title mb-0">Data Quality Assessment / Items</h5>
     </div>
     <div class="card-body">
-        <a href="home.php?p=modules&m=dqa" data-toggle="modal">
+        <a href="home.php?p=modules&m=dqa">
             <button type="button" class="btn btn-primary">
                 <span class="fa fa-arrow-left"></span> Back
             </button>
         </a>
-        <a href="#modalAddFiles" data-toggle="modal">
+        <?php
+        $dqaInfo = $app->getDqaInfo($_GET['dqaid']);
+        ?>
+        <a href="#modalAddFiles" data-toggle="modal" data-area="<?php echo $dqaInfo['area_id'] ?>" data-cycle="<?php echo $dqaInfo['fk_cycle']; ?>">
             <button type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Add Files</button>
         </a>
         <div class="table-responsive">
@@ -45,7 +48,7 @@
                         <th style="width: 300px;">Form</th>
                         <th style="width: 100px;">Mun/Barangay</th>
                         <th style="width: 100px;">Uploader</th>
-                        <th style="width: 100px;">Reviewer</th>
+                        <th style="width: 100px;">Uploaded</th>
                     </tr>
                     </thead>
                     <tbody></tbody>

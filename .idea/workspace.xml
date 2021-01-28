@@ -20,9 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/ajax/tbl_getFiles.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/dqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/tbl_dqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/ajax/tbl_dqaConducted.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/ajax/tbl_dqaConducted.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/viewDqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +71,7 @@
     <setting file="file://$PROJECT_DIR$/resources/ajax/saveDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/views/tblDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/ajax/tbl_getFiles.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/js/dqa_a.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/authenticate/index.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Database.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
@@ -99,7 +106,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/ajax" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -113,11 +120,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mrms\resources\ajax" />
       <recent name="C:\xampp\htdocs\mrms" />
       <recent name="C:\xampp\htdocs\mrms\resources\views" />
       <recent name="C:\xampp\htdocs\mrms\resources\js" />
       <recent name="C:\xampp\htdocs\mrms\login" />
-      <recent name="C:\xampp\htdocs\mrms\resources\ajax" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -155,7 +162,7 @@
       <workItem from="1611744470634" duration="137000" />
       <workItem from="1611745000930" duration="186000" />
       <workItem from="1611745216552" duration="8838000" />
-      <workItem from="1611806185177" duration="3177000" />
+      <workItem from="1611806185177" duration="16424000" />
     </task>
     <servers />
   </component>
