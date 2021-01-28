@@ -20,6 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,6 +106,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Background" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -152,7 +155,7 @@
       <workItem from="1611744470634" duration="137000" />
       <workItem from="1611745000930" duration="186000" />
       <workItem from="1611745216552" duration="8838000" />
-      <workItem from="1611806185177" duration="1685000" />
+      <workItem from="1611806185177" duration="3177000" />
     </task>
     <servers />
   </component>
