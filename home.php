@@ -96,7 +96,8 @@ if(!$auth->loggedIn()){
                     <ul id="pages"
                         class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
                         data-parent="#sidebar">
-                        <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']); ?>"><a
+                        <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']) ;
+                        $app->sidebar_active('view_dqa', $_GET['m'])?>"><a
                                     class="sidebar-link" href="home.php?p=modules&m=dqa">Data Quality Assessment</a>
                         </li>
                         <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
@@ -263,7 +264,7 @@ if(!$auth->loggedIn()){
     $(document).ready(function () {
         var m = url.searchParams.get("m");
         if(m=='dqa'){
-            new Choices(document.querySelector(".choices-single"));
+            new Choices(document.querySelector(".choices-muni"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));

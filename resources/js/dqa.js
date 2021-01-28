@@ -191,14 +191,15 @@ $(document).ready(function () {
     //DQA AddFiles Table
     $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
     $('#tbl_addFiles thead tr:eq(1) th').each(function (i) {
-
-        var title = $(this).text();
-        $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
-        $('input', this).on('keyup change', function (e) {
-            if (tbl_addFiles.column(i).search() !== this.value) {
-                tbl_addFiles.column(i).search(this.value).draw();
-            }
-        });
+        if (i !== 0) {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+            $('input', this).on('keyup change', function (e) {
+                if (tbl_addFiles.column(i).search() !== this.value) {
+                    tbl_addFiles.column(i).search(this.value).draw();
+                }
+            });
+        }
 
     });
     var tbl_addFiles = $('#tbl_addFiles').DataTable({
@@ -209,7 +210,7 @@ $(document).ready(function () {
             {orderable: false, targets: 0}
         ],
         ajax: {
-            url: "resources/ajax/dqaItems.php?dqaId=" + dqaId,
+            url: "resources/ajax/getFiles.php?dqaId=" + dqaId,
             type: "POST",
             processData: false,
             contentType: false,

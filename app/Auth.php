@@ -63,13 +63,4 @@
 			}
 		}
 
-		public function gate()
-		{
-			if (isset($_SESSION['login']) && $_SESSION['login'] == 'logged_in') {
-				return true;
-			} else {
-				$this->redirectTo('../login/logout.php');
-				return false;
-			}
-		}
 	}

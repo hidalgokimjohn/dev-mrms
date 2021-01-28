@@ -40,40 +40,49 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-3">
-                    <label for="choicesMun" class="form-label">Municipality</label>
-                    <select id="choicesMun" class="form-control choices-single" name="municipality" required>
-                        <option value="">Select Municipality</option>
-                        <?php
-                        $cities = $city->implementingCity();
-                        foreach ($cities as $muni) {
-                            echo '<option value="' . $muni['fk_psgc_mun'] . '">' . $muni['mun_name'] . '</option>';
-                        }
-                        $cadts = $city->enrolled_cadt_ipcdd();
-                        foreach ($cadts as $cadt) {
-                            echo '<option value="' . $cadt['cadt_id'] . '">' . strtoupper($cadt['cadt_name']) . '</option>';
-                        }
-                        ?>
+                    <label for="choicesMun" class="form-label">Municipality/CADT</label>
+                    <select id="choicesMun" class="form-control choices-muni" name="municipality" required>
+                        <option value="">Select Municipality/CADT</option>
+                        <optgroup label="MUNICIPALITY">
+                            <?php
+                            foreach ($app->getCities() as $options) {
+                                echo '<option value="' . $options['psgc_mun'] . '">' . $options['mun_name'] . '</option>';
+                            }
+                            ?>
+                        </optgroup>
+                        <optgroup label="CADTs">
+                            <?php
+                            foreach ($app->getCadt() as $options) {
+                                echo '<option value="' . $options['id'] . '">' . strtoupper($options['cadt_name']) . '</option>';
+                            }
+                            ?>
+                        </optgroup>
+
                     </select>
                     <label for="choicesCycle" class="form-label">Cycle</label>
                     <select id="choicesCycle" class="form-control choicesCycle" name="cycle" required>
                         <option value="">Select Cycle</option>
-                        <?php
-                        $cycles = $ceac->cycles('ncddp_drom_2020', 2020);
-                        foreach ($cycles as $cycle) {
-                            echo '<option value="' . $cycle['id'] . '" class="text-capitalize">' . strtoupper($cycle['cycle_name']) . ' - NCDDP DROM</option>';
-                        }
-                        $cycles = $ceac->cycles('ipcdd', 2020);
-                        foreach ($cycles as $cycle) {
-                            echo '<option value="' . $cycle['id'] . '" class="text-capitalize">' . strtoupper($cycle['cycle_name']) . ' - IPCDD</option>';
-                        }
-                        ?>
+                        <optgroup label="NCDDP">
+                            <?php
+                            foreach ($app->getCycle(2021, 'ncddp') as $options) {
+                                echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['batch']) . ' ' . strtoupper($options['cycle_name']) . '</option>';
+                            }
+                            ?>
+                        </optgroup>
+                        <optgroup label="IPCDD">
+                            <?php
+                            foreach ($app->getCycle(2021, 'ipcdd') as $options) {
+                                echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['batch']) . ' ' . strtoupper($options['cycle_name']) . '</option>';
+                            }
+                            ?>
+                        </optgroup>
+
                     </select>
                     <label for="choicesAC" class="form-label">Area Coordinator</label>
                     <select id="choicesAC" class="form-control choicesAc" name="staff" required>
                         <option value="">Select Area Coordinator</option>
                         <?php
-                        $acs = $user->get_staff("'ac'");
-                        foreach ($acs as $ac) {
+                        foreach ($app->getStaffs("'ac'") as $ac) {
                             echo '<option class="text-capitalize" value="' . $ac['fk_username'] . '">' . strtoupper($ac['fullname']) . '</option>';
                         }
                         ?>

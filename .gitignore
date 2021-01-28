@@ -1,2 +1,4 @@
-*.idea
+.idea
+storage
+*.xml
 .idea/workspace.xml

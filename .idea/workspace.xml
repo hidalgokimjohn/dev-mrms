@@ -20,11 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="301c7cc9-a625-4b81-949a-3a14c2efab27" name="Default Changelist" comment="isso">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/App.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/App.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/dqa.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/dqa.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/viewDqaItems.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/viewDqaItems.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Database.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,21 +41,33 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/app/Ceac.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/views/viewDqaItems.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/views/movUploadingStatus.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/User.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/home.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/authenticate/index.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/js/dqa.js" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/ajax/saveDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/ajax/editDqaTitle.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/js/dqa_a.js" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/resources/views/tblDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/index.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Upload.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/views/viewDqaItems.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/js/dqa.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Dqa.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/ajax/editDqaTitle.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/ajax/saveDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/views/tblDqa.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/resources/js/dqa_a.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/authenticate/index.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Database.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/City.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Finance.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -139,6 +147,12 @@
       <workItem from="1611534689255" duration="29790000" />
       <workItem from="1611641307446" duration="2187000" />
       <workItem from="1611664645635" duration="6130000" />
+      <workItem from="1611737906086" duration="1341000" />
+      <workItem from="1611739766948" duration="442000" />
+      <workItem from="1611744470634" duration="137000" />
+      <workItem from="1611745000930" duration="186000" />
+      <workItem from="1611745216552" duration="8838000" />
+      <workItem from="1611806185177" duration="1685000" />
     </task>
     <servers />
   </component>
@@ -182,67 +196,5 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="isso" />
     <option name="LAST_COMMIT_MESSAGE" value="isso" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="644" y="82" key="#Inspections" timestamp="1610580687330">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="644" y="82" key="#Inspections/0.0.1536.834@0.0.1536.834" timestamp="1610580687330" />
-    <state x="361" y="75" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610092193484">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="361" y="75" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1610092193484" />
-    <state x="522" y="260" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1610092774513">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="522" y="260" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.834@0.0.1536.834" timestamp="1610092774513" />
-    <state x="384" y="0" key="CommitChangelistDialog2" timestamp="1610446095055">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="384" y="0" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1610446095055" />
-    <state x="549" y="159" key="FileChooserDialogImpl" timestamp="1611570797835">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="549" y="159" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1611570797835" />
-    <state width="1025" height="208" key="GridCell.Tab.0.bottom" timestamp="1610092377627">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state width="1025" height="208" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state width="1025" height="208" key="GridCell.Tab.0.center" timestamp="1610092377627">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state width="1025" height="208" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state width="1025" height="208" key="GridCell.Tab.0.left" timestamp="1610092377627">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state width="1025" height="208" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state width="1025" height="208" key="GridCell.Tab.0.right" timestamp="1610092377627">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state width="1025" height="208" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1610092377627" />
-    <state x="601" y="336" key="NewPhpFileDialog" timestamp="1610632418177">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="601" y="336" key="NewPhpFileDialog/0.0.1536.834@0.0.1536.834" timestamp="1610632418177" />
-    <state x="277" y="62" key="SettingsEditor" timestamp="1610338784595">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="277" y="62" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1610338784595" />
-    <state x="579" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610544045116">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="579" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834@0.0.1536.834" timestamp="1610544045116" />
-    <state width="600" height="440" key="javadoc.popup" timestamp="1610196640176">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state width="600" height="440" key="javadoc.popup/0.0.1536.834@0.0.1536.834" timestamp="1610196640176" />
-    <state x="425" y="189" key="run.anything.popup" timestamp="1610525858203">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="425" y="189" key="run.anything.popup/0.0.1536.834@0.0.1536.834" timestamp="1610525858203" />
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup" timestamp="1611734425244">
-      <screen x="0" y="0" width="1536" height="834" />
-    </state>
-    <state x="431" y="155" width="672" height="160" key="search.everywhere.popup/0.0.1536.834@0.0.1536.834" timestamp="1611734425244" />
   </component>
 </project>
