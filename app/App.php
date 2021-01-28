@@ -246,4 +246,7 @@ class App
             return false;
         }
     }
+    public function name(){
+        
+    }
 }
