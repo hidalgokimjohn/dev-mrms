@@ -25,7 +25,7 @@ class App
             FROM
             users
             INNER JOIN personal_info ON personal_info.fk_username = users.username
-            INNER JOIN lib_user_positions ON users.fk_position = lib_user_positions.id
+            left JOIN lib_user_positions ON users.fk_position = lib_user_positions.id
             WHERE users.username = ?");
         $q->bind_param('s', $user);
         $q->execute();
@@ -245,8 +245,5 @@ class App
         } else {
             return false;
         }
-    }
-    public function name(){
-        
     }
 }

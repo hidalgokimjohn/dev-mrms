@@ -66,6 +66,7 @@
     <setting file="file://$PROJECT_DIR$/app/App.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/resources/js/dqa_a.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/authenticate/index.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/app/Database.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/City.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/app/Finance.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
   </component>
@@ -152,7 +153,7 @@
       <workItem from="1611744470634" duration="137000" />
       <workItem from="1611745000930" duration="186000" />
       <workItem from="1611745216552" duration="8838000" />
-      <workItem from="1611806185177" duration="459000" />
+      <workItem from="1611806185177" duration="1667000" />
     </task>
     <servers />
   </component>
