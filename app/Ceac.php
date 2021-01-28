@@ -268,22 +268,22 @@ class Ceac
         }
     }
 
-    public function cycles($modality, $year)
+    public function getCycle($year,$modality)
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-				cycles.id,
-				lib_cycle.cycle_name,
-				cycles.`year`,
-				lib_modality.modality_name
-			FROM
-				cycles
-			INNER JOIN lib_cycle ON cycles.fk_cycle = lib_cycle.id
-			INNER JOIN lib_modality ON cycles.fk_modality = lib_modality.id
-			WHERE
-				lib_modality.modality_name = ?
-			AND cycles.`year` = ?");
-        $q->bind_param('si', $modality, $year);
+                cycles.id,
+                lib_cycle.cycle_name,
+                lib_modality.modality_name,
+                cycles.batch,
+                cycles.`year`,
+                cycles.`status`
+                FROM
+                cycles
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE cycles.`year`= ? AND lib_modality.modality_group='drom' AND lib_modality.modality_name=?");
+        $q->bind_param('is',$year,$modality);
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {

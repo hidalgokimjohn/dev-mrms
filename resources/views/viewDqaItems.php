@@ -40,12 +40,12 @@
                 <table id="tbl_addFiles" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
                     <thead>
                     <tr class="border-bottom-0">
-                        <th style="width: 400px;">Filename</th>
-                        <th style="width: 500px;">Form</th>
-                        <th style="width: 200px;">Date Added</th>
+                        <th style="width: 100px;"></th>
+                        <th style="width: 500px;">Filename</th>
+                        <th style="width: 300px;">Form</th>
+                        <th style="width: 100px;">Mun/Barangay</th>
                         <th style="width: 100px;">Uploader</th>
                         <th style="width: 100px;">Reviewer</th>
-                        <th style="width: 100px;">Status</th>
                     </tr>
                     </thead>
                     <tbody></tbody>

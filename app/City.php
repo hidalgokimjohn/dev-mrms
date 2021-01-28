@@ -10,6 +10,42 @@ class City
         return $database->getConnection();
     }
 
+    public function getCadt(){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT * FROM lib_cadt ORDER BY lib_cadt.id ASC");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+    public function getCities(){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+            lib_region.psgc_region,
+            lib_municipality.psgc_mun,
+            lib_municipality.mun_name
+            FROM
+            lib_municipality
+            INNER JOIN lib_province ON lib_municipality.psgc_province = lib_province.psgc_province
+            INNER JOIN lib_region ON lib_province.psgc_region = lib_region.psgc_region
+            WHERE lib_region.psgc_region='160000000' ORDER BY lib_municipality.mun_name ASC");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
     public function implementingCity()
     {
         $mysql = $this->connectDatabase();
