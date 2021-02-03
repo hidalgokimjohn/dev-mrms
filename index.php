@@ -120,9 +120,9 @@ if(!$_SESSION['mrms_auth']){
                 <div class="d-table-cell align-middle">
 
                     <div class="text-center mt-4">
-                        <h1 class="h2">MOV Repository & Management System (Beta Version)</h1>
+                        <h1 class="h2">MOV Repository & Management System</h1>
                         <p class="lead">
-                            CARAGA | Kalahi-CIDSS
+                            CARAGA | Kalahi-CIDSS <small>Beta 3.0</small>
                         </p>
                     </div>
 
