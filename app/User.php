@@ -597,7 +597,7 @@ class User
         $name = $user_sso['name'];
 
         $user = $username;
-        $pass = "default";
+        $pass = "default123$";
         $name = $name;
         $email = '';
         $last_name = $lname;

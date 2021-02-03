@@ -8,7 +8,7 @@ $app = new \app\App();
 
 
 if($_POST['withFindings']=='yes'){
-	$required_fields = array("withFindings", "typeOfFindings", "textFindings", "responsiblePerson","dateOfCompliance");
+	$required_fields = array("withFindings", "typeOfFindings", "textFindings", "responsiblePerson","dateOfCompliance","dqaLevel");
 
 	foreach ($required_fields as $field) {
 	    if (!strlen($_POST[$field])) {
@@ -23,7 +23,7 @@ if($_POST['withFindings']=='yes'){
 }
 
 if($_POST['withFindings']=='ta'){
-	$required_fields = array("textFindings");
+	$required_fields = array("textFindings","dqaLevel");
 
 	foreach ($required_fields as $field) {
 	    if (!strlen($_POST[$field])) {
@@ -37,6 +37,16 @@ if($_POST['withFindings']=='ta'){
 	}
 }
 if($_POST['withFindings']=='no'){
+	$required_fields = array("dqaLevel");
+	foreach ($required_fields as $field) {
+	    if (!strlen($_POST[$field])) {
+	         $error[]=$field." is required";
+	    }
+	}
+	if(!empty($error)){
+		echo 'error_on_required_fields';
+	}else{
 		echo ($app->submitNoFinding())?'submitted':'submit_error';
+	}
 }
 

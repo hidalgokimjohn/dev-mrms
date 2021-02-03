@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var m = url.searchParams.get("m");
     var tbl_addFiles;
     var tbl_viewDqaItems;
+    var ft_guid;
+    var fileName;
 
 //DQA Table
     if (m == 'dqa') {
@@ -376,11 +378,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data == 'added') {
                         tbl_addFiles.ajax.reload();
                         tbl_viewDqaItems.ajax.reload();
-                        notyf.success({
+                        window.notyf.open({
+                            type:'success',
                             message: '<strong>File added </strong>successfully',
-                            duration: 10000,
-                            ripple: true,
-                            dismissible: true
+                            duration:'5000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
                         });
                     }
                 }
@@ -397,9 +404,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     if(modalViewFile){
         modalViewFile.addEventListener('show.bs.modal', function (e) {
-            var fileName = $(e.relatedTarget).data('file-name');
+            fileName = $(e.relatedTarget).data('file-name');
             var file_path = $(e.relatedTarget).data('file-path');
-            var ft_guid = $(e.relatedTarget).data('ft-guid');
+            ft_guid = $(e.relatedTarget).data('ft-guid');
             PDFObject.embed(file_path, "#pdf", options);
             $.ajax({
                 type: "post",
@@ -469,44 +476,85 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#btnSubmitFinding").prop('disabled',true);
         if(!hasError){
             $.ajax({
-            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId,
+            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId+'&ft_guid='+ft_guid+'&file_name='+fileName,
             type: 'POST',
             data: formData,
             async: true,
             cache: false,
             contentType: false,
             processData: false,
-            success: function (returndata) {
-                console.log(FormData);
-            }
-        });
+            success: function (data) {
+                    if(data=='submitted'){
+                       window.notyf.open({
+                            type:'success',
+                            message:'<strong>Good job!, </strong>your review has been submitted.',
+                            duration:'5000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });     
+                    }
+                    if(data=='submit_error'){
+                        window.notyf.open({
+                            type:'error',
+                            message:'<strong>Error:</strong> please fill-out required fields.',
+                            duration:'5000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+                    }
+                    if(data=='error_on_required_fields'){
+                        window.notyf.open({
+                            type:'error',
+                            message:'<strong>Error:</strong> please fill-out required fields.',
+                            duration:'5000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+                    }
+                    if(data=='NYUsubmit_error'){
+                        window.notyf.open({
+                            type:'warning',
+                            message:'<strong>Sorry, </strong> you cannot set a <strong class="text-info">No Findings</strong> with a non-existent file in the system.',
+                            duration:'9000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });   
+                    }
+                }
+            });
+        }else{
             window.notyf.open({
-                    type:'success',
-                    message:'<strong>Good job!, </strong>your review has been submitted.',
-                    duration:'5000',
-                    ripple:true,
-                    dismissible:true,
-                    position: {
-                        x: 'center',
-                        y: 'top'
-                    }
-                });    
-        }else{ 
-             window.notyf.open({
-                    type:'error',
-                    message:'<strong>Hey!,</strong> please fill-out required fields.',
-                    duration:'5000',
-                    ripple:true,
-                    dismissible:true,
-                    position: {
-                        x: 'center',
-                        y: 'top'
-                    }
-                });
+                            type:'error',
+                            message:'<strong>Hey!</strong> please fill-out required fields.',
+                            duration:'5000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
         }
+        
         $("#btnSubmitFinding").html('<i class="fa fa-save"></i> Submit');
         $("#btnSubmitFinding").prop('disabled',false);
-    })
+    });
 });
 
 

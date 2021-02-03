@@ -278,9 +278,11 @@ if(!$auth->loggedIn()){
             new Choices(document.querySelector(".choices-muni"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
-            new Choices(document.querySelector(".editChoicesAc"));
+            new Choices(document.querySelector(".editChoicesAc"));            
+
         }
         if(m=='view_dqa'){
+            new Choices(document.querySelector(".choices-dqa-level"));
             flatpickr(".flatpickr-minimum",{
                 minDate:'today'
             });
