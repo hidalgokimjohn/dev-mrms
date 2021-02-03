@@ -62,16 +62,23 @@
                     <label for="choicesCycle" class="form-label">Cycle</label>
                     <select id="choicesCycle" class="form-control choicesCycle" name="cycle" required>
                         <option value="">Select Cycle</option>
-                        <optgroup label="NCDDP">
+                        <optgroup label="NCDDP 2021">
                             <?php
                             foreach ($app->getCycle(2021, 'ncddp') as $options) {
                                 echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['batch']) . ' ' . strtoupper($options['cycle_name']) . '</option>';
                             }
                             ?>
                         </optgroup>
-                        <optgroup label="IPCDD">
+                        <optgroup label="IPCDD 2021">
                             <?php
                             foreach ($app->getCycle(2021, 'ipcdd') as $options) {
+                                echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['batch']) . ' ' . strtoupper($options['cycle_name']) . '</option>';
+                            }
+                            ?>
+                        </optgroup>
+                        <optgroup label="IPCDD 2020">
+                            <?php
+                            foreach ($app->getCycle(2020, 'ipcdd') as $options) {
                                 echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['batch']) . ' ' . strtoupper($options['cycle_name']) . '</option>';
                             }
                             ?>
