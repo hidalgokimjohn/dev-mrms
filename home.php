@@ -36,7 +36,16 @@ if(!$auth->loggedIn()){
 
     <title><?php echo(isset($_GET['p']) ? ucfirst($app->p_title($_GET['p'])) : 'MRMS | Home') ?></title>
     <link href="resources/css/app.css" rel="stylesheet">
-
+    <script type="text/css">
+        .choices[data-type*="select-one"] select.choices__input {
+            display: block !important;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+    </script>
     <!-- BEGIN SETTINGS -->
     <!-- END SETTINGS -->
 </head>
@@ -260,8 +269,8 @@ if(!$auth->loggedIn()){
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
 <!--Initialization-->
+<script type="text/javascript" src="vendor/PDFObject-master/pdfobject.min.js"></script>
 <script type="text/javascript" src="resources/js/dqa.js"></script>
-
 <script>
     $(document).ready(function () {
         var m = url.searchParams.get("m");
@@ -270,6 +279,42 @@ if(!$auth->loggedIn()){
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));
+        }
+        if(m=='view_dqa'){
+            flatpickr(".flatpickr-minimum",{
+                minDate:'today'
+            });
+            $("#dateOfCompliance").removeAttr('readonly')
+            const choicesFinding = new Choices(".choices-findings", {
+                shouldSort: false
+            });
+            const choiceTypeOfFindings = new Choices(".choices-type-of-findings", {
+                shouldSort: false
+            });
+            const choicesStaff = new Choices(".choices-staff");
+            document.getElementById("choicesFinding").addEventListener("change", function(e) {
+                if(this.value=='no'){
+                    choiceTypeOfFindings.disable();
+                    choicesStaff.disable();
+                    document.getElementById("text_findings").disabled = true;
+                    document.getElementById("text_findings").value = '';
+                    document.getElementById("dateOfCompliance").value = '';
+                    document.getElementById("responsiblePerson").value = '';
+                    $("#dateOfCompliance").prop('disabled',true);
+                }if(this.value=='yes'){
+                    choiceTypeOfFindings.enable();
+                    choicesStaff.enable();
+                    document.getElementById("text_findings").disabled = false;
+                    $('.flatpickr-minimum').prop('disabled',false);
+                }
+                if(this.value=='ta'){
+                    choiceTypeOfFindings.disable();
+                    choicesStaff.disable();
+                    $("#dateOfCompliance").prop('disabled',true);
+                    document.getElementById("text_findings").disabled = false;
+                }
+            });
+
         }
     });
     /*    */

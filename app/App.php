@@ -218,7 +218,7 @@ class App
                 cycles
                 INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE cycles.`year`= ? AND lib_modality.modality_group='drom' AND lib_modality.modality_name=?");
+                WHERE cycles.`year`= ? AND lib_modality.modality_group in ('ncddp_drom','ipcdd_drom','ipcdd','ncddp') AND lib_modality.modality_name=?");
         $q->bind_param('is', $year, $modality);
         $q->execute();
         $result = $q->get_result();
@@ -325,16 +325,16 @@ class App
             FROM
             tbl_dqa
             INNER JOIN tbl_dqa_list ON tbl_dqa.dqa_guid = tbl_dqa_list.fk_dqa_guid
-            INNER JOIN form_uploaded ON form_uploaded.file_id = tbl_dqa_list.fk_file_guid
-            INNER JOIN form_target ON form_target.ft_guid = form_uploaded.fk_ft_guid
-            INNER JOIN users ON users.username = form_uploaded.uploaded_by
-            INNER JOIN personal_info ON personal_info.fk_username = users.username
-            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+            LEFT JOIN form_uploaded ON form_uploaded.file_id = tbl_dqa_list.fk_file_guid
+            LEFT JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid OR form_target.ft_guid = form_uploaded.fk_ft_guid
+            LEFT JOIN users ON users.username = form_uploaded.uploaded_by
+            LEFT JOIN personal_info ON personal_info.fk_username = users.username
+            LEFT JOIN lib_form ON lib_form.form_code = form_target.fk_form
             LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
             LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
             LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
-            where
-             tbl_dqa.dqa_guid='$dqaId' AND tbl_dqa_list.is_delete='0' AND form_uploaded.is_deleted='0'";
+            WHERE
+             tbl_dqa.dqa_guid='$dqaId' AND tbl_dqa_list.is_delete='0' AND (form_uploaded.is_deleted='0' OR form_uploaded.is_deleted is null)";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_row()) {
@@ -356,45 +356,60 @@ class App
         $cycle_id = $mysql->real_escape_string($cycle_id);
         $username = $_SESSION['username'];
         $q = "SELECT
-            form_uploaded.file_id,
-            form_uploaded.fk_ft_guid,
-            form_uploaded.original_filename,
-            form_uploaded.file_path,
-            form_uploaded.date_uploaded,
-            COALESCE (
+                form_uploaded.file_id,
+                form_target.ft_guid,
+                form_uploaded.original_filename,
+                form_uploaded.file_path,
+                form_uploaded.date_uploaded,
+                COALESCE (
                     lib_barangay.brgy_name,
                     lib_municipality.mun_name,
                     lib_cadt.cadt_name,
                     'n/a'
                 ) AS location,
-            lib_form.form_name,
-            lib_form.form_type,
-            CONCAT(personal_info.first_name,' ',personal_info.last_name) as uploader
+                lib_form.form_name,
+                lib_form.form_type,
+                tbl_dqa_list.added_by,
+                tbl_dqa_list.fk_dqa_guid,
+                tbl_dqa_list.is_delete,
+                tbl_dqa_list.ft_guid
             FROM
-                form_uploaded
-            INNER JOIN form_target ON form_target.ft_guid = form_uploaded.fk_ft_guid
-            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+                form_target
+            LEFT JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
+            LEFT JOIN tbl_dqa_list ON tbl_dqa_list.fk_file_guid = form_uploaded.file_id
             LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
             LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
             LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
-            INNER JOIN personal_info ON personal_info.fk_username = form_uploaded.uploaded_by
-            INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+            LEFT JOIN lib_form ON lib_form.form_code = form_target.fk_form
             WHERE
-                form_uploaded.is_deleted = 0
-            AND form_uploaded.is_compliance IS NULL
-            AND (
-                form_target.fk_psgc_mun = '$fk_psgc_mun'
-                OR form_target.fk_cadt = '$cadt_id'
-            )
-            AND form_target.fk_cycle = '$cycle_id'
-            AND form_uploaded.file_id NOT IN (
-                SELECT
-                    tbl_dqa_list.fk_file_guid
-                FROM
-                    tbl_dqa_list
-                WHERE
-                    tbl_dqa_list.added_by = '$username'
-            )";
+                (
+                    (
+                        form_target.fk_psgc_mun = '$fk_psgc_mun'
+                        OR form_target.fk_cadt = '$cadt_id'
+                    )
+                    AND form_target.fk_cycle = '$cycle_id'
+                    AND (
+                        tbl_dqa_list.is_delete = 0
+                        OR tbl_dqa_list.is_delete IS NULL
+                        OR tbl_dqa_list.fk_file_guid IS NULL
+                    )
+                    AND (
+                        form_target.ft_guid NOT IN (
+                            SELECT
+                                form_target.ft_guid
+                            FROM
+                                tbl_dqa_list
+                            LEFT JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+                            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
+                            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
+                            LEFT JOIN form_uploaded ON form_uploaded.file_id = tbl_dqa_list.fk_file_guid
+                            WHERE
+                                added_by = '$username'
+                            AND (
+                                form_target.fk_psgc_mun = '$fk_psgc_mun'
+                                OR form_target.fk_cadt = '$cadt_id'
+                            )
+                            AND form_target.fk_cycle = '$cycle_id')))";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_row()) {
@@ -428,5 +443,136 @@ class App
         } else {
             return false;
         }
+    }
+
+    public function addFile()
+    {
+        $mysql = $this->connectDatabase();
+        $ceac = new Ceac();
+        $f_guid = $ceac->v4();
+        $ft_guid = $mysql->real_escape_string($_POST['ftGuid']);
+        $dqa_id = $mysql->real_escape_string($_POST['dqaId']);
+        $file_id = $mysql->real_escape_string($_POST['fileId']);
+        if ($_POST['fileId'] !== '') {
+            !
+            $q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
+            VALUES ('$file_id','$dqa_id', '$_SESSION[username]', NOW(), '0','$ft_guid')";
+        } else {
+            $q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
+            VALUES (null,'$dqa_id', '$_SESSION[username]', NOW(), '0','$ft_guid')";
+        }
+        if ($ft_guid) {
+            $result = $mysql->query($q) or die($mysql->error);
+            if ($mysql->affected_rows > 0) {
+                if ($file_id !== null) {
+                    $q = "UPDATE `form_uploaded` SET `is_added_to_dqa`='0' WHERE (`file_id`='$file_id') LIMIT 1";
+                    $mysql->query($q) or die($mysql->error);
+                }
+                echo 'added';
+            }
+        }
+    }
+
+    public function updateDqaList()
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+                tbl_dqa_list.id,
+                tbl_dqa_list.fk_file_guid
+                FROM
+                tbl_dqa_list";
+        $result = $mysql->query($q);
+        while ($row = $result->fetch_assoc()) {
+            $q1 = "SELECT
+                    form_uploaded.fk_ft_guid
+                    FROM
+                    form_uploaded
+                    WHERE file_id='$row[fk_file_guid]'";
+            $result1 = $mysql->query($q1);
+            while ($row1 = $result1->fetch_assoc()) {
+                $q2 = "UPDATE `tbl_dqa_list` SET `ft_guid`='$row1[fk_ft_guid]' WHERE (`fk_file_guid`='$row[fk_file_guid]')";
+                $result2 = $mysql->query($q2) or die($mysql->error);
+                if ($result2) {
+                    echo 'updated<br>';
+                }
+            }
+        }
+    }
+
+    public function getRelatedFiles($ft_guid)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+                lib_activity.id,
+                form_target.fk_psgc_mun,
+                form_target.fk_psgc_brgy,
+                form_target.fk_cycle,
+                form_target.fk_cadt
+                FROM
+                lib_form
+                INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+                INNER JOIN form_target ON lib_form.form_code = form_target.fk_form
+                INNER JOIN form_uploaded ON form_target.ft_guid = form_uploaded.fk_ft_guid
+                WHERE form_target.ft_guid='$ft_guid'";
+        $result = $mysql->query($q) or die($mysql->error);
+        $row = $result->fetch_assoc();
+        $q1 = "SELECT
+                lib_activity.id,
+                form_uploaded.original_filename,
+                form_uploaded.file_path
+                FROM
+                lib_form
+                INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+                INNER JOIN form_target ON lib_form.form_code = form_target.fk_form
+                LEFT JOIN form_uploaded ON form_target.ft_guid = form_uploaded.fk_ft_guid
+                WHERE lib_activity.id='$row[id]' AND (form_target.fk_psgc_mun='$row[fk_psgc_mun]' OR form_target.fk_cadt='$row[fk_cadt]') AND form_target.fk_psgc_brgy='$row[fk_psgc_brgy]'";
+        $result1 = $mysql->query($q1) or die($mysql->error);
+        if($result1->num_rows>0){
+            while ($row1 = $result1->fetch_assoc()) {
+                $data[] = $row1;
+            }
+            return $data;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function createDqa(){
+        $mysql = $this->connectDatabase();
+        $ceac = new Ceac();
+        $dqa_gui = $ceac->v4();
+        
+        if (strlen($_POST['municipality']) == 9) {
+            $q = $mysql->prepare("INSERT INTO `tbl_dqa` (`dqa_guid`, `fk_psgc_mun`, `fk_cycle`, `title`, `responsible_person`, `conducted_by`, `created_at`,`dqa_status`)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
+        } else {
+            $q = $mysql->prepare("INSERT INTO `tbl_dqa` (`dqa_guid`, `fk_cadt_id`, `fk_cycle`, `title`, `responsible_person`, `conducted_by`, `created_at`,`dqa_status`)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
+        }
+
+        $q->bind_param('siisss', $dqa_gui, $_POST['municipality'], $_POST['cycle'], $_POST['dqaTitle'], $_POST['staff'], $_SESSION['username']);
+        $q->execute();
+        if ($q->affected_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function submitNoFinding(){
+        $mysql = $this->connectDatabase();
+
+    }
+    public function submitWithFinding(){
+        $mysql = $this->connectDatabase();
+        $guid = new Ceac();
+        $finding_guid = $guid->v4();
+        $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `fk_file_guid`, `deadline_for_compliance`) VALUES ('$findings_guid', 'fk_ft_guid', 'fk_dqa_guid', '6', 'findings', 'responsible_person', '0', '2021-02-03 00:17:47', '0', 'added_by', 'field', 'file_id', '2021-02-04')";
+
+    }
+    public function submitGiveTa(){
+        $mysql = $this->connectDatabase();
+        
     }
 }

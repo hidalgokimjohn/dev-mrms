@@ -4,8 +4,11 @@ var url = new URL(url_string);
 document.addEventListener("DOMContentLoaded", function () {
     var dqaId = url.searchParams.get("dqaid");
     var m = url.searchParams.get("m");
+    var tbl_addFiles;
+    var tbl_viewDqaItems;
+
 //DQA Table
-    if(m=='dqa'){
+    if (m == 'dqa') {
         $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
         $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
             if (i !== 0) {
@@ -107,10 +110,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    var tbl_viewDqaItems = $('#tbl_viewDqaItems').DataTable({
+    tbl_viewDqaItems = $('#tbl_viewDqaItems').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
         order: [[2, "desc"]],
+        dom: '<"html5buttons">lTgitpr',
         columnDefs: [
             {orderable: false, targets: 0}
         ],
@@ -126,14 +130,17 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
         language: {
-            "emptyTable": "<b>No records found. Click add files to create one.</b>"
+            "emptyTable": "<b>No files found in this item.</b>"
         },
         "columnDefs": [{
             "targets": 0,
             "data": null,
             "render": function (data, type, row) {
-                return '<a href="#modal-reviewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" title="Review"><b>' + titleCase(data[3]) + '</b></a>';
-
+                if(data[3]!==null){
+                    return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="'+data[3]+'"><b>' + titleCase(data[3]) + '</b></a>';
+                }else{
+                    return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="'+data[3]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
+                }
             },
         },
             {
@@ -155,7 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 3,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class="text-capitalize">' + data[4] + '</div>';
+                    if(data[4]!==null){
+                        return '<div class="text-capitalize">' + data[4] + '</div>';
+                    }else{
+                        return 'N/A';
+                    }
                 },
             }, {
                 "targets": 4,
@@ -164,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data[7] !== null) {
                         return '<span class="text-capitalize">' + data[7] + '</span>';
                     } else {
-                        return 'n/a';
+                        return 'N/A';
                     }
 
                 },
@@ -174,20 +185,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 "render": function (data, type, row) {
                     complied = '';
                     stat = '';
-                    if (data[8] == 'for review') {
-                        stat += '<div class="badge bg-secondary text-center"><span class="fa fa-exclamation-circle"></span> For review</div>';
-                    }
-                    if (data[9] == 'with findings') {
-                        if (data[10] == 'complied') {
-                            stat += '<div class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</div>'
-                        } else {
-                            stat += '<div class="badge bg-danger text-center"><span class="fa fa-thumbs-down"></span> With findings</div>';
+                    if(data[8]!==null){
+                        if (data[8] == 'for review') {
+                            stat += '<div class="badge bg-secondary text-center"><span class="fa fa-exclamation-circle"></span> For review</div>';
                         }
+                        if (data[9] == 'with findings') {
+                            if (data[10] == 'complied') {
+                                stat += '<div class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</div>'
+                            } else {
+                                stat += '<div class="badge bg-danger text-center"><span class="fa fa-thumbs-down"></span> With findings</div>';
+                            }
+                        }
+                        if (data[9] == 'no findings') {
+                            stat += '   <div class="badge bg-primary"><span class="fa fa-thumbs-up"></span> No findings</div>';
+                        }
+                        return stat;
+                    }else{
+                        return 'N/A';
                     }
-                    if (data[9] == 'no findings') {
-                        stat += '   <div class="badge bg-primary"><span class="fa fa-thumbs-up"></span> No findings</div>';
-                    }
-                    return stat;
                 },
             },
         ],
@@ -233,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const modalCreateDqa = document.getElementById('modalCreateDqa');
     const modalAddFiles = document.getElementById('modalAddFiles');
+    const modalViewFile = document.getElementById('modalViewFile');
     if (modalCreateDqa) {
         modalCreateDqa.addEventListener('show.bs.modal', function (e) {
         });
@@ -256,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             var areaId = $(e.relatedTarget).data('area');
             var cycleId = $(e.relatedTarget).data('cycle');
-            var tbl_addFiles = $('#tbl_addFiles').DataTable({
+            tbl_addFiles = $('#tbl_addFiles').DataTable({
                 orderCellsTop: true,
                 fixedHeader: true,
                 order: [[5, "asc"]],
@@ -270,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     type: "POST",
                     data: {
                         "psgc_mun": areaId,
-                        "cycle_id":cycleId
+                        "cycle_id": cycleId
                     },
                     dataType: 'json',
                     error: function () {
@@ -278,20 +294,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 },
                 language: {
-                    "emptyTable": "<b>No records found. Click add files to create one.</b>"
+                    "emptyTable": "<b>No files found in this item.</b>"
                 },
                 "columnDefs": [{
                     "targets": 0,
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<button class="btn btn-success file_id" data-file-id="' + data[0] + '" data-ft-guid="' + data[6] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
+                        var file_id;
+                        if(data[0]!==null){
+                            file_id=data[0];
+                        }else{
+                            file_id='';
+                        }
+                        return '<button class="btn btn-success file_id" data-file-id="' + file_id + '" data-ft-guid="' + data[1] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
                     },
                 },
                     {
                         "targets": 1,
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<a href="' + data[3] + '" target="_blank"><strong>' + data[2] + '</strong></a>';
+                            if (data[0] !== null) {
+                                return '<a href="' + data[3] + '" target="_blank"><strong>' + data[2] + '</strong></a>';
+                            } else {
+                                return '<strong class="text-danger">Not Yet Uploaded</strong>';
+                            }
                         },
                     }, {
                         "targets": 2,
@@ -305,37 +331,95 @@ document.addEventListener("DOMContentLoaded", function () {
                         "render": function (data, type, row) {
                             return data[5];
                         },
-                    },{
+                    }, {
                         "targets": 4,
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<span class="text-capitalize">'+data[8]+'</span>';
+                            if (data[8] !== null) {
+                                return '<span class="text-capitalize">' + data[8] + '</span>';
+                            } else {
+                                return '<strong class="text-danger">N/A</strong>'
+                            }
                         },
-                    },{
+                    }, {
                         "targets": 5,
                         "data": null,
                         "render": function (data, type, row) {
-                            return data[4];
+                            if (data[4] !== null) {
+                                return data[4];
+                            } else {
+                                return '<strong class="text-danger">N/A</strong>'
+                            }
                         },
                     }
                 ],
             });
-            $('#tbl_addFiles').on('click', 'tbody td .file_id', function (e) {
-                var file_id = $(this).attr('data-file-id');
-                var a = this;
-                $(a).html('<i class="fa fa-circle-notch fa-spin"></i> Adding');
-                $(a).attr("disabled", "disabled");
-                tbl_addFiles.ajax.reload();
-                tbl_viewDqaItems.ajax.reload();
+        });
+        //addFiles
+        $('#tbl_addFiles').on('click', 'tbody td .file_id', function (e) {
+
+            var fileId = $(this).attr('data-file-id');
+            var ftGuid = $(this).attr('data-ft-guid');
+            var dqaId = $(this).attr('data-dqa-id');
+            var a = this;
+            $(a).html('<i class="fa fa-circle-notch fa-spin"></i> Adding');
+            $(a).attr("disabled", "disabled");
+            $.ajax({
+                type: "post",
+                url: "resources/ajax/addFile.php",
+                data: {
+                    "dqaId": dqaId,
+                    "fileId": fileId,
+                    "ftGuid": ftGuid
+                },
+                success: function (data) {
+                    if (data == 'added') {
+                        tbl_addFiles.ajax.reload();
+                        tbl_viewDqaItems.ajax.reload();
+                        notyf.success({
+                            message: '<strong>File added </strong>successfully',
+                            duration: 10000,
+                            ripple: true,
+                            dismissible: true
+                        });
+                    }
+                }
             });
         });
     }
+    //DQA View File
+    var options = {
+        height: "600px",
+        pdfOpenParams: {
+            view: 'FitH',
+            pagemode: 'thumbs'
+        }
+    };
+    if(modalViewFile){
+        modalViewFile.addEventListener('show.bs.modal', function (e) {
+            var fileName = $(e.relatedTarget).data('file-name');
+            var file_path = $(e.relatedTarget).data('file-path');
+            var ft_guid = $(e.relatedTarget).data('ft-guid');
+            PDFObject.embed(file_path, "#pdf", options);
+            $.ajax({
+                type: "post",
+                url: "resources/ajax/getRelatedFiles.php",
+                data: {
+                    "ft_guid": ft_guid
+                },
+                dataType:'html',
+                success: function (data) {
+                    $("#relatedFiles").html('');
+                    $("#relatedFiles").html(data);
+                }
+            });
 
-    /* var modalAddFiles = document.getElementById('modalCreateDqa');
-     modalCreateDqa.addEventListener('show.bs.modal',function (e){
-
-     });*/
-
+            if(fileName==null){
+                fileName='Not Yet Uploaded';
+            }
+            $('.file-name').text(fileName);
+        });
+    }
     const editDqaTitle = document.getElementById('editDqaTitle');
     if (editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
@@ -359,6 +443,70 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    //Submit Findings
+    var forms = document.querySelectorAll('.needs-validation')
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                form.classList.add('was-validated');
+                form.classList.add('has-error');
+            }else{
+                form.classList.remove('was-validated');
+                form.classList.remove('has-error');
+                form.classList.remove('needs-validation');
+            }
+        }, false)
+    })
+    $("form#submitFinding").submit(function (event) {
+        event.preventDefault();
+        var formData = new FormData($(this)[0]);
+        var formValidated = document.querySelector('#submitFinding');
+        var hasError = formValidated.classList.contains('has-error');
+        $("#btnSubmitFinding").html('<i class="fa fa-circle-notch fa-spin"></i> Submitting');
+        $("#btnSubmitFinding").prop('disabled',true);
+        if(!hasError){
+            $.ajax({
+            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId,
+            type: 'POST',
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                console.log(FormData);
+            }
+        });
+            window.notyf.open({
+                    type:'success',
+                    message:'<strong>Good job!, </strong>your review has been submitted.',
+                    duration:'5000',
+                    ripple:true,
+                    dismissible:true,
+                    position: {
+                        x: 'center',
+                        y: 'top'
+                    }
+                });    
+        }else{ 
+             window.notyf.open({
+                    type:'error',
+                    message:'<strong>Hey!,</strong> please fill-out required fields.',
+                    duration:'5000',
+                    ripple:true,
+                    dismissible:true,
+                    position: {
+                        x: 'center',
+                        y: 'top'
+                    }
+                });
+        }
+        $("#btnSubmitFinding").html('<i class="fa fa-save"></i> Submit');
+        $("#btnSubmitFinding").prop('disabled',false);
+    })
 });
 
 
@@ -372,12 +520,14 @@ function pad(str, max) {
 }
 
 function titleCase(str) {
-    var splitStr = str.toUpperCase().split(' ');
-    for (var i = 0; i < splitStr.length; i++) {
-        // You do not need to check if i is larger than splitStr length, as your for does that for you
-        // Assign it back to the array
-        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-    }
-    // Directly return the joined string
-    return splitStr.join(' ');
+
+        var splitStr = str.toUpperCase().split(' ');
+
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+        }
+        // Directly return the joined string
+        return splitStr.join(' ');
 }
