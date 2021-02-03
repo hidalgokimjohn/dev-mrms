@@ -109,8 +109,11 @@
                                     <label for="choicesTypeOfFindings" class="form-label">Type of Findings</label>
                                     <select id="choicesTypeOfFindings" class="form-control choices-type-of-findings" name="typeOfFindings">
                                         <option value="">Select Options</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
+                                        <?php
+                                            foreach ($app->getTypeOfFindings() as $options) {
+                                                echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['findings_type']) . '</option>';
+                                            }
+                            ?>
                                     </select>
                                     <label for="text_findings">Findings/TA</label>
                                     <textarea name="textFindings" id="text_findings" class="form-control" required></textarea>
@@ -123,6 +126,12 @@
                                     <label class="form-label">Date of Compliance</label>
                                     <input type="text" name="dateOfCompliance" class="form-control flatpickr-minimum" id="dateOfCompliance" placeholder="Select date.." required>
                                     <br>
+                                    <label for="dqaLevel" class="form-label">DQA Level</label>
+                                    <select id="dqaLevel" class="form-control choices-dqa-level" name="dqaLevel">
+                                        <option value="">Select Options</option>
+                                        <option value="field office">Field Office</option>                                        
+                                        <option value="field act">Field (ACT)</option>
+                                    </select>
                                     <button class="btn btn-primary" type="submit" id="btnSubmitFinding"><span class="fa fa-save"></span> Submit</button>
                                 </form>
                             </div>

@@ -256,6 +256,24 @@ class App
         }
     }
 
+    public function getTypeOfFindings(){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+                lib_findings.id,
+                lib_findings.findings_type
+                FROM
+                lib_findings";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            return false;
+        }
+    }
+
     public function tbl_dqaConducted()
     {
         $mysql = $this->connectDatabase();
@@ -562,17 +580,39 @@ class App
 
     public function submitNoFinding(){
         $mysql = $this->connectDatabase();
+        if($_GET['file_name']=='Not Yet Uploaded'){
+            echo 'NYU';   
+        }else{
+            return true;
+        }
 
     }
     public function submitWithFinding(){
         $mysql = $this->connectDatabase();
         $guid = new Ceac();
         $finding_guid = $guid->v4();
-        $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `fk_file_guid`, `deadline_for_compliance`) VALUES ('$findings_guid', 'fk_ft_guid', 'fk_dqa_guid', '6', 'findings', 'responsible_person', '0', '2021-02-03 00:17:47', '0', 'added_by', 'field', 'file_id', '2021-02-04')";
+        $fk_ft_guid = $_GET['ft_guid'];
+        $fk_dqa_guid = $_GET['dqa_id'];
+        $textFindings = $_POST['textFindings'];
+        $responsiblePerson = $_POST['responsiblePerson'];        
+        $typeOfFindings = $_POST['typeOfFindings'];
+        $dateOfCompliance = $_POST['dateOfCompliance'];
+        $addedBy = $_SESSION['username'];
+        $q="";
+        if($_GET['file_name']=='Not Yet Uploaded'){
+            $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', '$dateOfCompliance', '0', '$addedBy', 'field', '$dateOfCompliance')";
+            echo '<br>'.$q;    
+        }else{
 
+        }
+        
+        //$result = $mysql->query($q) or die($mysql->error);
+        
     }
     public function submitGiveTa(){
         $mysql = $this->connectDatabase();
+        return true;
         
     }
+    
 }
