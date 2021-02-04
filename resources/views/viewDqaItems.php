@@ -59,38 +59,11 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalAddFiles" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><strong>Add files</strong></h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body m-3">
-                <table id="tbl_addFiles" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
-                    <thead>
-                    <tr class="border-bottom-0">
-                        <th style="width: 100px;"></th>
-                        <th style="width: 500px;">Filename</th>
-                        <th style="width: 300px;">Form</th>
-                        <th style="width: 100px;">Mun/Barangay</th>
-                        <th style="width: 100px;">Uploader</th>
-                        <th style="width: 100px;">Uploaded</th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="modalViewFile" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xxl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title file-name text-uppercase"><strong>Add files</strong></h5>
+                <h4 class="modal-title file-name text-uppercase"></h4>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body m-3">

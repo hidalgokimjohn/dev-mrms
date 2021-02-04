@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var tbl_viewDqaItems;
     var ft_guid;
     var fileName;
+    var file_id;
+    var file_path;
 
 //DQA Table
     if (m == 'dqa') {
@@ -256,9 +258,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     //DQA AddFiles Table
-    $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
 
     if (modalAddFiles) {
+        $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
         modalAddFiles.addEventListener('show.bs.modal', function (e) {
             $('#tbl_addFiles thead tr:eq(1) th').each(function (i) {
                 if (i !== 0) {
@@ -405,7 +407,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if(modalViewFile){
         modalViewFile.addEventListener('show.bs.modal', function (e) {
             fileName = $(e.relatedTarget).data('file-name');
-            var file_path = $(e.relatedTarget).data('file-path');
+            file_path = $(e.relatedTarget).data('file-path');
+            fileId = $(e.relatedTarget).data('file-id');
+            console.log(fileId);
             ft_guid = $(e.relatedTarget).data('ft-guid');
             PDFObject.embed(file_path, "#pdf", options);
             $.ajax({
@@ -418,6 +422,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 success: function (data) {
                     $("#relatedFiles").html('');
                     $("#relatedFiles").html(data);
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "resources/ajax/displayFindings.php",
+                data: {
+                    "ft_guid": ft_guid
+                },
+                dataType:'html',
+                success: function (data) {
+                    $("#displayFindings").html('');
+                    $("#displayFindings").html(data);
                 }
             });
 
@@ -474,9 +490,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var hasError = formValidated.classList.contains('has-error');
         $("#btnSubmitFinding").html('<i class="fa fa-circle-notch fa-spin"></i> Submitting');
         $("#btnSubmitFinding").prop('disabled',true);
+        console.log(fileId+' submitFindings');
         if(!hasError){
             $.ajax({
-            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId+'&ft_guid='+ft_guid+'&file_name='+fileName,
+            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId+'&ft_guid='+ft_guid+'&file_name='+fileName+'&file_id='+fileId,
             type: 'POST',
             data: formData,
             async: true,
@@ -485,7 +502,8 @@ document.addEventListener("DOMContentLoaded", function () {
             processData: false,
             success: function (data) {
                     if(data=='submitted'){
-                       window.notyf.open({
+                        tbl_viewDqaItems.ajax.reload();
+                        window.notyf.open({
                             type:'success',
                             message:'<strong>Good job!, </strong>your review has been submitted.',
                             duration:'5000',
@@ -495,7 +513,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 x: 'center',
                                 y: 'top'
                             }
-                        });     
+                        });
+
                     }
                     if(data=='submit_error'){
                         window.notyf.open({
@@ -523,11 +542,24 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
                     }
-                    if(data=='NYUsubmit_error'){
+                    if(data=='notYetUploaded_submit_error'){
                         window.notyf.open({
                             type:'warning',
                             message:'<strong>Sorry, </strong> you cannot set a <strong class="text-info">No Findings</strong> with a non-existent file in the system.',
                             duration:'9000',
+                            ripple:true,
+                            dismissible:true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });   
+                    }
+                    if(data=='hasPreviousFindings_submit_error'){
+                        window.notyf.open({
+                            type:'warning',
+                            message:'<strong>Sorry, </strong> you cannot set a <strong class="text-success">\"No Findings\"</strong> when there are <strong class="text-danger">non-complied findings.</strong>  Please check below.',
+                            duration:'10000',
                             ripple:true,
                             dismissible:true,
                             position: {

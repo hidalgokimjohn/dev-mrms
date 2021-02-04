@@ -387,7 +387,7 @@ class App
                 ) AS location,
                 lib_form.form_name,
                 lib_form.form_type,
-                tbl_dqa_list.added_by,
+                form_uploaded.uploaded_by,
                 tbl_dqa_list.fk_dqa_guid,
                 tbl_dqa_list.is_delete,
                 tbl_dqa_list.ft_guid
@@ -411,6 +411,7 @@ class App
                         OR tbl_dqa_list.is_delete IS NULL
                         OR tbl_dqa_list.fk_file_guid IS NULL
                     )
+                    AND form_uploaded.is_deleted = 0
                     AND (
                         form_target.ft_guid NOT IN (
                             SELECT
@@ -581,9 +582,17 @@ class App
     public function submitNoFinding(){
         $mysql = $this->connectDatabase();
         if($_GET['file_name']=='Not Yet Uploaded'){
-            echo 'NYU';   
+            //NYU stands for Not Yet Uploaded
+            echo 'notYetUploaded_';   
         }else{
-            return true;
+            //check if file has previous findings (not complied)
+            if(!$this->checkPreviousFindings()){
+                //if no previous findings set no finding.
+                return true;
+            }else{            
+                echo 'hasPreviousFindings_';
+            }
+           
         }
 
     }
@@ -593,6 +602,7 @@ class App
         $finding_guid = $guid->v4();
         $fk_ft_guid = $_GET['ft_guid'];
         $fk_dqa_guid = $_GET['dqa_id'];
+        $fileId = $_GET['file_id'];
         $textFindings = $_POST['textFindings'];
         $responsiblePerson = $_POST['responsiblePerson'];        
         $typeOfFindings = $_POST['typeOfFindings'];
@@ -601,12 +611,30 @@ class App
         $q="";
         if($_GET['file_name']=='Not Yet Uploaded'){
             $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', '$dateOfCompliance', '0', '$addedBy', 'field', '$dateOfCompliance')";
-            echo '<br>'.$q;    
+            $result = $mysql->query($q) or die($mysql->error);
+                if($mysql->affected_rows>0){
+                     return true;
+                }else{
+                    return false;
+                }
         }else{
-
+             $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`,`fk_file_guid`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', 'field', '$dateOfCompliance','$fileId')";
+             //Update file status 
+             $result = $mysql->query($q) or die($mysql->error);
+                if($mysql->affected_rows>0){
+                     $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `reviewed_by`='$addedBy', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                     $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
+                     if($mysql->affected_rows>0){
+                        return true;
+                     }else{
+                        return false;
+                     }
+                }else{
+                    return false;
+                }
         }
         
-        //$result = $mysql->query($q) or die($mysql->error);
+        
         
     }
     public function submitGiveTa(){
@@ -614,5 +642,21 @@ class App
         return true;
         
     }
-    
+
+    public function checkPreviousFindings(){
+        $mysql = $this->connectDatabase();
+        $fk_ft_guid = $_GET['ft_guid'];
+        $q="SELECT
+            tbl_dqa_findings.fk_ft_guid
+            FROM
+            tbl_dqa_findings
+            WHERE fk_ft_guid='$fk_ft_guid' AND is_checked=0";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($mysql->affected_rows>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+        
 }

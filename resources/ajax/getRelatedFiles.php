@@ -5,6 +5,7 @@ include_once("../../app/Auth.php");
 $auth = new \app\Auth();
 $app = new \app\App();
 if($_POST['ft_guid']){
+  
     $relatedFiles = $app->getRelatedFiles($_POST['ft_guid']);
     if(!empty($relatedFiles)){
         $i=0;
