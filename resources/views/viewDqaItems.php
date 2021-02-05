@@ -115,59 +115,8 @@
                             <div class="card-body">
                                 <div id="pdf" class="mb-3 bg-light">
                                 </div>
-                                <h3>Findings</h3>
                                 <div id="displayFindings">
-                                    <div class="card mb-3 bg-light border">
-                                        <div class="card-body">
-                                            <div class="float-right mr-n2">
-                                                <label class="form-check">
-                                                    <span class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</span>
-                                                </label>
-                                            </div>
-                                            <p>Posted: Feb 2, 2021, Deadline of Compliance: Feb 5, 2021</p>
-                                            <p>Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum.</p>
-                                            <div class="float-right mt-n1">
-                                                <img src="resources/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
-                                                <span>Kim John Hidalgo</span>
-                                                <br>
-                                            </div>
-                                            <a class="btn btn-outline-danger" href="#">Remove</a>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-3 bg-light border">
-                                        <div class="card-body">
-                                            <div class="float-right mr-n2">
-                                                <label class="form-check">
-                                                    <span class="badge bg-danger"><span class="fa fa-times-circle"></span> Not Complied</span>
-                                                </label>
-                                            </div>
-                                            <p>Added: Feb 2, 2021, Deadline of Compliance: Feb 5, 2021</p>
-                                            <p>Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum.</p>
-                                            <div class="float-right mt-n1">
-                                                <img src="resources/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
-                                                <span>Kim John Hidalgo</span>
 
-                                            </div>
-                                            <a class="btn btn-outline-danger" href="#">Remove</a>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-3 bg-warning-light border">
-                                        <div class="card-body">
-                                            <div class="float-right mr-n2">
-                                                <label class="form-check">
-                                                    <span class="badge bg-warning"><span class="fa fa-lightbulb"></span> Technical Advice</span>
-                                                </label>
-                                            </div>
-                                            <p>Added: Feb 2, 2021, Deadline of Compliance: Feb 5, 2021</p>
-                                            <p>Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum.</p>
-                                            <div class="float-right mt-n1">
-                                                <img src="resources/img/avatars/avatar.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
-                                                <span>Kim John Hidalgo</span>
-
-                                            </div>
-                                            <a class="btn btn-outline-danger" href="#">Remove</a>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +132,7 @@
                     <div class="col-sm-2">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Related Files</h5>
+                            <h3>Related files</h3>
                             </div>
                             <div class="list-group list-group-flush" role="tablist" id="relatedFiles">
 

@@ -256,20 +256,21 @@ class App
         }
     }
 
-    public function getTypeOfFindings(){
+    public function getTypeOfFindings()
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
                 lib_findings.id,
                 lib_findings.findings_type
                 FROM
                 lib_findings";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-            while($row = $result->fetch_assoc()){
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
             return $data;
-        }else{
+        } else {
             return false;
         }
     }
@@ -327,7 +328,7 @@ class App
                 lib_municipality.mun_name,
                 lib_barangay.brgy_name,
                 CONCAT(lib_form.form_name,IF (lib_barangay.brgy_name IS NOT NULL,', ',''),COALESCE (lib_barangay.brgy_name,'')) AS forms,
-                form_uploaded.original_filename,    
+                form_uploaded.original_filename,
                 CONCAT(personal_info.first_name,' ',personal_info.last_name) AS fullname,
                 personal_info.first_name,
                 personal_info.last_name,
@@ -546,22 +547,23 @@ class App
                 LEFT JOIN form_uploaded ON form_target.ft_guid = form_uploaded.fk_ft_guid
                 WHERE lib_activity.id='$row[id]' AND (form_target.fk_psgc_mun='$row[fk_psgc_mun]' OR form_target.fk_cadt='$row[fk_cadt]') AND form_target.fk_psgc_brgy='$row[fk_psgc_brgy]'";
         $result1 = $mysql->query($q1) or die($mysql->error);
-        if($result1->num_rows>0){
+        if ($result1->num_rows > 0) {
             while ($row1 = $result1->fetch_assoc()) {
                 $data[] = $row1;
             }
             return $data;
-        }else{
+        } else {
             return false;
         }
 
     }
 
-    public function createDqa(){
+    public function createDqa()
+    {
         $mysql = $this->connectDatabase();
         $ceac = new Ceac();
         $dqa_gui = $ceac->v4();
-        
+
         if (strlen($_POST['municipality']) == 9) {
             $q = $mysql->prepare("INSERT INTO `tbl_dqa` (`dqa_guid`, `fk_psgc_mun`, `fk_cycle`, `title`, `responsible_person`, `conducted_by`, `created_at`,`dqa_status`)
             VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
@@ -579,24 +581,32 @@ class App
         }
     }
 
-    public function submitNoFinding(){
+    public function submitNoFinding()
+    {
         $mysql = $this->connectDatabase();
-        if($_GET['file_name']=='Not Yet Uploaded'){
+        if ($_GET['file_name'] == 'Not Yet Uploaded') {
             //NYU stands for Not Yet Uploaded
-            echo 'notYetUploaded_';   
-        }else{
+            echo 'notYetUploaded_';
+        } else {
             //check if file has previous findings (not complied)
-            if(!$this->checkPreviousFindings()){
+            if (!$this->checkPreviousFindings()) {
                 //if no previous findings set no finding.
+                $fileId = $_GET['file_id'];
+                $q="UPDATE `form_uploaded` SET `with_findings`='no findings', `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                $result = $mysql->query($q) or die($mysql->error);
+                if($mysql->affected_rows>0){
+                    return true;
+                }
                 return true;
-            }else{            
+            } else {
                 echo 'hasPreviousFindings_';
             }
-           
+
         }
 
     }
-    public function submitWithFinding(){
+    public function submitWithFinding()
+    {
         $mysql = $this->connectDatabase();
         $guid = new Ceac();
         $finding_guid = $guid->v4();
@@ -604,53 +614,129 @@ class App
         $fk_dqa_guid = $_GET['dqa_id'];
         $fileId = $_GET['file_id'];
         $textFindings = $_POST['textFindings'];
-        $responsiblePerson = $_POST['responsiblePerson'];        
+        $responsiblePerson = $_POST['responsiblePerson'];
         $typeOfFindings = $_POST['typeOfFindings'];
         $dateOfCompliance = $_POST['dateOfCompliance'];
         $addedBy = $_SESSION['username'];
-        $q="";
-        if($_GET['file_name']=='Not Yet Uploaded'){
-            $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', '$dateOfCompliance', '0', '$addedBy', 'field', '$dateOfCompliance')";
+        $q = "";
+        if ($_GET['file_name'] == 'Not Yet Uploaded') {
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', '$dateOfCompliance', '0', '$addedBy', 'field', '$dateOfCompliance')";
             $result = $mysql->query($q) or die($mysql->error);
-                if($mysql->affected_rows>0){
-                     return true;
-                }else{
+            if ($mysql->affected_rows > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`,`fk_file_guid`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', 'field', '$dateOfCompliance','$fileId')";
+            //Update file status
+            $result = $mysql->query($q) or die($mysql->error);
+            if ($mysql->affected_rows > 0) {
+                $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `reviewed_by`='$addedBy', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
+                if ($mysql->affected_rows > 0) {
+                    return true;
+                } else {
                     return false;
                 }
-        }else{
-             $q="INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`,`fk_file_guid`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', 'field', '$dateOfCompliance','$fileId')";
-             //Update file status 
-             $result = $mysql->query($q) or die($mysql->error);
-                if($mysql->affected_rows>0){
-                     $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `reviewed_by`='$addedBy', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
-                     $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
-                     if($mysql->affected_rows>0){
-                        return true;
-                     }else{
-                        return false;
-                     }
-                }else{
-                    return false;
-                }
+            } else {
+                return false;
+            }
         }
-        
-        
-        
+
     }
-    public function submitGiveTa(){
+    public function submitGiveTa()
+    {
         $mysql = $this->connectDatabase();
         return true;
-        
+
     }
 
-    public function checkPreviousFindings(){
+    public function checkPreviousFindings()
+    {
         $mysql = $this->connectDatabase();
         $fk_ft_guid = $_GET['ft_guid'];
-        $q="SELECT
+        $q = "SELECT
             tbl_dqa_findings.fk_ft_guid
             FROM
             tbl_dqa_findings
-            WHERE fk_ft_guid='$fk_ft_guid' AND is_checked=0";
+            WHERE fk_ft_guid='$fk_ft_guid' AND is_checked=0 AND is_deleted=0";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($mysql->affected_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function displayFindings($fileId)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        tbl_dqa_findings.findings,
+        tbl_dqa_findings.responsible_person,
+        tbl_dqa_findings.deadline_for_compliance,
+        tbl_dqa_findings.is_checked,
+        tbl_dqa_findings.created_at,
+        tbl_dqa_findings.dqa_level,
+        tbl_dqa_findings.date_complied,
+        tbl_dqa_findings.added_by,
+        tbl_dqa_findings.findings_guid
+        FROM
+        tbl_dqa_findings
+        WHERE fk_file_guid='$fileId' AND is_deleted=0";
+        $results = $mysql->query($q) or die($mysql->error);
+        if ($results->num_rows > 0) {
+            while ($row = $results->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+    public function findingStatus($id,$deadLineForCompliance)
+    {
+        $s = ($id == '0') ? '<span class="badge bg-danger"><span class="fa fa-times-circle"></span> Not Complied</span> ' : '<span class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</span> ';
+        //0 is not complied
+        if($id=='0'){
+           return $s.=$this->dueStatus($deadLineForCompliance);
+        }else{
+            return $s;
+        }
+    }
+    public function userInfo($username)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        *,
+        CONCAT(personal_info.first_name,' ',personal_info.last_name) as fullName
+        FROM
+        personal_info
+        WHERE personal_info.fk_username='$username'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['fullName'];
+        } else {
+            return $row['fullName'] = 'User not found';
+        }
+    }
+    public function dueStatus($deadLineForCompliance)
+    {
+        $today = date("Y-m-d");
+        $dueDate = abs(strtotime($deadLineForCompliance)) - strtotime($today);
+        $difference = floor($dueDate / (60 * 60 * 24));
+        if ($difference == 0) {
+            return '<span class="badge bg-warning"><span class="fa fa-exclamation-circle text-danger"></span> <span class="text-danger">Due Today</span></span>';
+        }
+        if ($difference <= -1) {
+            return '<span class="badge bg-warning"><span class="fa fa-exclamation-circle text-danger"></span> <span class="text-danger">Due now</span></span>';
+        }
+    }
+
+    public function removeFinding($id){
+        $mysql = $this->connectDatabase();
+        $q = "UPDATE `tbl_dqa_findings` SET `is_deleted`='1' WHERE (`findings_guid`='$id') LIMIT 1";
         $result = $mysql->query($q) or die($mysql->error);
         if($mysql->affected_rows>0){
             return true;
@@ -658,5 +744,20 @@ class App
             return false;
         }
     }
-        
+    public function noFindings($fileId){
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        form_uploaded.file_id,
+        form_uploaded.is_reviewed,
+        form_uploaded.with_findings
+        FROM
+        form_uploaded
+        WHERE file_id='$fileId' AND is_reviewed='reviewed' AND with_findings='no findings'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

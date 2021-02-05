@@ -260,7 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalAddFiles = document.getElementById('modalAddFiles');
     const modalViewFile = document.getElementById('modalViewFile');
     if (modalCreateDqa) {
-        modalCreateDqa.addEventListener('show.bs.modal', function (e) {});
+        modalCreateDqa.addEventListener('show.bs.modal', function (e) {
+
+        });
     }
     //DQA AddFiles Table
 
@@ -436,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 type: "post",
                 url: "resources/ajax/displayFindings.php",
                 data: {
-                    "ft_guid": ft_guid
+                    "file_id": fileId,
                 },
                 dataType: 'html',
                 success: function (data) {
@@ -522,6 +524,18 @@ document.addEventListener("DOMContentLoaded", function () {
                                 y: 'top'
                             }
                         });
+                        $.ajax({
+                            type: "post",
+                            url: "resources/ajax/displayFindings.php",
+                            data: {
+                                "file_id": fileId,
+                            },
+                            dataType: 'html',
+                            success: function (data) {
+                                $("#displayFindings").html('');
+                                $("#displayFindings").html(data);
+                            }
+                        });
 
                     }
                     if (data == 'submit_error') {
@@ -566,7 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data == 'hasPreviousFindings_submit_error') {
                         window.notyf.open({
                             type: 'warning',
-                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-success">\"No Findings\"</strong> when there are <strong class="text-danger">non-complied findings.</strong>  Please check below.',
+                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-success">\"No Findings\"</strong> when there are existing <strong class="text-danger">non-complied findings.</strong>  Please check below.',
                             duration: '10000',
                             ripple: true,
                             dismissible: true,
@@ -595,7 +609,56 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#btnSubmitFinding").html('<i class="fa fa-save"></i> Submit');
         $("#btnSubmitFinding").prop('disabled', false);
     });
+    //Remove findings
+    $(document).on('click', '#removeFinding', function(e) {
+        let finding_id = document.querySelector('#removeFinding');
+        if(finding_id){
+            //confirm remove
+            var r = confirm('Are you want to remove this finding?');
+            if(r){
+                $.ajax({
+                    type: "post",
+                    url: "resources/ajax/removeFinding.php",
+                    data: {
+                        "finding_id": finding_id.getAttribute('data-finding-id'),
+                    },
+                    dataType: 'html',
+                    success: function (data) {
+                        if(data=='removed'){
+                            $.ajax({
+                                type: "post",
+                                url: "resources/ajax/displayFindings.php",
+                                data: {
+                                    "file_id": fileId,
+                                },
+                                dataType: 'html',
+                                success: function (data) {
+                                    $("#displayFindings").html('');
+                                    $("#displayFindings").html(data);
+                                    window.notyf.open({
+                                        type: 'success',
+                                        message: 'Remove successfully',
+                                        duration: '5000',
+                                        ripple: true,
+                                        dismissible: true,
+                                        position: {
+                                            x: 'center',
+                                            y: 'top'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });   
+            }
+           
+        }
+       
+    });
+    
 });
+
 
 
 function htmlspecialchars(string) {
