@@ -8,8 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var tbl_viewDqaItems;
     var ft_guid;
     var fileName;
+    var file_id;
+    var file_path;
 
-//DQA Table
+    //DQA Table
     if (m == 'dqa') {
         $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
         $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
@@ -26,10 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
         var tbl_dqa = $('#tbl_dqa').DataTable({
             orderCellsTop: true,
             fixedHeader: true,
-            order: [[1, "desc"]],
-            columnDefs: [
-                {orderable: false, targets: 0}
+            order: [
+                [1, "desc"]
             ],
+            columnDefs: [{
+                orderable: false,
+                targets: 0
+            }],
             ajax: {
                 url: "resources/ajax/tbl_dqaConducted.php",
                 type: "POST",
@@ -45,18 +50,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 "emptyTable": "<b>No records found. Click add files to create one.</b>"
             },
             columnDefs: [{
-                "targets": 0,
-                "data": null,
-                "render": function (data, type, row) {
-                    return '<button class="btn btn-danger btn-sm">Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
+                    "targets": 0,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<button class="btn btn-danger btn-sm">Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
+                    },
+                }, {
+                    "targets": 1,
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<strong>#' + pad(data[14], 4) + '</strong>';
+                    },
                 },
-            }, {
-                "targets": 1,
-                "data": null,
-                "render": function (data, type, row) {
-                    return '<strong>#' + pad(data[14], 4) + '</strong>';
-                },
-            },
                 {
                     "targets": 2,
                     "data": null,
@@ -99,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-//DQA Items Table
+    //DQA Items Table
 
     $('#tbl_viewDqaItems thead tr').clone(true).appendTo('#tbl_viewDqaItems thead');
     $('#tbl_viewDqaItems thead tr:eq(1) th').each(function (i) {
@@ -115,11 +120,14 @@ document.addEventListener("DOMContentLoaded", function () {
     tbl_viewDqaItems = $('#tbl_viewDqaItems').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-        order: [[2, "desc"]],
-        dom: '<"html5buttons">lTgitpr',
-        columnDefs: [
-            {orderable: false, targets: 0}
+        order: [
+            [2, "desc"]
         ],
+        dom: '<"html5buttons">lTgitpr',
+        columnDefs: [{
+            orderable: false,
+            targets: 0
+        }],
         ajax: {
             url: "resources/ajax/tbl_dqaItems.php?dqaId=" + dqaId,
             type: "POST",
@@ -135,16 +143,16 @@ document.addEventListener("DOMContentLoaded", function () {
             "emptyTable": "<b>No files found in this item.</b>"
         },
         "columnDefs": [{
-            "targets": 0,
-            "data": null,
-            "render": function (data, type, row) {
-                if(data[3]!==null){
-                    return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="'+data[3]+'"><b>' + titleCase(data[3]) + '</b></a>';
-                }else{
-                    return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="'+data[3]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
-                }
+                "targets": 0,
+                "data": null,
+                "render": function (data, type, row) {
+                    if (data[3] !== null) {
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '"><b>' + titleCase(data[3]) + '</b></a>';
+                    } else {
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '"><strong class="text-danger">Not Yet Uploaded</strong></a>';
+                    }
+                },
             },
-        },
             {
                 "targets": 1,
                 "data": null,
@@ -164,9 +172,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 3,
                 "data": null,
                 "render": function (data, type, row) {
-                    if(data[4]!==null){
+                    if (data[4] !== null) {
                         return '<div class="text-capitalize">' + data[4] + '</div>';
-                    }else{
+                    } else {
                         return 'N/A';
                     }
                 },
@@ -187,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "render": function (data, type, row) {
                     complied = '';
                     stat = '';
-                    if(data[8]!==null){
+                    if (data[8] !== null) {
                         if (data[8] == 'for review') {
                             stat += '<div class="badge bg-secondary text-center"><span class="fa fa-exclamation-circle"></span> For review</div>';
                         }
@@ -202,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             stat += '   <div class="badge bg-primary"><span class="fa fa-thumbs-up"></span> No findings</div>';
                         }
                         return stat;
-                    }else{
+                    } else {
                         return 'N/A';
                     }
                 },
@@ -253,12 +261,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalViewFile = document.getElementById('modalViewFile');
     if (modalCreateDqa) {
         modalCreateDqa.addEventListener('show.bs.modal', function (e) {
+
         });
     }
     //DQA AddFiles Table
-    $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
 
     if (modalAddFiles) {
+        $('#tbl_addFiles thead tr').clone(true).appendTo('#tbl_addFiles thead');
         modalAddFiles.addEventListener('show.bs.modal', function (e) {
             $('#tbl_addFiles thead tr:eq(1) th').each(function (i) {
                 if (i !== 0) {
@@ -277,12 +286,15 @@ document.addEventListener("DOMContentLoaded", function () {
             tbl_addFiles = $('#tbl_addFiles').DataTable({
                 orderCellsTop: true,
                 fixedHeader: true,
-                order: [[5, "asc"]],
+                order: [
+                    [5, "asc"]
+                ],
                 bDestroy: true,
                 dom: '<"html5buttons">lTgitpr',
-                columnDefs: [
-                    {orderable: false, targets: 0}
-                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 0
+                }],
                 ajax: {
                     url: "resources/ajax/tbl_getFiles.php",
                     type: "POST",
@@ -299,18 +311,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     "emptyTable": "<b>No files found in this item.</b>"
                 },
                 "columnDefs": [{
-                    "targets": 0,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        var file_id;
-                        if(data[0]!==null){
-                            file_id=data[0];
-                        }else{
-                            file_id='';
-                        }
-                        return '<button class="btn btn-success file_id" data-file-id="' + file_id + '" data-ft-guid="' + data[1] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
+                        "targets": 0,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            var file_id;
+                            if (data[0] !== null) {
+                                file_id = data[0];
+                            } else {
+                                file_id = '';
+                            }
+                            return '<button class="btn btn-success file_id" data-file-id="' + file_id + '" data-ft-guid="' + data[1] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
+                        },
                     },
-                },
                     {
                         "targets": 1,
                         "data": null,
@@ -379,11 +391,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         tbl_addFiles.ajax.reload();
                         tbl_viewDqaItems.ajax.reload();
                         window.notyf.open({
-                            type:'success',
+                            type: 'success',
                             message: '<strong>File added </strong>successfully',
-                            duration:'5000',
-                            ripple:true,
-                            dismissible:true,
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
                             position: {
                                 x: 'center',
                                 y: 'top'
@@ -402,10 +414,12 @@ document.addEventListener("DOMContentLoaded", function () {
             pagemode: 'thumbs'
         }
     };
-    if(modalViewFile){
+    if (modalViewFile) {
         modalViewFile.addEventListener('show.bs.modal', function (e) {
             fileName = $(e.relatedTarget).data('file-name');
-            var file_path = $(e.relatedTarget).data('file-path');
+            file_path = $(e.relatedTarget).data('file-path');
+            fileId = $(e.relatedTarget).data('file-id');
+            console.log(fileId);
             ft_guid = $(e.relatedTarget).data('ft-guid');
             PDFObject.embed(file_path, "#pdf", options);
             $.ajax({
@@ -414,15 +428,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 data: {
                     "ft_guid": ft_guid
                 },
-                dataType:'html',
+                dataType: 'html',
                 success: function (data) {
                     $("#relatedFiles").html('');
                     $("#relatedFiles").html(data);
                 }
             });
+            $.ajax({
+                type: "post",
+                url: "resources/ajax/displayFindings.php",
+                data: {
+                    "file_id": fileId,
+                },
+                dataType: 'html',
+                success: function (data) {
+                    $("#displayFindings").html('');
+                    $("#displayFindings").html(data);
+                }
+            });
 
-            if(fileName==null){
-                fileName='Not Yet Uploaded';
+            if (fileName == null) {
+                fileName = 'Not Yet Uploaded';
             }
             $('.file-name').text(fileName);
         });
@@ -453,14 +479,14 @@ document.addEventListener("DOMContentLoaded", function () {
     //Submit Findings
     var forms = document.querySelectorAll('.needs-validation')
     // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
             if (!form.checkValidity()) {
                 event.preventDefault()
                 event.stopPropagation()
                 form.classList.add('was-validated');
                 form.classList.add('has-error');
-            }else{
+            } else {
                 form.classList.remove('was-validated');
                 form.classList.remove('has-error');
                 form.classList.remove('needs-validation');
@@ -473,89 +499,166 @@ document.addEventListener("DOMContentLoaded", function () {
         var formValidated = document.querySelector('#submitFinding');
         var hasError = formValidated.classList.contains('has-error');
         $("#btnSubmitFinding").html('<i class="fa fa-circle-notch fa-spin"></i> Submitting');
-        $("#btnSubmitFinding").prop('disabled',true);
-        if(!hasError){
+        $("#btnSubmitFinding").prop('disabled', true);
+        console.log(fileId + ' submitFindings');
+        if (!hasError) {
             $.ajax({
-            url: 'resources/ajax/submitFinding.php?dqa_id='+dqaId+'&ft_guid='+ft_guid+'&file_name='+fileName,
-            type: 'POST',
-            data: formData,
-            async: true,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                    if(data=='submitted'){
-                       window.notyf.open({
-                            type:'success',
-                            message:'<strong>Good job!, </strong>your review has been submitted.',
-                            duration:'5000',
-                            ripple:true,
-                            dismissible:true,
+                url: 'resources/ajax/submitFinding.php?dqa_id=' + dqaId + '&ft_guid=' + ft_guid + '&file_name=' + fileName + '&file_id=' + fileId,
+                type: 'POST',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 'submitted') {
+                        tbl_viewDqaItems.ajax.reload();
+                        window.notyf.open({
+                            type: 'success',
+                            message: '<strong>Good job!, </strong>your review has been submitted.',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
                             position: {
                                 x: 'center',
                                 y: 'top'
                             }
-                        });     
+                        });
+                        $.ajax({
+                            type: "post",
+                            url: "resources/ajax/displayFindings.php",
+                            data: {
+                                "file_id": fileId,
+                            },
+                            dataType: 'html',
+                            success: function (data) {
+                                $("#displayFindings").html('');
+                                $("#displayFindings").html(data);
+                            }
+                        });
+
                     }
-                    if(data=='submit_error'){
+                    if (data == 'submit_error') {
                         window.notyf.open({
-                            type:'error',
-                            message:'<strong>Error:</strong> please fill-out required fields.',
-                            duration:'5000',
-                            ripple:true,
-                            dismissible:true,
+                            type: 'error',
+                            message: '<strong>Error:</strong> please fill-out required fields.',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
                             position: {
                                 x: 'center',
                                 y: 'top'
                             }
                         });
                     }
-                    if(data=='error_on_required_fields'){
+                    if (data == 'error_on_required_fields') {
                         window.notyf.open({
-                            type:'error',
-                            message:'<strong>Error:</strong> please fill-out required fields.',
-                            duration:'5000',
-                            ripple:true,
-                            dismissible:true,
+                            type: 'error',
+                            message: '<strong>Error:</strong> please fill-out required fields.',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
                             position: {
                                 x: 'center',
                                 y: 'top'
                             }
                         });
                     }
-                    if(data=='NYUsubmit_error'){
+                    if (data == 'notYetUploaded_submit_error') {
                         window.notyf.open({
-                            type:'warning',
-                            message:'<strong>Sorry, </strong> you cannot set a <strong class="text-info">No Findings</strong> with a non-existent file in the system.',
-                            duration:'9000',
-                            ripple:true,
-                            dismissible:true,
+                            type: 'warning',
+                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-info">No Findings</strong> with a non-existent file in the system.',
+                            duration: '9000',
+                            ripple: true,
+                            dismissible: true,
                             position: {
                                 x: 'center',
                                 y: 'top'
                             }
-                        });   
+                        });
+                    }
+                    if (data == 'hasPreviousFindings_submit_error') {
+                        window.notyf.open({
+                            type: 'warning',
+                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-success">\"No Findings\"</strong> when there are existing <strong class="text-danger">non-complied findings.</strong>  Please check below.',
+                            duration: '10000',
+                            ripple: true,
+                            dismissible: true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
                     }
                 }
             });
-        }else{
+        } else {
             window.notyf.open({
-                            type:'error',
-                            message:'<strong>Hey!</strong> please fill-out required fields.',
-                            duration:'5000',
-                            ripple:true,
-                            dismissible:true,
-                            position: {
-                                x: 'center',
-                                y: 'top'
-                            }
-                        });
+                type: 'error',
+                message: '<strong>Hey!</strong> please fill-out required fields.',
+                duration: '5000',
+                ripple: true,
+                dismissible: true,
+                position: {
+                    x: 'center',
+                    y: 'top'
+                }
+            });
         }
-        
+
         $("#btnSubmitFinding").html('<i class="fa fa-save"></i> Submit');
-        $("#btnSubmitFinding").prop('disabled',false);
+        $("#btnSubmitFinding").prop('disabled', false);
     });
+    //Remove findings
+    $(document).on('click', '#removeFinding', function(e) {
+        let finding_id = document.querySelector('#removeFinding');
+        if(finding_id){
+            //confirm remove
+            var r = confirm('Are you want to remove this finding?');
+            if(r){
+                $.ajax({
+                    type: "post",
+                    url: "resources/ajax/removeFinding.php",
+                    data: {
+                        "finding_id": finding_id.getAttribute('data-finding-id'),
+                    },
+                    dataType: 'html',
+                    success: function (data) {
+                        if(data=='removed'){
+                            $.ajax({
+                                type: "post",
+                                url: "resources/ajax/displayFindings.php",
+                                data: {
+                                    "file_id": fileId,
+                                },
+                                dataType: 'html',
+                                success: function (data) {
+                                    $("#displayFindings").html('');
+                                    $("#displayFindings").html(data);
+                                    window.notyf.open({
+                                        type: 'success',
+                                        message: 'Remove successfully',
+                                        duration: '5000',
+                                        ripple: true,
+                                        dismissible: true,
+                                        position: {
+                                            x: 'center',
+                                            y: 'top'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });   
+            }
+           
+        }
+       
+    });
+    
 });
+
 
 
 function htmlspecialchars(string) {
@@ -569,13 +672,13 @@ function pad(str, max) {
 
 function titleCase(str) {
 
-        var splitStr = str.toUpperCase().split(' ');
+    var splitStr = str.toUpperCase().split(' ');
 
-        for (var i = 0; i < splitStr.length; i++) {
-            // You do not need to check if i is larger than splitStr length, as your for does that for you
-            // Assign it back to the array
-            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-        }
-        // Directly return the joined string
-        return splitStr.join(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        // You do not need to check if i is larger than splitStr length, as your for does that for you
+        // Assign it back to the array
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    }
+    // Directly return the joined string
+    return splitStr.join(' ');
 }
