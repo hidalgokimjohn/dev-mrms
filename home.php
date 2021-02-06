@@ -157,12 +157,12 @@ if(!$auth->loggedIn()){
             </ul>
             <div class="sidebar-cta">
                 <div class="sidebar-cta-content">
-                    <strong class="d-inline-block mb-2">Weekly Uploading Report</strong>
+                    <strong class="d-inline-block mb-2">Weekly Report</strong>
                     <div class="mb-3 text-sm">
-                        Your weekly uploading report is ready for download!
+                        Your weekly report is ready for download!
                     </div>
                     <a href="https://adminkit.io/" class="btn btn-outline-primary btn-block"
-                       target="_blank">Download</a>
+                       target="_blank">Click here</a>
                 </div>
             </div>
         </div>
@@ -213,10 +213,9 @@ if(!$auth->loggedIn()){
                 </ul>
             </div>
         </nav>
-
         <main class="content">
             <div class="container-fluid p-0">
-                <h1 class="h3 mb-3 text-capitalize"><?php echo $_GET['p']; ?></h1>
+                <h1 class="h3 mb-3 text-capitalize">Module / Data Quality Assessment</h1>
                 <div class="row">
                     <div class="col-12">
                         <?php
