@@ -83,7 +83,7 @@
                                     <select id="choicesTypeOfFindings" class="form-control choices-type-of-findings" name="typeOfFindings">
                                         <option value="">Select Options</option>
                                         <?php
-                                            foreach ($app->getTypeOfFindings() as $options) {
+                                            foreach ($app->get() as $options) {
                                                 echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['findings_type']) . '</option>';
                                             }
                             ?>

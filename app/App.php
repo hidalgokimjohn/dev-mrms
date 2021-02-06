@@ -760,4 +760,80 @@ class App
             return false;
         }
     }
+
+    public function findingsByUsername($username,$modalityGroup){
+        $mysql = $this->connectDatabase();
+        $modalityGroup = $mysql->real_escape_string($modalityGroup);
+        $q = "SELECT
+                count(tbl_dqa_findings.findings_guid) as findingsByUsername
+                FROM
+                    tbl_dqa_findings
+                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE
+                tbl_dqa_findings.is_deleted = 0
+                AND tbl_dqa_findings.added_by = '$username'
+                AND cycles.`status` = 'active'
+                AND lib_modality.modality_group = '$modalityGroup'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+           $row = $result->fetch_assoc();
+           return $row['findingsByUsername'];
+        }else{
+            return '0';
+        }   
+    }
+
+    public function thisWeekFindingsByUsername($username,$modalityGroup){
+        $mysql = $this->connectDatabase();
+        $modalityGroup = $mysql->real_escape_string($modalityGroup);
+        $q = "SELECT
+                count(tbl_dqa_findings.findings_guid) as this_week
+                FROM
+                    tbl_dqa_findings
+                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE
+                tbl_dqa_findings.is_deleted = 0
+                AND tbl_dqa_findings.added_by = '$username'
+                AND cycles.`status` = 'active'
+                AND lib_modality.modality_group = '$modalityGroup' AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+           $row = $result->fetch_assoc();
+           return $row['this_week'];
+        }else{
+            return '0';
+        }   
+    }
+
+    public function thisDayFindingsByUsername($username,$modalityGroup){
+        $mysql = $this->connectDatabase();
+        $modalityGroup = $mysql->real_escape_string($modalityGroup);
+        $q = "SELECT
+                count(tbl_dqa_findings.findings_guid) as this_day
+                FROM
+                    tbl_dqa_findings
+                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE
+                tbl_dqa_findings.is_deleted = 0
+                AND tbl_dqa_findings.added_by = '$username'
+                AND cycles.`status` = 'active'
+                AND lib_modality.modality_group = '$modalityGroup' AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+           $row = $result->fetch_assoc();
+           return $row['this_day'];
+        }else{
+            return '0';
+        }
+    
+    }
 }

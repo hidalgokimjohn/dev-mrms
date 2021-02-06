@@ -44,13 +44,21 @@
 														</div>
 													</div>
 												</div>
-												<h1 class="mt-1 mb-3">1,233</h1>
+												<h1 class="mt-1 mb-3"><?php 
+                                                if(isset($_GET['modality'])){
+                                                    echo $app->findingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                }
+                                                ?></h1>
 												<div class="mb-0">
 													<span class="text-success"> <i
-															class="mdi mdi-arrow-bottom-right"></i> 233 </span>
+															class="mdi mdi-arrow-bottom-right"></i> <?php if(isset($_GET['modality'])){
+                                                    echo $app->thisWeekFindingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                } ?> </span>
 													<span class="text-muted">This week,</span>
                                                     <span class="text-success"> <i
-															class="mdi mdi-arrow-bottom-right"></i> 45 </span>
+															class="mdi mdi-arrow-bottom-right"></i> <?php if(isset($_GET['modality'])){
+                                                    echo $app->thisDayFindingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                } ?> </span>
 													<span class="text-muted">Today</span>
 												</div>
 											</div>
