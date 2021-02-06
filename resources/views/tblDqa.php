@@ -1,7 +1,149 @@
+<div class="row">
+						<div class="col-xl-12 d-flex">
+							<div class="w-100">
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col mt-0">
+														<h5 class="card-title">Reviewed</h5>
+													</div>
+													<div class="col-auto">
+														<div class="avatar">
+															<div class="avatar-title rounded-circle bg-primary-light">
+																<i class="align-middle" data-feather="file-text"></i>
+															</div>
+														</div>
+													</div>
+												</div>
+												<h1 class="mt-1 mb-3">304</h1>
+												<div class="mb-0">
+													<span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> 23 </span>
+													<span class="text-muted">This week,</span>
+                                                    <span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> 4 </span>
+													<span class="text-muted">Today</span>
+												</div>
+											</div>
+										</div>
+									</div>
+                                    <div class="col-sm-3">
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col mt-0">
+														<h5 class="card-title">Findings made</h5>
+													</div>
+													<div class="col-auto">
+														<div class="avatar">
+															<div class="avatar-title rounded-circle bg-primary-light">
+																<i class="align-middle" data-feather="file-minus"></i>
+															</div>
+														</div>
+													</div>
+												</div>
+												<h1 class="mt-1 mb-3"><?php 
+                                                if(isset($_GET['modality'])){
+                                                    echo $app->allfindingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                }
+                                                ?></h1>
+												<div class="mb-0">
+													<span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> <?php if(isset($_GET['modality'])){
+                                                    echo $app->thisWeekFindingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                } ?> </span>
+													<span class="text-muted">This week,</span>
+                                                    <span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> <?php if(isset($_GET['modality'])){
+                                                    echo $app->thisDayFindingsByUsername($_SESSION['username'],$_GET['modality']); 
+                                                } ?> </span>
+													<span class="text-muted">Today</span>
+												</div>
+											</div>
+										</div>
+									</div>
+                                    <div class="col-sm-3">
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col mt-0">
+														<h5 class="card-title">Technical Advice</h5>
+													</div>
+													<div class="col-auto">
+														<div class="avatar">
+															<div class="avatar-title rounded-circle bg-primary-light">
+																<i class="align-middle" data-feather="info"></i>
+															</div>
+														</div>
+													</div>
+												</div>
+												<h1 class="mt-1 mb-3"><?php
+                                                            
+                                                            if(isset($_GET['modality'])){
+                                                                echo $app->allTaByUsername($_SESSION['username'],$_GET['modality']); 
+                                                            }
+                                                            
+                                                            ?></h1>
+												<div class="mb-0">
+													<span class="text-success"> <i
+														class="mdi mdi-arrow-bottom-right"></i>
+                                                    </span>
+													<span class="text-success"> <?php
+                                                            
+                                                            if(isset($_GET['modality'])){
+                                                                echo $app->thisWeekTaByUsername($_SESSION['username'],$_GET['modality']); 
+                                                            }
+                                                            
+                                                            ?></span><span class="text-muted"> This week,</span>
+                                                    <span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> 
+                                                            <?php
+                                                            
+                                                            if(isset($_GET['modality'])){
+                                                                echo $app->thisDayTaByUsername($_SESSION['username'],$_GET['modality']); 
+                                                            }
+                                                            
+                                                            ?>
+                                                             </span>
+													<span class="text-muted">Today</span>
+												</div>
+											</div>
+										</div>
+									</div>
+                                    <div class="col-sm-3">
+										<div class="card">
+											<div class="card-body">
+												<div class="row">
+													<div class="col mt-0">
+														<h5 class="card-title">Findings Complied</h5>
+													</div>
+													<div class="col-auto">
+														<div class="avatar">
+															<div class="avatar-title rounded-circle bg-primary-light">
+																<i class="align-middle" data-feather="check-square"></i>
+															</div>
+														</div>
+													</div>
+												</div>
+												<h1 class="mt-1 mb-3">0/1,233</h1>
+												<div class="mb-0">
+													<span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> 0 </span>
+													<span class="text-muted">This week,</span>
+                                                    <span class="text-success"> <i
+															class="mdi mdi-arrow-bottom-right"></i> 0 </span>
+													<span class="text-muted">Today</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 <div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Data Quality Assessment</h5>
-    </div>
     <div class="card-body">
         <a href="#modalCreateDqa" data-toggle="modal">
             <button type="button" class="btn btn-primary">
@@ -31,6 +173,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalCreateDqa" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
