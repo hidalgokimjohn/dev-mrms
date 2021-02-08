@@ -1,9 +1,10 @@
 <div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Data Quality Assessment / Items</h5>
-    </div>
     <div class="card-body">
-        <a href="home.php?p=modules&m=dqa">
+        <a href="home.php?p=modules&m=dqa_conducted&modality=<?php
+        if(isset($_GET['modality'])){
+            echo $_GET['modality'];
+        }
+        ?>">
             <button type="button" class="btn btn-primary">
                 <span class="fa fa-arrow-left"></span> Back
             </button>
@@ -83,7 +84,7 @@
                                     <select id="choicesTypeOfFindings" class="form-control choices-type-of-findings" name="typeOfFindings">
                                         <option value="">Select Options</option>
                                         <?php
-                                            foreach ($app->get() as $options) {
+                                            foreach ($app->getTypeOfFindings() as $options) {
                                                 echo '<option value="' . $options['id'] . '" class="text-capitalize">' . strtoupper($options['findings_type']) . '</option>';
                                             }
                             ?>
