@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var file_path;
 
     //DQA Table
-    if (m == 'dqa') {
+    
         $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
         $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
             if (i !== 0) {
@@ -59,14 +59,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     "targets": 1,
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<strong>#' + pad(data[14], 4) + '</strong>';
+                        return '<strong>#' + pad(data[15], 4) + '</strong>';
                     },
                 },
                 {
                     "targets": 2,
                     "data": null,
                     "render": function (data, type, row) {
-                        return '<div class=" font-bold"><a href="home.php?p=modules&m=view_dqa&dqaid=' + data[9] + '"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
+                        return '<div class=" font-bold"><a href="home.php?p=modules&m=dqa_items&modality='+data[14]+'&dqaid=' + data[9] + '&title='+data['2']+'"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
                     },
                 },
                 {
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             ],
         });
-    }
+    
 
     //DQA Items Table
 

@@ -69,7 +69,7 @@ if(!$auth->loggedIn()){
                     Pages
                 </li>
                 <li class="sidebar-item <?php $app->sidebar_active('dashboards', $_GET['p']); ?>">
-                    <a data-target="#dashboards" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a data-target="#dashboards" data-toggle="collapse" class="sidebar-link <?php $app->sidebar_collapsed('dashboards', $_GET['p']); ?>">
                         <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboards</span>
                     </a>
                     <ul id="dashboards"
@@ -77,14 +77,15 @@ if(!$auth->loggedIn()){
                         data-parent="#sidebar">
                         <li class="sidebar-item ">
                             <a data-target="#multi-2" data-toggle="collapse"
-                               class="sidebar-link <?php $app->sidebar_showList('dashboards', $_GET['p']); ?>">MOV
-                                Uploading</a>
-                            <ul id="multi-2" class="sidebar-dropdown list-unstyled collapse show">
+                               class="sidebar-link <?php $app->sidebar_collapsed('mov_uploading', $_GET['m']); ?>">MOV
+                                Uploading
+                            </a>
+                            <ul id="multi-2" class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('mov_uploading', $_GET['m']); ?>">
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading_2021">2021
+                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading&year=2021">2021
                                         <span
                                                 class="sidebar-badge badge bg-secondary">NYS</span></a>
-                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading_2020">2020
+                                    <a class="sidebar-link" href="home.php?p=dashboards&m=mov_uploading&year=2020">2020
                                         <span
                                                 class="sidebar-badge badge bg-success">On-Going</span></a>
                                 </li>
@@ -103,15 +104,25 @@ if(!$auth->loggedIn()){
                         <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Modules</span>
                     </a>
                     <ul id="pages"
-                        class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('modules', $_GET['p']); ?>"
+                        class="sidebar-dropdown list-unstyled collapse <?php if($_GET['m']=='dqa_conducted' || $_GET['m']=='dqa_items'){
+                            echo 'show';
+                        } ?>"
                         data-parent="#sidebar">
-                        <li class="sidebar-item <?php $app->sidebar_active('dqa', $_GET['m']) ;
-                        $app->sidebar_active('view_dqa', $_GET['m'])?>"><a
-                                    class="sidebar-link" href="home.php?p=modules&m=dqa">Data Quality Assessment</a>
-                        </li>
-                        <li class="sidebar-item <?php $app->sidebar_active('mov_checklist', $_GET['m']); ?>"><a
-                                    class="sidebar-link" href="home.php?p=modules&m=mov_checklist">MOV Checklist</a>
-                        </li>
+                        <a data-target="#multi-3" data-toggle="collapse"
+                               class="sidebar-link <?php 
+                               if($_GET['m']!=='dqa_conducted' OR $_GET['m']=='dqa_items'){
+                                   echo 'collapsed';
+                               }
+                               $app->sidebar_collapsed('dqa_conducted', $_GET['m']); ?>">DQA
+                        </a>
+                        <ul id="multi-3" class="sidebar-dropdown list-unstyled collapse <?php if($_GET['m']=='dqa_conducted' || $_GET['m']=='dqa_items'){
+                            echo 'show';
+                        } ?>">
+                                <li class="sidebar-item">   
+                                    <a class="sidebar-link" href="home.php?p=modules&m=dqa_conducted&modality=af_cbrc">KC-AF CBRC</a>
+                                    <a class="sidebar-link" href="home.php?p=modules&m=dqa_conducted&modality=ipcdd_drom">IPCDD DROM</a>
+                                </li>
+                        </ul>
                     </ul>
                 </li>
                 <li class="sidebar-header">
@@ -215,14 +226,48 @@ if(!$auth->loggedIn()){
         </nav>
         <main class="content">
             <div class="container-fluid p-0">
-                <h1 class="h3 mb-3 text-capitalize">Module / Data Quality Assessment</h1>
                 <div class="row">
                     <div class="col-12">
                         <?php
-                        ($_GET['m'] == 'mov_uploading_2020') ? include('resources/views/movUploadingStatus.php') : '';
-                        ($_GET['m'] == 'mov_uploading_2021') ? include('resources/views/movUploadingStatus_2021.php') : '';
-                        ($_GET['m'] == 'dqa') ? include('resources/views/tblDqa.php') : '';
-                        ($_GET['m'] == 'view_dqa') ? include('resources/views/viewDqaItems.php') : '';
+                        ($_GET['m'] == 'mov_uploading' && $_GET['year']=='2020') ? include('resources/views/movUploadingStatus.php') : '';
+                        ($_GET['m'] == 'mov_uploading' && $_GET['year']=='2021') ? include('resources/views/movUploadingStatus_2021.php') : '';
+                        //dqa module
+                        $getModality='';
+                        if(isset($_GET['modality']) && ($_GET['modality']=='ipcdd_drom')){
+                            $getModality = 'IPCDD DROM';
+                        }
+                        if(isset($_GET['modality']) && ($_GET['modality']=='af_cbrc' OR $_GET['modality']=='ncddp_drom')){
+                            $getModality = 'KC-AF CBRC';
+                        }
+
+                        if(isset($_GET['m']) && $_GET['m']=='dqa_items'){
+                            $l='';
+                            if(isset($_GET['modality'])){
+                                $l="home.php?p=modules&m=dqa_conducted&modality=".$_GET['modality'];
+                            }
+                            echo '<nav aria-label="breadcrumb">
+										<ol class="breadcrumb">
+											<li class="breadcrumb-item"><a href="#"><strong>Module</strong></a></li>
+                                            <li class="breadcrumb-item"><a href="#"><strong>Data Quality Assessment</strong></a></li>
+											<li class="breadcrumb-item"><a href="'.$l.'"><strong>'.$getModality.'</strong></a></li>
+											<li class="breadcrumb-item active"><strong>'.$_GET['title'].'</strong></li>
+										</ol>
+									</nav>';
+                            include('resources/views/viewDqaItems.php');
+                        }
+                        if(isset($_GET['m']) && $_GET['m']=='dqa_conducted'){
+                            if(isset($_GET['modality'])){
+                                $l="home.php?p=modules&m=dqa_conducted&modality=".$_GET['modality'];
+                            }
+                            echo '<nav aria-label="breadcrumb">
+										<ol class="breadcrumb">
+											<li class="breadcrumb-item"><a href="index.html"><strong>Module</strong></a></li>
+                                            <li class="breadcrumb-item"><a href="#"><strong>Data Quality Assessment</strong></a></li>
+											<li class="breadcrumb-item active"><strong>'.$getModality.'</strong></li>
+										</ol>
+									</nav>';
+                            include('resources/views/tblDqa.php');
+                        }
                         ?>
                     </div>
                 </div>
@@ -273,14 +318,14 @@ if(!$auth->loggedIn()){
 <script>
     $(document).ready(function () {
         var m = url.searchParams.get("m");
-        if(m=='dqa'){
+        if(m=='dqa_conducted'){
             new Choices(document.querySelector(".choices-muni"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));            
 
         }
-        if(m=='view_dqa'){
+        if(m=='dqa_items'){
             new Choices(document.querySelector(".choices-dqa-level"));
             flatpickr(".flatpickr-minimum",{
                 minDate:'today'
@@ -318,6 +363,5 @@ if(!$auth->loggedIn()){
 
         }
     });
-    /*    */
 </script>
 </html>
