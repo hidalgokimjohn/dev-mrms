@@ -120,8 +120,8 @@ class App
             case 'modules';
                 $title = '';
                 if (isset($_GET['p'])) {
-                    if(isset($_GET['title'])){
-                        $title.=$_GET['title']." |";
+                    if (isset($_GET['title'])) {
+                        $title .= $_GET['title'] . " |";
                     }
                     $title .= " Data Quality Assessment | MRMS";
                 }
@@ -171,18 +171,20 @@ class App
         &copy; ' . date("Y ") . ' DSWD CARAGA Kalahi-CIDSS | Monitoring & Evaluation Unit.</div></div>';
     }
 
-    public function getCities()
+    public function getCities($status, $modalityGroup)
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-            lib_region.psgc_region,
-            lib_municipality.psgc_mun,
-            lib_municipality.mun_name
-            FROM
-            lib_municipality
-            INNER JOIN lib_province ON lib_municipality.psgc_province = lib_province.psgc_province
-            INNER JOIN lib_region ON lib_province.psgc_region = lib_region.psgc_region
-            WHERE lib_region.psgc_region='160000000' ORDER BY lib_municipality.mun_name ASC");
+        lib_municipality.mun_name,
+        lib_modality.modality_group,
+        cycles.`status`
+        FROM
+        implementing_muni_ncddp
+        INNER JOIN lib_municipality ON lib_municipality.psgc_mun = implementing_muni_ncddp.fk_psgc_mun
+        INNER JOIN cycles ON cycles.id = implementing_muni_ncddp.fk_cycles
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' AND lib_modality.modality_group='$modality'
+        ORDER BY lib_municipality.mun_name ASC");
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
@@ -195,10 +197,19 @@ class App
         }
     }
 
-    public function getCadt()
+    public function getCadt($status, $modalityGroup)
     {
         $mysql = $this->connectDatabase();
-        $q = $mysql->prepare("SELECT * FROM lib_cadt ORDER BY lib_cadt.id ASC");
+        $q = $mysql->prepare("SELECT
+        lib_cadt.id,
+        lib_cadt.cadt_name
+        FROM
+        implementing_cadt_ipcdd
+        INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        INNER JOIN lib_cadt ON lib_cadt.id = implementing_cadt_ipcdd.fk_cadt
+        WHERE cycles.`status`='$status' AND lib_modality.modality_group='$modalityGroup'
+        ORDER BY lib_cadt.cadt_name ASC");
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
@@ -211,7 +222,7 @@ class App
         }
     }
 
-    public function getCycle($year, $modality)
+    public function getCycle($status, $modalityGroup)
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
@@ -225,8 +236,8 @@ class App
                 cycles
                 INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE cycles.`year`= ? AND lib_modality.modality_group in ('ncddp_drom','ipcdd_drom','ipcdd','ncddp') AND lib_modality.modality_name=?");
-        $q->bind_param('is', $year, $modality);
+                WHERE cycles.`status`=? AND lib_modality.modality_group=?");
+        $q->bind_param('ss', $status, $modalityGroup);
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
@@ -485,8 +496,7 @@ class App
         $dqa_id = $mysql->real_escape_string($_POST['dqaId']);
         $file_id = $mysql->real_escape_string($_POST['fileId']);
         if ($_POST['fileId'] !== '') {
-            !
-            $q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
+            !$q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
             VALUES ('$file_id','$dqa_id', '$_SESSION[username]', NOW(), '0','$ft_guid')";
         } else {
             $q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
@@ -566,7 +576,6 @@ class App
         } else {
             return false;
         }
-
     }
 
     public function createDqa()
@@ -603,18 +612,16 @@ class App
             if (!$this->checkPreviousFindings()) {
                 //if no previous findings set no finding.
                 $fileId = $_GET['file_id'];
-                $q="UPDATE `form_uploaded` SET `with_findings`='no findings', `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                $q = "UPDATE `form_uploaded` SET `with_findings`='no findings', `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
                 $result = $mysql->query($q) or die($mysql->error);
-                if($mysql->affected_rows>0){
+                if ($mysql->affected_rows > 0) {
                     return true;
                 }
                 return true;
             } else {
                 echo 'hasPreviousFindings_';
             }
-
         }
-
     }
     public function submitWithFinding()
     {
@@ -654,13 +661,11 @@ class App
                 return false;
             }
         }
-
     }
     public function submitGiveTa()
     {
         $mysql = $this->connectDatabase();
         return true;
-
     }
 
     public function checkPreviousFindings()
@@ -705,13 +710,13 @@ class App
         }
     }
 
-    public function findingStatus($id,$deadLineForCompliance)
+    public function findingStatus($id, $deadLineForCompliance)
     {
         $s = ($id == '0') ? '<span class="badge bg-danger"><span class="fa fa-times-circle"></span> Not Complied</span> ' : '<span class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</span> ';
         //0 is not complied
-        if($id=='0'){
-           return $s.=$this->dueStatus($deadLineForCompliance);
-        }else{
+        if ($id == '0') {
+            return $s .= $this->dueStatus($deadLineForCompliance);
+        } else {
             return $s;
         }
     }
@@ -745,17 +750,19 @@ class App
         }
     }
 
-    public function removeFinding($id){
+    public function removeFinding($id)
+    {
         $mysql = $this->connectDatabase();
         $q = "UPDATE `tbl_dqa_findings` SET `is_deleted`='1' WHERE (`findings_guid`='$id') LIMIT 1";
         $result = $mysql->query($q) or die($mysql->error);
-        if($mysql->affected_rows>0){
+        if ($mysql->affected_rows > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    public function noFindings($fileId){
+    public function noFindings($fileId)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
         form_uploaded.file_id,
@@ -765,14 +772,15 @@ class App
         form_uploaded
         WHERE file_id='$fileId' AND is_reviewed='reviewed' AND with_findings='no findings'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
+        if ($result->num_rows > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function allfindingsByUsername($username,$modalityGroup,$status){
+    public function allfindingsByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -789,15 +797,16 @@ class App
                 AND cycles.`status` = '$status'
                 AND lib_modality.modality_group = '$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['findingsByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['findingsByUsername'];
+        } else {
             return '0';
-        }   
+        }
     }
 
-    public function thisWeekFindingsByUsername($username,$modalityGroup,$status){
+    public function thisWeekFindingsByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -816,15 +825,16 @@ class App
                 AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['this_week'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['this_week'];
+        } else {
             return '0';
-        }   
+        }
     }
 
-    public function thisDayFindingsByUsername($username,$modalityGroup,$status){
+    public function thisDayFindingsByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -843,16 +853,16 @@ class App
                 AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['this_day'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['this_day'];
+        } else {
             return '0';
         }
-    
     }
 
-    public function allTaByUsername($username,$modalityGroup,$status){
+    public function allTaByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -870,15 +880,16 @@ class App
                 AND lib_modality.modality_group = '$modalityGroup'
                 AND tbl_dqa_findings.technical_advice='technical advice'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['all_ta'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['all_ta'];
+        } else {
             return '0';
-        }   
+        }
     }
 
-    public function thisWeekTaByUsername($username,$modalityGroup,$status){
+    public function thisWeekTaByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -898,15 +909,16 @@ class App
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
                 AND tbl_dqa_findings.technical_advice='technical advice'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['this_week_ta'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['this_week_ta'];
+        } else {
             return '0';
-        }   
+        }
     }
 
-    public function thisDayTaByUsername($username,$modalityGroup,$status){
+    public function thisDayTaByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -926,16 +938,16 @@ class App
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
                 AND tbl_dqa_findings.technical_advice='technical advice'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['this_day_ta'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['this_day_ta'];
+        } else {
             return '0';
         }
-    
     }
 
-    public function allfindingsCompliedByUsername($username,$modalityGroup,$status){
+    public function allfindingsCompliedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -953,14 +965,15 @@ class App
                 AND lib_modality.modality_group = '$modalityGroup'
                 AND tbl_dqa_findings.is_checked=1";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['CompliedFindingsByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['CompliedFindingsByUsername'];
+        } else {
             return '0';
-        }   
+        }
     }
-    public function thisWeekFindingsCompliedByUsername($username,$modalityGroup,$status){
+    public function thisWeekFindingsCompliedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -980,14 +993,15 @@ class App
                 AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['thisWeekFindingsCompliedByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['thisWeekFindingsCompliedByUsername'];
+        } else {
             return '0';
-        }   
+        }
     }
-    public function thisDayFindingsCompliedByUsername($username,$modalityGroup,$status){
+    public function thisDayFindingsCompliedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -1007,15 +1021,16 @@ class App
                 AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
                 AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['thisDayFindingsCompliedByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['thisDayFindingsCompliedByUsername'];
+        } else {
             return '0';
-        }   
+        }
     }
 
-    public function allReviewedByUsername($username,$modalityGroup,$status){
+    public function allReviewedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -1031,14 +1046,15 @@ class App
                 AND lib_modality.modality_group='$modalityGroup' 
                 AND cycles.`status`='$status'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['allReviewedByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['allReviewedByUsername'];
+        } else {
             return '0';
         }
     }
-    public function thisWeekReviewedByUsername($username,$modalityGroup,$status){
+    public function thisWeekReviewedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -1056,14 +1072,15 @@ class App
                 AND WEEKOFYEAR(form_uploaded.date_uploaded)=WEEKOFYEAR(NOW()) 
                 AND YEAR(form_uploaded.date_uploaded) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['thisWeekReviewedByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['thisWeekReviewedByUsername'];
+        } else {
             return '0';
         }
     }
-    public function thisDayReviewedByUsername($username,$modalityGroup,$status){
+    public function thisDayReviewedByUsername($username, $modalityGroup, $status)
+    {
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
@@ -1081,11 +1098,15 @@ class App
                 AND DAYOFYEAR(form_uploaded.date_uploaded)=DAYOFYEAR(NOW()) 
                 AND YEAR(form_uploaded.date_uploaded) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
-           $row = $result->fetch_assoc();
-           return $row['thisDayReviewedByUsername'];
-        }else{
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['thisDayReviewedByUsername'];
+        } else {
             return '0';
         }
+    }
+
+    public function editDqa()
+    {
     }
 }
