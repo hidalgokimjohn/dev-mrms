@@ -1231,7 +1231,7 @@ class App
         $q="SELECT
         lib_category.id as stage_id,
         lib_category.category_name,
-        lib_activity.id AS act_id,
+        lib_activity.id AS activity_id,
         lib_activity.activity_name
         
         FROM
