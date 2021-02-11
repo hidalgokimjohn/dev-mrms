@@ -1,15 +1,14 @@
 <?php
 include_once("../../app/Database.php");
 include_once("../../app/App.php");
-include_once("../../app/Auth.php");
 include_once("../../app/Ceac.php");
-include_once("../../app/Dqa.php");
-include_once("../../app/Upload.php");
-include_once("../../app/User.php");
+include_once("../../app/Auth.php");
 $auth = new \app\Auth();
-$dqa = new \app\Dqa();
-$user = new \app\User();
-$upload = new \app\Upload();
-if ($auth->loggedIn()) {
-    echo 'edit_success';
+$app = new \app\App();
+if($_POST['staff']!=='' && $_POST['dqaTitle']!==''){
+    if($app->editDqaTitle($_GET['dqa_id'],$_POST['dqaTitle'],$_POST['staff'])){
+        echo 'submitted';
+    }
+}else{
+    echo 'submit_error';
 }

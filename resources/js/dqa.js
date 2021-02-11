@@ -12,97 +12,98 @@ document.addEventListener("DOMContentLoaded", function () {
     var file_path;
 
     //DQA Table
-    
-        $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
-        $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
-            if (i !== 0) {
-                var title = $(this).text();
-                $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
-                $('input', this).on('keyup change', function (e) {
-                    if (tbl_dqa.column(i).search() !== this.value) {
-                        tbl_dqa.column(i).search(this.value).draw();
-                    }
-                });
+
+    $('#tbl_dqa thead tr').clone(true).appendTo('#tbl_dqa thead');
+    $('#tbl_dqa thead tr:eq(1) th').each(function (i) {
+        if (i !== 0) {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+            $('input', this).on('keyup change', function (e) {
+                if (tbl_dqa.column(i).search() !== this.value) {
+                    tbl_dqa.column(i).search(this.value).draw();
+                }
+            });
+        }
+    });
+    var tbl_dqa = $('#tbl_dqa').DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        order: [
+            [1, "desc"]
+        ],
+        columnDefs: [{
+            orderable: false,
+            targets: 0
+        }],
+        ajax: {
+            url: "resources/ajax/tbl_dqaConducted.php",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            cache: false,
+            dataType: 'json',
+            error: function () {
+                $("post_list_processing").css("display", "none");
             }
-        });
-        var tbl_dqa = $('#tbl_dqa').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-            order: [
-                [1, "desc"]
-            ],
-            columnDefs: [{
-                orderable: false,
-                targets: 0
-            }],
-            ajax: {
-                url: "resources/ajax/tbl_dqaConducted.php",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                cache: false,
-                dataType: 'json',
-                error: function () {
-                    $("post_list_processing").css("display", "none");
-                }
+        },
+        language: {
+            "emptyTable": "<b>No records found. Click add files to create one.</b>"
+        },
+        columnDefs: [{
+                "targets": 0,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return ' <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
+                },
+            }, {
+                "targets": 1,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<strong>#' + pad(data[15], 4) + '</strong>';
+                },
             },
-            language: {
-                "emptyTable": "<b>No records found. Click add files to create one.</b>"
+            {
+                "targets": 2,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<div class=" font-bold"><a href="home.php?p=modules&m=dqa_items&modality=' + data[14] + '&dqaid=' + data[9] + '&title=' + data['2'] + '"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
+                },
             },
-            columnDefs: [{
-                    "targets": 0,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<button class="btn btn-danger btn-sm">Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
-                    },
-                }, {
-                    "targets": 1,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<strong>#' + pad(data[15], 4) + '</strong>';
-                    },
+            {
+                "targets": 3,
+                "data": null,
+                "render": function (data, type, row) {
+                    if (data[1] === null) {
+                        return '<div class="text-uppercase">' + data[12] + '</div>';
+                    } else {
+                        return '<div class="text-uppercase">' + data[1] + '</div>';
+                    }
                 },
-                {
-                    "targets": 2,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class=" font-bold"><a href="home.php?p=modules&m=dqa_items&modality='+data[14]+'&dqaid=' + data[9] + '&title='+data['2']+'"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
-                    },
+            },
+            {
+                "targets": 4,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<div class="text-capitalize">' + data[3] + '</div>';
                 },
-                {
-                    "targets": 3,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        if (data[1] === null) {
-                            return '<div class="text-uppercase">' + data[12] + '</div>';
-                        } else {
-                            return '<div class="text-uppercase">' + data[1] + '</div>';
-                        }
-                    },
+            },
+            {
+                "targets": 5,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<div class="text-capitalize">' + data[4] + '</div>';
                 },
-                {
-                    "targets": 4,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[3] + '</div>';
-                    },
+            }, {
+                "targets": 6,
+                "data": null,
+                "render": function (data, type, row) {
+                    return '<div class="text-capitalize">' + data[0] + '</div>';
                 },
-                {
-                    "targets": 5,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[4] + '</div>';
-                    },
-                }, {
-                    "targets": 6,
-                    "data": null,
-                    "render": function (data, type, row) {
-                        return '<div class="text-capitalize">' + data[0] + '</div>';
-                    },
-                }
-            ],
-        });
-    
+            }
+        ],
+    });
+
 
     //DQA Items Table
 
@@ -261,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalViewFile = document.getElementById('modalViewFile');
     if (modalCreateDqa) {
         modalCreateDqa.addEventListener('show.bs.modal', function (e) {
-
+            
         });
     }
     //DQA AddFiles Table
@@ -456,24 +457,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const editDqaTitle = document.getElementById('editDqaTitle');
     if (editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
-            var dqaId = $(e.relatedTarget).data('dqaguid');
+            dqaId = $(e.relatedTarget).data('dqaguid');
             var dqaTitle = $(e.relatedTarget).data('dqatitle');
             var newDdaTitle = $('.dqaTitle').val();
             $('.dqaTitle').val(dqaTitle);
-            if (dqaId !== '') {
-                $.ajax({
-                    type: "post",
-                    processData: false,
-                    url: "resources/ajax/editDqaTitle.php",
-                    data: {
-                        "dqaId": dqaId,
-                        "dqaTitle": newDdaTitle
-                    },
-                    success: function (data) {
-
-                    }
-                });
-            }
+            
         });
     }
     //Submit Findings
@@ -610,12 +598,12 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#btnSubmitFinding").prop('disabled', false);
     });
     //Remove findings
-    $(document).on('click', '#removeFinding', function(e) {
+    $(document).on('click', '#removeFinding', function (e) {
         let finding_id = document.querySelector('#removeFinding');
-        if(finding_id){
+        if (finding_id) {
             //confirm remove
             var r = confirm('Are you want to remove this finding?');
-            if(r){
+            if (r) {
                 $.ajax({
                     type: "post",
                     url: "resources/ajax/removeFinding.php",
@@ -624,7 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                     dataType: 'html',
                     success: function (data) {
-                        if(data=='removed'){
+                        if (data == 'removed') {
                             $.ajax({
                                 type: "post",
                                 url: "resources/ajax/displayFindings.php",
@@ -650,13 +638,76 @@ document.addEventListener("DOMContentLoaded", function () {
                             });
                         }
                     }
-                });   
+                });
             }
-           
         }
-       
+
     });
-    
+
+    //saveEdit
+    $("form#formEditDqaTitle").submit(function (event) {
+        event.preventDefault();
+        var formData = new FormData($(this)[0]);
+        $("#btnEditDqaTitle").html('<i class="fa fa-circle-notch fa-spin"></i> Saving changes');
+        $("#btnEditDqaTitle").prop('disabled', true);
+        var formValidated = document.querySelector('#formEditDqaTitle');
+        var hasError = formValidated.classList.contains('has-error');
+        console.log(hasError);
+        if (!hasError) {
+            $.ajax({
+                url: 'resources/ajax/editDqaTitle.php?dqa_id='+dqaId,
+                type: 'POST',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 'submitted') {
+                        window.notyf.open({
+                            type: 'success',
+                            message: '<strong>Saved!</strong>',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+                        tbl_dqa.ajax.reload();
+                    }
+                    if (data == 'submit_error') {
+                        window.notyf.open({
+                            type: 'error',
+                            message: '<strong>Hey!</strong> please fill-out required fields.',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+                    }
+                    $("#btnEditDqaTitle").html('<i class="fa fa-save"></i> Save changes');
+                    $("#btnEditDqaTitle").prop('disabled', false);
+                }
+            });
+        } else {
+            window.notyf.open({
+                type: 'error',
+                message: '<strong>Hey!</strong> please fill-out required fields.',
+                duration: '5000',
+                ripple: true,
+                dismissible: true,
+                position: {
+                    x: 'center',
+                    y: 'top'
+                }
+            });
+        }
+    });
 });
 
 
