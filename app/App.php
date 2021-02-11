@@ -1229,8 +1229,11 @@ class App
         $mysql = $this->connectDatabase();
         $id=$mysql->real_escape_string($id);
         $q="SELECT
-        lib_activity.id AS act_id,
+        lib_category.id as stage_id,
+        lib_category.category_name,
+        lib_activity.id AS activity_id,
         lib_activity.activity_name
+        
         FROM
         lib_activity
         INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
