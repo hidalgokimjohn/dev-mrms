@@ -1203,34 +1203,42 @@ class App
         }
     }
     //api for sdu
-    public function apiForms($id){
+    public function apiForms($id)
+    {
         $mysql = $this->connectDatabase();
-        $id=$mysql->real_escape_string($id);
-        $q="SELECT
-        lib_activity.id,
-        lib_activity.activity_name,
-        lib_form.form_code,
-        lib_form.form_name,
-        lib_form.form_type
-        FROM
-        lib_form
-        INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
-        WHERE lib_activity.id='$id'";
+        $id = $mysql->real_escape_string($id);
+        $q = "SELECT
+                lib_modality.id AS modality_id,
+                lib_modality.modality_group,
+                lib_category.id AS stage_id,
+                lib_category.category_name as stage_name,
+                lib_activity.id AS activity_id,
+                lib_activity.activity_name,
+                lib_form.form_code,
+                lib_form.form_name,
+                lib_form.form_type
+            FROM
+                lib_form
+            INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+            INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
+            INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
+            WHERE lib_activity.id = '$id'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
-            $json_data = array("forms"=>$data);
-            echo json_encode($json_data,JSON_PRETTY_PRINT);
+            $json_data = array("forms" => $data);
+            echo json_encode($json_data, JSON_PRETTY_PRINT);
         }
     }
-    public function apiActivity($id){
+    public function apiActivity($id)
+    {
         $mysql = $this->connectDatabase();
-        $id=$mysql->real_escape_string($id);
-        $q="SELECT
+        $id = $mysql->real_escape_string($id);
+        $q = "SELECT
         lib_category.id as stage_id,
-        lib_category.category_name,
+        lib_category.category_name as stage_name,
         lib_activity.id AS activity_id,
         lib_activity.activity_name
         
@@ -1244,17 +1252,18 @@ class App
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
-            $json_data = array("activities"=>$data);
-            echo json_encode($json_data,JSON_PRETTY_PRINT);
+            $json_data = array("activities" => $data);
+            echo json_encode($json_data, JSON_PRETTY_PRINT);
         }
     }
-    
-    public function apiCategory($userGroup){
+
+    public function apiCategory($userGroup)
+    {
         $mysql = $this->connectDatabase();
-        $userGroup=$mysql->real_escape_string($userGroup);
-        $q="SELECT
-        lib_category.id,
-        lib_category.category_name,
+        $userGroup = $mysql->real_escape_string($userGroup);
+        $q = "SELECT
+        lib_category.id as stage_id,
+        lib_category.category_name as stage_name,
         lib_modality.modality_group
         FROM
         lib_category
@@ -1265,8 +1274,8 @@ class App
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
-            $json_data = array("category"=>$data);
-            echo json_encode($json_data,JSON_PRETTY_PRINT);
+            $json_data = array("category" => $data);
+            echo json_encode($json_data, JSON_PRETTY_PRINT);
         }
     }
 }
