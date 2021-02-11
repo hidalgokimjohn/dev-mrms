@@ -5,4 +5,4 @@ include_once("../app/Ceac.php");
 header('Content-type:application/json;charset=utf-8');
 
 $api = new \app\App();
-$api->apiActivity($_POST['cat_id']);
+$api->apiActivity($_GET['cat_id']);
