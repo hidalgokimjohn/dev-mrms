@@ -6,7 +6,9 @@ include_once("../../app/Auth.php");
 $auth = new \app\Auth();
 $app = new \app\App();
 if($_POST['staff']!=='' && $_POST['dqaTitle']!==''){
-    echo 'submitted';
+    if($app->editDqaTitle($_GET['dqa_id'],$_POST['dqaTitle'],$_POST['staff'])){
+        echo 'submitted';
+    }
 }else{
     echo 'submit_error';
 }

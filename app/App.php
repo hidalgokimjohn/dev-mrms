@@ -183,7 +183,7 @@ class App
         INNER JOIN lib_municipality ON lib_municipality.psgc_mun = implementing_muni_ncddp.fk_psgc_mun
         INNER JOIN cycles ON cycles.id = implementing_muni_ncddp.fk_cycles
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-        WHERE cycles.`status`='$status' AND lib_modality.modality_group='$modality'
+        WHERE cycles.`status`='$status' AND lib_modality.modality_group='$modalityGroup'
         ORDER BY lib_municipality.mun_name ASC");
         $q->execute();
         $result = $q->get_result();
@@ -296,12 +296,7 @@ class App
     public function tbl_dqaConducted()
     {
         $mysql = $this->connectDatabase();
-        include_once 'User.php';
-        $user = new User();
-        $user->info($_SESSION['username']);
-        if ($user->position_abbrv !== 'RMES') {
-            $where_con = ' AND m.conducted_by="' . $_SESSION['username'] . '"';
-        }
+
         //TODO add where modality
         $q = "SELECT
                 DATE_FORMAT(m.created_at, '%Y/%m/%d'),
@@ -331,8 +326,7 @@ class App
             INNER JOIN lib_cycle ON cycles.fk_cycle = lib_cycle.id
             LEFT JOIN lib_cadt ON lib_cadt.id = m.fk_cadt_id
             INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-            WHERE 1 = 1 ";
-        $q .= $where_con;
+            WHERE m.conducted_by='$_SESSION[username]' ";
         $result = $mysql->query($q) or die($mysql->error);
         while ($row = $result->fetch_row()) {
             $data[] = $row;
@@ -1106,7 +1100,170 @@ class App
         }
     }
 
-    public function editDqa()
+    public function editDqaTitle($dqa_id, $dqaTitle, $responsiblePerson)
     {
+        $mysql = $this->connectDatabase();
+        $dqa_id = $mysql->real_escape_string($dqa_id);
+        $dqaTitle = $mysql->real_escape_string($dqaTitle);
+        $responsiblePerson = $mysql->real_escape_string($responsiblePerson);
+        $q = "UPDATE `tbl_dqa` SET `title`='$dqaTitle', `responsible_person`='$responsiblePerson' WHERE (`dqa_guid`='$dqa_id') LIMIT 1";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($mysql->affected_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getIpcddCoverage($status, $username)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        lib_cadt.cadt_name,
+        cycles.`status`,
+        lib_cadt.id as cadt_id,
+        cycles.id as cycle_id
+        FROM
+        user_cadt_coverage
+        INNER JOIN implementing_cadt_ipcdd ON implementing_cadt_ipcdd.fk_cadt = user_cadt_coverage.fk_cadt
+        INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
+        INNER JOIN lib_cadt ON lib_cadt.id = user_cadt_coverage.fk_cadt
+        WHERE cycles.`status`='$status' AND user_cadt_coverage.fk_username='$username'";
+        $results = $mysql->query($q) or die($mysql->error);
+        if ($results->num_rows > 0) {
+            while ($row = $results->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+    public function is_pending($user)
+    {
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT users.status FROM users WHERE users.username= ? ") or die($mysql->error);
+        $q->bind_param('s', $user);
+        $q->execute();
+        $result = $q->get_result();
+        $row = $result->fetch_assoc();
+        if ($result->num_rows > 0 && $row['status'] == 'pending') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function permission($user)
+    {
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+				lib_user_permission.permission,
+				user_permission.fk_username
+				FROM
+				user_permission
+				INNER JOIN lib_user_permission ON user_permission.fk_user_permission = lib_user_permission.id
+				WHERE user_permission.fk_username = ? ");
+        $q->bind_param('s', $user);
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row['permission'];
+            }
+            return $_SESSION['user_auth'] = array("permission" => $data);
+            //return $_SESSION['user_auth'] = array("permission" => $data, "user_details" => array('username' => $row['fk_username']));
+        } else {
+            return false;
+        }
+    }
+
+    public function getAllCadtMembers($cadt_id, $userGroup)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        CONCAT(personal_info.first_name,' ',personal_info.last_name) as fullName,
+        personal_info.pic_url,
+        users.fk_position,
+        lib_user_positions.user_position,
+        lib_user_positions.user_position_abbrv,
+        lib_user_positions.user_group,
+        user_cadt_coverage.fk_username
+        FROM
+        user_cadt_coverage
+        INNER JOIN personal_info ON personal_info.fk_username = user_cadt_coverage.fk_username
+        INNER JOIN users ON users.username = user_cadt_coverage.fk_username
+        INNER JOIN lib_user_positions ON lib_user_positions.id = users.fk_position
+        WHERE user_cadt_coverage.fk_cadt='$cadt_id' AND lib_user_positions.user_group='$userGroup'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+    //api for sdu
+    public function apiForms($id){
+        $mysql = $this->connectDatabase();
+        $id=$mysql->real_escape_string($id);
+        $q="SELECT
+        lib_activity.id,
+        lib_activity.activity_name,
+        lib_form.form_code,
+        lib_form.form_name,
+        lib_form.form_type
+        FROM
+        lib_form
+        INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+        WHERE lib_activity.id='$id'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            $json_data = array("forms"=>$data);
+            echo json_encode($json_data,JSON_PRETTY_PRINT);
+        }
+    }
+    public function apiActivity($id){
+        $mysql = $this->connectDatabase();
+        $id=$mysql->real_escape_string($id);
+        $q="SELECT
+        lib_activity.id AS act_id,
+        lib_activity.activity_name
+        FROM
+        lib_activity
+        INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
+        INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
+        WHERE lib_category.id ='$id'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            $json_data = array("activities"=>$data);
+            echo json_encode($json_data,JSON_PRETTY_PRINT);
+        }
+    }
+    
+    public function apiCategory($userGroup){
+        $mysql = $this->connectDatabase();
+        $userGroup=$mysql->real_escape_string($userGroup);
+        $q="SELECT
+        lib_category.id,
+        lib_category.category_name,
+        lib_modality.modality_group
+        FROM
+        lib_category
+        INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
+        WHERE lib_modality.modality_group='$userGroup'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            $json_data = array("category"=>$data);
+            echo json_encode($json_data,JSON_PRETTY_PRINT);
+        }
     }
 }

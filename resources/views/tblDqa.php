@@ -19,7 +19,6 @@
                             </div>
                             <h1 class="mt-1 mb-3">
                                 <?php
-
                                 if (isset($_GET['modality'])) {
                                     echo $app->allreviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
                                 }
@@ -183,13 +182,13 @@
                 <thead>
                     <tr class="border-bottom-0">
 
-                        <th style="width: 90px;"></th>
+                        <th style="width: 30px;"></th>
                         <th style="width: 80px;">DQA #</th>
                         <th style="width: 230px;">Title</th>
                         <th>City</th>
-                        <th title="Responsible Person">Responsible Person</th>
+                        <th title="Responsible Person">Area Coordinator</th>
                         <th class="">Created by</th>
-                        <th class="">Create at</th>
+                        <th class="">Created at</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -279,7 +278,7 @@
                     <select id="editChoicesAC" class="form-control editChoicesAc" name="staff">
                         <option value="">Select Area Coordinator</option>
                         <?php
-                        $acs = $user->get_staff("'ac'");
+                        $acs = $app->getStaffs("'ac'");
                         foreach ($acs as $ac) {
                             echo '<option class="text-capitalize" value="' . $ac['fk_username'] . '">' . strtoupper($ac['fullname']) . '</option>';
                         }

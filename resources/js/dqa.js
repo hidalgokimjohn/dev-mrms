@@ -53,7 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 0,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<button class="btn btn-danger btn-sm">Delete</button> <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return ' <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
                 },
             }, {
                 "targets": 1,
@@ -456,24 +457,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const editDqaTitle = document.getElementById('editDqaTitle');
     if (editDqaTitle) {
         editDqaTitle.addEventListener('show.bs.modal', function (e) {
-            var dqaId = $(e.relatedTarget).data('dqaguid');
+            dqaId = $(e.relatedTarget).data('dqaguid');
             var dqaTitle = $(e.relatedTarget).data('dqatitle');
             var newDdaTitle = $('.dqaTitle').val();
             $('.dqaTitle').val(dqaTitle);
-            if (dqaId !== '') {
-                $.ajax({
-                    type: "post",
-                    processData: false,
-                    url: "resources/ajax/editDqaTitle.php",
-                    data: {
-                        "dqaId": dqaId,
-                        "dqaTitle": newDdaTitle
-                    },
-                    success: function (data) {
-
-                    }
-                });
-            }
+            
         });
     }
     //Submit Findings
@@ -667,7 +655,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(hasError);
         if (!hasError) {
             $.ajax({
-                url: 'resources/ajax/editDqaTitle.php',
+                url: 'resources/ajax/editDqaTitle.php?dqa_id='+dqaId,
                 type: 'POST',
                 data: formData,
                 async: true,
