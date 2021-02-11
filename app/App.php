@@ -1212,6 +1212,7 @@ class App
                 lib_modality.modality_group,
                 lib_category.id AS stage_id,
                 lib_category.category_name as stage_name,
+                lib_category.acronym,
                 lib_activity.id AS activity_id,
                 lib_activity.activity_name,
                 lib_form.form_code,
@@ -1239,9 +1240,9 @@ class App
         $q = "SELECT
         lib_category.id as stage_id,
         lib_category.category_name as stage_name,
+        lib_category.acronym,
         lib_activity.id AS activity_id,
         lib_activity.activity_name
-        
         FROM
         lib_activity
         INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
@@ -1265,7 +1266,7 @@ class App
         lib_category.id as stage_id,
         lib_category.category_name as stage_name,
         lib_modality.modality_group,
-        lib_modality.acronym
+        lib_category.acronym
         FROM
         lib_category
         INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
