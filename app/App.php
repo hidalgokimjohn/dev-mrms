@@ -1264,7 +1264,8 @@ class App
         $q = "SELECT
         lib_category.id as stage_id,
         lib_category.category_name as stage_name,
-        lib_modality.modality_group
+        lib_modality.modality_group,
+        lib_modality.acronym
         FROM
         lib_category
         INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
