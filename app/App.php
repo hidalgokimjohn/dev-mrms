@@ -9,6 +9,34 @@ class App
         $database = Database::getInstance();
         return $database->getConnection();
     }
+    //generate GUID
+    public function v4()
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+
+            // 32 bits for "time_low"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_mid"
+            mt_rand(0, 0xffff),
+
+            // 16 bits for "time_hi_and_version",
+            // four most significant bits holds version number 4
+            mt_rand(0, 0x0fff) | 0x4000,
+
+            // 16 bits, 8 bits for "clk_seq_hi_res",
+            // 8 bits for "clk_seq_low",
+            // two most significant bits holds zero and one for variant DCE1.1
+            mt_rand(0, 0x3fff) | 0x8000,
+
+            // 48 bits for "node"
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
+        );
+    }
 
     public function login_sso($user)
     {
@@ -348,14 +376,16 @@ class App
                 personal_info.first_name,
                 personal_info.last_name,
                 form_uploaded.reviewed_by,
-                form_uploaded.is_reviewed   ,
+                form_uploaded.is_reviewed,
                 form_uploaded.with_findings,
                 form_uploaded.is_findings_complied,
                 form_uploaded.file_id,
                 form_uploaded.file_path,
                 lib_cadt.cadt_name,
                 form_target.ft_guid,
-                tbl_dqa_list.created_at
+                tbl_dqa_list.created_at,
+                tbl_dqa_list.id,
+                tbl_dqa_list.added_by
             FROM
             tbl_dqa
             INNER JOIN tbl_dqa_list ON tbl_dqa.dqa_guid = tbl_dqa_list.fk_dqa_guid
@@ -372,6 +402,7 @@ class App
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_row()) {
+                $row['17'] = $this->userInfo($row['17']);
                 $data[] = $row;
             }
         } else {
@@ -428,7 +459,9 @@ class App
                         OR tbl_dqa_list.fk_file_guid IS NULL
                         OR form_uploaded.is_deleted = 0
                         OR form_uploaded.is_deleted is NULL
+                        
                     )
+                    AND form_uploaded.is_compliance is null
                     AND (
                         form_target.ft_guid NOT IN (
                             SELECT
@@ -500,7 +533,7 @@ class App
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
                 if ($file_id !== null) {
-                    $q = "UPDATE `form_uploaded` SET `is_added_to_dqa`='0' WHERE (`file_id`='$file_id') LIMIT 1";
+                    $q = "UPDATE `form_uploaded` SET `is_added_to_dqa`='1' WHERE (`file_id`='$file_id') LIMIT 1";
                     $mysql->query($q) or die($mysql->error);
                 }
                 echo 'added';
@@ -598,6 +631,8 @@ class App
     public function submitNoFinding()
     {
         $mysql = $this->connectDatabase();
+        $listId = $_GET['list_id'];
+
         if ($_GET['file_name'] == 'Not Yet Uploaded') {
             //NYU stands for Not Yet Uploaded
             echo 'notYetUploaded_';
@@ -609,6 +644,8 @@ class App
                 $q = "UPDATE `form_uploaded` SET `with_findings`='no findings', `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
                 $result = $mysql->query($q) or die($mysql->error);
                 if ($mysql->affected_rows > 0) {
+                    $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                    $mysql->query($listUpdate);
                     return true;
                 }
                 return true;
@@ -620,37 +657,38 @@ class App
     public function submitWithFinding()
     {
         $mysql = $this->connectDatabase();
-        $guid = new Ceac();
-        $finding_guid = $guid->v4();
+        $finding_guid = $this->v4();
         $fk_ft_guid = $_GET['ft_guid'];
         $fk_dqa_guid = $_GET['dqa_id'];
         $fileId = $_GET['file_id'];
-        $textFindings = $_POST['textFindings'];
+        $listId = $_GET['list_id'];
+        $textFindings = $mysql->real_escape_string($_POST['textFindings']);
         $responsiblePerson = $_POST['responsiblePerson'];
         $typeOfFindings = $_POST['typeOfFindings'];
         $dateOfCompliance = $_POST['dateOfCompliance'];
         $addedBy = $_SESSION['username'];
+        $dqaLevel = $_POST['dqaLevel'];
         $q = "";
         if ($_GET['file_name'] == 'Not Yet Uploaded') {
-            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', '$dateOfCompliance', '0', '$addedBy', 'field', '$dateOfCompliance')";
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', '$dqaLevel', '$dateOfCompliance')";
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`in_hard_copy`='yes' WHERE (`id`='$listId') LIMIT 1";
+                $resultFileUpdate = $mysql->query($listUpdate) or die($mysql->error);
                 return true;
             } else {
                 return false;
             }
         } else {
-            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`,`fk_file_guid`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', 'field', '$dateOfCompliance','$fileId')";
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`,`fk_file_guid`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', '$dqaLevel', '$dateOfCompliance','$fileId')";
             //Update file status
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
-                $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `reviewed_by`='$addedBy', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
-                $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
-                if ($mysql->affected_rows > 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $resultFileUpdate = $mysql->query($listUpdate) or die($mysql->error);
+                $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                $mysql->query($fileUpdate) or die($mysql->error);
+                return true;
             } else {
                 return false;
             }
@@ -659,6 +697,40 @@ class App
     public function submitGiveTa()
     {
         $mysql = $this->connectDatabase();
+        $mysql = $this->connectDatabase();
+        $finding_guid = $this->v4();
+        $fk_ft_guid = $_GET['ft_guid'];
+        $fk_dqa_guid = $_GET['dqa_id'];
+        $fileId = $_GET['file_id'];
+        $textFindings = $_POST['textFindings'];
+        $listId = $_GET['list_id'];
+        $addedBy = $_SESSION['username'];
+        $dqaLevel = $_POST['dqaLevel'];
+        $q = "";
+        if ($_GET['file_name'] == 'Not Yet Uploaded') {
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`,`findings`, `is_deleted`, `created_at`, `added_by`, `dqa_level`,`technical_advice`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$textFindings', '0',NOW(),'$addedBy','$dqaLevel','technical advice')";
+            $result = $mysql->query($q) or die($mysql->error);
+            if ($mysql->affected_rows > 0) {
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $mysql->query($listUpdate);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `findings`, `is_deleted`, `created_at`, `added_by`,`fk_file_guid`,`dqa_level`,`technical_advice`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$textFindings', '0', NOW(), '$addedBy','$fileId','$dqaLevel','technical advice')";
+            //Update file status
+            $result = $mysql->query($q) or die($mysql->error);
+            if ($mysql->affected_rows > 0) {
+                // $fileUpdate = "UPDATE `form_uploaded` SET `is_reviewed`='reviewed', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
+                // $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $mysql->query($listUpdate);
+                return true;
+            } else {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -679,7 +751,7 @@ class App
         }
     }
 
-    public function displayFindings($fileId)
+    public function displayFindings($fileId, $ft_guid)
     {
         $mysql = $this->connectDatabase();
         $q = "SELECT
@@ -691,10 +763,12 @@ class App
         tbl_dqa_findings.dqa_level,
         tbl_dqa_findings.date_complied,
         tbl_dqa_findings.added_by,
-        tbl_dqa_findings.findings_guid
+        tbl_dqa_findings.findings_guid,
+        tbl_dqa_findings.technical_advice
         FROM
         tbl_dqa_findings
-        WHERE fk_file_guid='$fileId' AND is_deleted=0";
+        WHERE  (fk_ft_guid='$ft_guid' OR fk_file_guid='$fileId') AND is_deleted=0
+        ORDER BY tbl_dqa_findings.created_at DESC";
         $results = $mysql->query($q) or die($mysql->error);
         if ($results->num_rows > 0) {
             while ($row = $results->fetch_assoc()) {
@@ -789,7 +863,8 @@ class App
                 tbl_dqa_findings.is_deleted = 0
                 AND tbl_dqa_findings.added_by = '$username'
                 AND cycles.`status` = '$status'
-                AND lib_modality.modality_group = '$modalityGroup'";
+                AND lib_modality.modality_group = '$modalityGroup'
+                AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -804,24 +879,22 @@ class App
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
-                count(tbl_dqa_findings.findings_guid) as this_week
-                FROM
-                    tbl_dqa_findings
-                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
-                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
-                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
-                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE
-                tbl_dqa_findings.is_deleted = 0
-                AND tbl_dqa_findings.added_by = '$username'
-                AND cycles.`status` = '$status'
-                AND lib_modality.modality_group = '$modalityGroup' 
-                AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
-                AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        Count(tbl_dqa_findings.added_by) AS thisWeekReviewedByUsername
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' 
+        AND tbl_dqa_findings.is_deleted=0 
+        AND tbl_dqa_findings.added_by='$username'
+        AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now()) 
+        AND lib_modality.modality_group='$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['this_week'];
+            return $row['thisWeekReviewedByUsername'];
         } else {
             return '0';
         }
@@ -832,24 +905,22 @@ class App
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
-                count(tbl_dqa_findings.findings_guid) as this_day
-                FROM
-                    tbl_dqa_findings
-                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
-                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
-                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
-                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE
-                tbl_dqa_findings.is_deleted = 0
-                AND tbl_dqa_findings.added_by = '$username'
-                AND cycles.`status` = '$status'
-                AND lib_modality.modality_group = '$modalityGroup' 
-                AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
-                AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        Count(tbl_dqa_findings.added_by) AS thisDayReviewedByUsername
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' 
+        AND tbl_dqa_findings.is_deleted=0 
+        AND tbl_dqa_findings.added_by='$username'
+        AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now()) 
+        AND lib_modality.modality_group='$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['this_day'];
+            return $row['thisDayReviewedByUsername'];
         } else {
             return '0';
         }
@@ -1035,7 +1106,7 @@ class App
                 INNER JOIN cycles ON cycles.id = form_target.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
                 WHERE form_uploaded.reviewed_by='$username' 
-                AND form_uploaded.is_reviewed='reviewed' 
+                AND form_uploaded.is_reviewed='r    eviewed' 
                 AND form_uploaded.is_deleted=0 
                 AND lib_modality.modality_group='$modalityGroup' 
                 AND cycles.`status`='$status'";
@@ -1278,6 +1349,245 @@ class App
             }
             $json_data = array("category" => $data);
             echo json_encode($json_data, JSON_PRETTY_PRINT);
+        }
+    }
+
+    public function myWorkDashboard_ipcddDrom($status)
+    {
+        $mysql = $this->connectDatabase();
+        $status = $mysql->real_escape_string($status);
+        $q = "SELECT
+        lib_cadt.cadt_name,
+        lib_cycle.cycle_name,
+        Sum(form_target.target) AS target,
+        Sum(form_target.actual) AS actual,
+        CONCAT(
+                    FORMAT(
+                        Sum(form_target.actual) / Sum(form_target.target) * 100,
+                        2
+                    ),
+                    '%'
+                ) AS uploadStatus,
+        cycles.id as cycle_id,
+        lib_cadt.id as cadt_id,
+        form_target.fk_psgc_mun
+        FROM
+                form_target
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            INNER JOIN user_cadt_coverage ON user_cadt_coverage.fk_cadt = form_target.fk_cadt
+            INNER JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
+            INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+            LEFT JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
+        WHERE
+                cycles.`status` = '$status'
+            AND user_cadt_coverage.fk_username = '$_SESSION[username]'
+            AND form_target.target > 0
+            AND (
+                form_uploaded.is_deleted = 0
+                OR form_uploaded.is_deleted IS NULL
+            )
+        GROUP BY
+                form_target.fk_cadt,
+                form_target.fk_cycle
+        ";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $row['reviewed'] = $this->countReviewedByUsername($row['cadt_id'], $row['fk_psgc_mun'], $row['cycle_id']);
+                $row['reviewedOverActual'] = number_format($row['reviewed'] / $row['actual'] * 100, 2);
+                $row['findings']= $this->countFindingByUsername($row['cadt_id'],$row['fk_psgc_mun'],$row['cycle_id']);
+                $row['complied'] = $this->countCompliedByUsername($row['cadt_id'],$row['fk_psgc_mun'],$row['cycle_id']);
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+    public function countReviewedByUsername($area_id, $area_id2, $cycle_id)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+                COUNT(
+                    DISTINCT tbl_dqa_list.fk_file_guid
+                ) as reviewed
+            FROM
+                tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            WHERE
+                tbl_dqa_list.added_by = '$_SESSION[username]'
+            AND (
+                form_target.fk_cadt = '$area_id'
+                OR form_target.fk_psgc_mun = '$area_id2'
+            )
+            AND form_target.fk_cycle = '$cycle_id'
+            AND tbl_dqa_list.is_delete = 0";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+
+            return $row['reviewed'];
+        }
+    }
+    public function countFindingByUsername($area_id, $area_id2, $cycle_id)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        COUNT(tbl_dqa_findings.findings_guid) as countFinding
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        WHERE (form_target.fk_cadt='$area_id' OR form_target.fk_psgc_mun='$area_id2') AND form_target.fk_cycle='$cycle_id' AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        AND tbl_dqa_findings.is_deleted=0";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['countFinding'];
+        }
+    }
+    public function countCompliedByUsername($area_id, $area_id2, $cycle_id)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        COUNT(tbl_dqa_findings.findings_guid) as countComplied
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        WHERE (form_target.fk_cadt='$area_id' OR form_target.fk_psgc_mun='$area_id2') AND form_target.fk_cycle='$cycle_id' AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.is_checked=1";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['countComplied'];
+        }
+    }
+
+    public function myWorkFindingAll($status){
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        count(tbl_dqa_findings.added_by) as cntFinding
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['cntFinding'];
+        }
+    }
+    public function myWorkThisWeekFinding($status){
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        count(tbl_dqa_findings.added_by) as cntFinding
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['cntFinding'];
+        }else{
+            return 0;
+        }
+    }
+    public function myWorkThisDayFinding($status){
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+        count(tbl_dqa_findings.added_by) as cntFinding
+        FROM
+        tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['cntFinding'];
+        }else{
+            return 0;
+        }
+    }
+    public function myWorkReviewedAll($username,$status){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            COUNT(tbl_dqa_list.id) as myWorkReviewedAll
+            FROM
+            tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            WHERE cycles.`status`='$status' 
+            AND tbl_dqa_list.added_by='$username' 
+            AND tbl_dqa_list.is_delete=0 
+            AND tbl_dqa_list.fk_file_guid is not NULL
+            AND tbl_dqa_list.is_reviewed='reviewed'
+            AND DAYOFYEAR(tbl_dqa_list.created_at)=DAYOFYEAR(NOW()) 
+            AND YEAR(tbl_dqa_list.created_at) = YEAR(now())
+            ";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkReviewedAll'];
+        }else{
+            return 0;
+        }
+
+    }
+
+    public function myWorkThisWeekReviewed($status){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            COUNT(tbl_dqa_list.id) as myWorkThisWeekReviewed
+            FROM
+            tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            WHERE cycles.`status`='$status' 
+            AND tbl_dqa_list.added_by='$_SESSION[username]' 
+            AND tbl_dqa_list.is_delete=0
+            AND tbl_dqa_list.fk_file_guid is not NULL
+            AND tbl_dqa_list.is_reviewed='reviewed'
+            AND WEEKOFYEAR(tbl_dqa_list.created_at)=WEEKOFYEAR(NOW()) 
+            AND YEAR(tbl_dqa_list.created_at) = YEAR(now())";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkThisWeekReviewed'];
+        }else{
+            return 0;
+        }
+    }
+    public function myWorkThisDayReviewed($status){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            COUNT(tbl_dqa_list.id) as myWorkThisDayReviewed
+            FROM
+            tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            WHERE cycles.`status`='$status' 
+            AND tbl_dqa_list.added_by='$_SESSION[username]' 
+            AND tbl_dqa_list.is_delete=0
+            AND tbl_dqa_list.fk_file_guid is not NULL
+            AND tbl_dqa_list.is_reviewed='reviewed'
+            AND DAYOFYEAR(tbl_dqa_list.created_at)=DAYOFYEAR(NOW()) 
+            AND YEAR(tbl_dqa_list.created_at) = YEAR(now())";
+        $result = $mysql->query($q);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkThisDayReviewed'];
+        }else{
+            return 0;
         }
     }
 }

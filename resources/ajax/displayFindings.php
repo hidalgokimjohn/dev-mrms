@@ -4,9 +4,10 @@ include_once "../../app/App.php";
 include_once "../../app/Auth.php";
 $auth = new \app\Auth();
 $app = new \app\App();
-if ($_POST['file_id']) {
-    $displayFindings = $app->displayFindings($_POST['file_id']);
+
+    $displayFindings = $app->displayFindings($_POST['file_id'],$_POST['ft_guid']);
     if (!empty($displayFindings)) {
+        echo '<h3>Findings</h3>';
         foreach ($displayFindings as $displayFinding) {
             $today = date("Y-m-d");
             $date1 = date("Y-m-d", strtotime($displayFinding['created_at']));
@@ -20,15 +21,16 @@ if ($_POST['file_id']) {
             }else{
                 $btnRemove = '';
             }
-            echo '<h3>Findings</h3>
-            <div class="card mb-3 bg-light border animated fadeIn">
+            //if TA
+            if($displayFinding['technical_advice']=='technical advice'){
+                echo '<div class="card mb-3 bg-light border animated fadeIn">
             <div class="card-body">
                 <div class="float-right mr-n2">
                     <label class="form-check">
-                        ' . $app->findingStatus($displayFinding['is_checked'],$displayFinding['deadline_for_compliance']) . '
+                        <span class="badge bg-warning"><i class="fa fa-lightbulb"></i> Technical Advice</span>
                     </label>
                 </div>
-                <p>Deadline for Compliance: ' . date("M d, Y", strtotime($displayFinding['deadline_for_compliance'])) . ' (' . $days . ' days)
+                <p>
                 Posted: ' . date("M d, Y H:m:s a", strtotime($displayFinding['created_at'])) . '
                 <p><strong>' . htmlentities($displayFinding['findings']) . '</strong></p>
                 <div class="float-right mt-n1">
@@ -39,6 +41,27 @@ if ($_POST['file_id']) {
                 '.$btnRemove.'
             </div>
             </div>';
+            }else{
+                echo '<div class="card mb-3 bg-light border animated fadeIn">
+                <div class="card-body">
+                    <div class="float-right mr-n2">
+                        <label class="form-check">
+                            ' . $app->findingStatus($displayFinding['is_checked'],$displayFinding['deadline_for_compliance']) . '
+                        </label>
+                    </div>
+                    <p>Deadline for Compliance: ' . date("M d, Y", strtotime($displayFinding['deadline_for_compliance'])) . ' (' . $days . ' days)
+                    Posted: ' . date("M d, Y H:m:s a", strtotime($displayFinding['created_at'])) . '
+                    <p><strong>' . htmlentities($displayFinding['findings']) . '</strong></p>
+                    <div class="float-right mt-n1">
+                        <img src="resources/img/avatars/default.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
+                        <span>' . $app->userInfo($displayFinding['added_by']) . '</span>
+                        <br>
+                    </div>
+                    '.$btnRemove.'
+                </div>
+                </div>';
+            }
+            
         }
     } else {
         //if reviewed and no findings
@@ -55,4 +78,3 @@ if ($_POST['file_id']) {
             echo '<a class="list-group-item font-weight-bold text-center">No reviews yet</a>';
         }
     }
-}

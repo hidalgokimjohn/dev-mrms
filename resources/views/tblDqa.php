@@ -34,7 +34,7 @@
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php
                                     //thisDayReviewedByUsername
-                                    echo $app->thisWeekReviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->thisDayReviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
                                     ?> </span>
                                 <span class="text-muted">Today</span>
                             </div>
@@ -65,12 +65,12 @@
                             <div class="mb-0">
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php if (isset($_GET['modality'])) {
-                                        echo $app->thisWeekFindingsByUsername($_SESSION['username'], $_GET['modality'], 'status');
+                                        echo $app->thisWeekFindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
                                     } ?> </span>
                                 <span class="text-muted">This week,</span>
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php if (isset($_GET['modality'])) {
-                                        echo $app->thisDayFindingsByUsername($_SESSION['username'], $_GET['modality'], '$status');
+                                        echo $app->thisDayFindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
                                     } ?> </span>
                                 <span class="text-muted">Today</span>
                             </div>
