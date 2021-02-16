@@ -890,7 +890,8 @@ class App
         AND tbl_dqa_findings.added_by='$username'
         AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now()) 
-        AND lib_modality.modality_group='$modalityGroup'";
+        AND lib_modality.modality_group='$modalityGroup'
+        AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -916,7 +917,8 @@ class App
         AND tbl_dqa_findings.added_by='$username'
         AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now()) 
-        AND lib_modality.modality_group='$modalityGroup'";
+        AND lib_modality.modality_group='$modalityGroup'
+        AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -1471,7 +1473,8 @@ class App
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
         INNER JOIN cycles ON cycles.id = form_target.fk_cycle
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'";
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -1481,7 +1484,7 @@ class App
     public function myWorkThisWeekFinding($status){
         $mysql = $this->connectDatabase();
         $q = "SELECT
-        count(tbl_dqa_findings.added_by) as cntFinding
+        count(tbl_dqa_findings.added_by) as cntFindingThisWeek
         FROM
         tbl_dqa_findings
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
@@ -1489,11 +1492,12 @@ class App
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
         WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
         AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
-        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
+        AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['cntFinding'];
+            return $row['cntFindingThisWeek'];
         }else{
             return 0;
         }
@@ -1501,7 +1505,7 @@ class App
     public function myWorkThisDayFinding($status){
         $mysql = $this->connectDatabase();
         $q = "SELECT
-        count(tbl_dqa_findings.added_by) as cntFinding
+        count(tbl_dqa_findings.added_by) as cntFindingThisDay
         FROM
         tbl_dqa_findings
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
@@ -1509,11 +1513,12 @@ class App
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
         WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
         AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
-        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())";
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
+        AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            return $row['cntFinding'];
+            return $row['cntFindingThisDay'];
         }else{
             return 0;
         }
@@ -1588,6 +1593,83 @@ class App
             return $row['myWorkThisDayReviewed'];
         }else{
             return 0;
+        }
+    }
+
+    public function myWorkTaAll($status)
+    {
+        $mysql = $this->connectDatabase();
+        $q = "SELECT
+                count(tbl_dqa_findings.findings_guid) as myWorkTaAll
+                FROM
+                    tbl_dqa_findings
+                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE
+                tbl_dqa_findings.is_deleted = 0
+                AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+                AND cycles.`status` = '$status'
+                AND tbl_dqa_findings.technical_advice='technical advice'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkTaAll'];
+        } else {
+            return '0';
+        }
+    }
+
+    public function myWorkTaThisWeek($status){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+        count(tbl_dqa_findings.findings_guid) as myWorkTaThisWeek
+        FROM
+            tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE
+        tbl_dqa_findings.is_deleted = 0
+        AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+        AND cycles.`status` = '$status'
+        AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
+        AND tbl_dqa_findings.technical_advice='technical advice'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkTaThisWeek'];
+        } else {
+            return '0';
+        }
+    }
+
+    public function myWorkTaThisDay($status){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+        count(tbl_dqa_findings.findings_guid) as myWorkTaThisDay
+        FROM
+            tbl_dqa_findings
+        INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
+        INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+        INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE
+        tbl_dqa_findings.is_deleted = 0
+        AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+        AND cycles.`status` = '$status'
+        AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
+        AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
+        AND tbl_dqa_findings.technical_advice='technical advice'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['myWorkTaThisDay'];
+        } else {
+            return '0';
         }
     }
 }

@@ -113,11 +113,21 @@
                                 </div>
                                 <h1 class="mt-1 mb-3">
                                     <?php
-                                    if (isset($_GET['modality'])) {
-                                        echo $app->allreviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
-                                    }
+                                        echo $app->myWorkTaAll('active');
                                     ?>
                                 </h1>
+                                <div class="mb-0">
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        echo $app->myWorkTaThisWeek('active');
+                                        ?> </span>
+                                    <span class="text-muted">This week,</span>
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        echo $app->myWorkTaThisDay('active');
+                                        ?> </span>
+                                    <span class="text-muted">Today</span>
+                                </div>
                             </div>
                         </div>
                     </div>
