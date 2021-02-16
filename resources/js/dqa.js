@@ -4,6 +4,7 @@ var url = new URL(url_string);
 document.addEventListener("DOMContentLoaded", function () {
     var dqaId = url.searchParams.get("dqaid");
     var m = url.searchParams.get("m");
+    var modality = url.searchParams.get("modality");
     var tbl_addFiles;
     var tbl_viewDqaItems;
     var ft_guid;
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             targets: 0
         }],
         ajax: {
-            url: "resources/ajax/tbl_dqaConducted.php",
+            url: "resources/ajax/tbl_dqaConducted.php?modality="+modality,
             type: "POST",
             processData: false,
             contentType: false,

@@ -324,7 +324,7 @@ class App
     public function tbl_dqaConducted()
     {
         $mysql = $this->connectDatabase();
-
+        $modalityGroup = $mysql->real_escape_string($_GET['modality']);
         //TODO add where modality
         $q = "SELECT
                 DATE_FORMAT(m.created_at, '%Y/%m/%d'),
@@ -354,11 +354,17 @@ class App
             INNER JOIN lib_cycle ON cycles.fk_cycle = lib_cycle.id
             LEFT JOIN lib_cadt ON lib_cadt.id = m.fk_cadt_id
             INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-            WHERE m.conducted_by='$_SESSION[username]' ";
+            WHERE m.conducted_by='$_SESSION[username]'
+            AND lib_modality.modality_group='$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
-        while ($row = $result->fetch_row()) {
-            $data[] = $row;
+        if($result->num_rows>0){
+            while ($row = $result->fetch_row()) {
+                $data[] = $row;
+            }
+        }else{
+            $data='';
         }
+
         $json_data = array("data" => $data);
         echo json_encode($json_data);
     }
