@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var fileName;
     var file_id;
     var file_path;
+    var listId;
 
     //DQA Table
 
@@ -148,9 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 "data": null,
                 "render": function (data, type, row) {
                     if (data[3] !== null) {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '"><b>' + titleCase(data[3]) + '</b></a>';
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><b>' + titleCase(data[3]) + '</b></a>';
                     } else {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '"><strong class="text-danger">Not Yet Uploaded</strong></a>';
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
                     }
                 },
             },
@@ -183,8 +184,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 4,
                 "data": null,
                 "render": function (data, type, row) {
-                    if (data[7] !== null) {
-                        return '<span class="text-capitalize">' + data[7] + '</span>';
+                    if (data[17] !== null) {
+                        return '<span class="text-capitalize">' + data[17] + '</span>';
                     } else {
                         return 'N/A';
                     }
@@ -420,6 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fileName = $(e.relatedTarget).data('file-name');
             file_path = $(e.relatedTarget).data('file-path');
             fileId = $(e.relatedTarget).data('file-id');
+            listId = $(e.relatedTarget).data('list-id');
             console.log(fileId);
             ft_guid = $(e.relatedTarget).data('ft-guid');
             PDFObject.embed(file_path, "#pdf", options);
@@ -440,6 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 url: "resources/ajax/displayFindings.php",
                 data: {
                     "file_id": fileId,
+                    "ft_guid": ft_guid
                 },
                 dataType: 'html',
                 success: function (data) {
@@ -491,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(fileId + ' submitFindings');
         if (!hasError) {
             $.ajax({
-                url: 'resources/ajax/submitFinding.php?dqa_id=' + dqaId + '&ft_guid=' + ft_guid + '&file_name=' + fileName + '&file_id=' + fileId,
+                url: 'resources/ajax/submitFinding.php?dqa_id=' + dqaId + '&ft_guid=' + ft_guid + '&file_name=' + fileName + '&file_id=' + fileId+'&list_id='+listId,
                 type: 'POST',
                 data: formData,
                 async: true,
@@ -517,6 +520,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             url: "resources/ajax/displayFindings.php",
                             data: {
                                 "file_id": fileId,
+                                "ft_guid": ft_guid
                             },
                             dataType: 'html',
                             success: function (data) {
@@ -555,8 +559,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data == 'notYetUploaded_submit_error') {
                         window.notyf.open({
                             type: 'warning',
-                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-info">No Findings</strong> with a non-existent file in the system.',
-                            duration: '9000',
+                            message: '<strong>Sorry, </strong> to set \"No findings\" requires an uploaded file.',
+                            duration: '5000',
                             ripple: true,
                             dismissible: true,
                             position: {
@@ -568,8 +572,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data == 'hasPreviousFindings_submit_error') {
                         window.notyf.open({
                             type: 'warning',
-                            message: '<strong>Sorry, </strong> you cannot set a <strong class="text-success">\"No Findings\"</strong> when there are existing <strong class="text-danger">non-complied findings.</strong>  Please check below.',
-                            duration: '10000',
+                            message: '<strong>Sorry, </strong> you still have non-complied findings below.',
+                            duration: '5000',
                             ripple: true,
                             dismissible: true,
                             position: {
@@ -608,7 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     type: "post",
                     url: "resources/ajax/removeFinding.php",
                     data: {
-                        "finding_id": finding_id.getAttribute('data-finding-id'),
+                        "finding_id": $(this).data('finding-id'),
                     },
                     dataType: 'html',
                     success: function (data) {
@@ -618,6 +622,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 url: "resources/ajax/displayFindings.php",
                                 data: {
                                     "file_id": fileId,
+                                    "ft_guid":ft_guid
                                 },
                                 dataType: 'html',
                                 success: function (data) {

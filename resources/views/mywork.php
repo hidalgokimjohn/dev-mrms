@@ -3,10 +3,10 @@
     <div class="col-sm-3 col-xl-2">
         <div class="card mb-3">
             <div class="list-group list-group-flush" role="tablist">
-                <a class="list-group-item list-group-item-action <?php echo (isset($_GET['tab']) && $_GET['tab']=='main')?'active':''; ?>" data-toggle="list" href="#main" role="tab">
+                <a class="list-group-item list-group-item-action <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'main') ? 'active' : ''; ?>" data-toggle="list" href="#main" role="tab">
                     Dashboard
                 </a>
-                <a class="list-group-item list-group-item-action <?php echo (isset($_GET['tab']) && $_GET['tab']=='coverage')?'active':''; ?>" data-toggle="list" href="#coverage" role="tab">
+                <a class="list-group-item list-group-item-action <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'coverage') ? 'active' : ''; ?>" data-toggle="list" href="#coverage" role="tab">
                     Coverage
                 </a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" href="#activity" role="tab">
@@ -20,7 +20,7 @@
     </div>
     <div class="col-sm-9 col-xl-10">
         <div class="tab-content">
-            <div class="tab-pane fade show <?php echo (isset($_GET['tab']) && $_GET['tab']=='main')?'active':''; ?>" id="main" role="tabpanel">
+            <div class="tab-pane fade show <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'main') ? 'active' : ''; ?>" id="main" role="tabpanel">
                 <div class="row">
                     <div class="col-md-4 col-xl-4">
                         <div class="card">
@@ -39,11 +39,23 @@
                                 </div>
                                 <h1 class="mt-1 mb-3">
                                     <?php
-                                    if (isset($_GET['modality'])) {
-                                        echo $app->allreviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
-                                    }
+                                    echo $app->myWorkReviewedAll($_SESSION['username'],'active');
                                     ?>
                                 </h1>
+                                <div class="mb-0">
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        //thisDayReviewedByUsername
+                                        echo $app->myWorkThisWeekReviewed('active');
+                                        ?> </span>
+                                    <span class="text-muted">This week,</span>
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        //thisDayReviewedByUsername
+                                        echo $app->myWorkThisDayReviewed('active');
+                                        ?> </span>
+                                    <span class="text-muted">Today</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,12 +75,24 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-3">
-                                    <?php
-                                    if (isset($_GET['modality'])) {
-                                        echo $app->allreviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
-                                    }
+                                <?php
+                                    echo $app->myWorkFindingAll('active');
                                     ?>
                                 </h1>
+                                <div class="mb-0">
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        //thisDayReviewedByUsername
+                                        echo $app->myWorkThisWeekFinding('active');
+                                        ?> </span>
+                                    <span class="text-muted">This week,</span>
+                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
+                                        <?php
+                                        //thisDayReviewedByUsername
+                                        echo $app->myWorkThisDayFinding('active');
+                                        ?> </span>
+                                    <span class="text-muted">Today</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -148,7 +172,7 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>CADT</th>
+                                        <th style="width: 300px;">CADT</th>
                                         <th>Cycle</th>
                                         <th>Reviewed</th>
                                         <th>Findings</th>
@@ -157,58 +181,66 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            CADT-078
-                                        </td>
-                                        <td>
-                                            B2 Cycle 3
-                                        </td>
-                                        <td>133/1,232 = <strong>23%</strong></td>
-                                        <td>34</td>
-                                        <td>33/34</td>
-                                        <td>98%</td>
-                                    </tr>
+                                    <?php
 
+                                    foreach ($app->myWorkDashboard_ipcddDrom('active') as $item) {
+                                        echo '<tr>';
+                                        echo '<td>' . $item['cadt_name'] . '</td>';
+                                        echo '<td class="text-capitalize">' . $item['cycle_name'] . '</td>';
+                                        echo '<td>' . $item['reviewedOverActual'] . '%</td>';
+                                        //echo '<td>'.$item['reviewed'].'/'.$item['actual'].'=<strong>'.$item['reviewedOverActual'].'</strong></td>';
+                                        echo '<td>' . $item['findings'] . '</td>';
+                                        echo '<td>' . $item['complied'] . ' / ' . $item['findings'] . '</td>';
+                                        echo '<td><strong>' . $item['uploadStatus'] . '</strong></td>';
+                                        echo '</tr>';
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>  
-            <div class="tab-pane fade show <?php echo ($_GET['tab']=='coverage')?'active':''; ?>" id="coverage" role="tabpanel">
-                <div class="row">
-                    <h4>Coverage / </h2>
+            </div>
+            <div class="tab-pane fade show <?php echo ($_GET['tab'] == 'coverage') ? 'active' : ''; ?>" id="coverage" role="tabpanel">
+                <div class="card">
                     <?php
-                    if(!isset($_GET['m'])){
+                    if (!isset($_GET['m'])) {
                         $userCoverages = $app->getIpcddCoverage('active', $_SESSION['username']);
-                    if ($userCoverages) {
-                        foreach ($userCoverages as $userCoverage) { ?>
-                            <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card">
-                                <div class="card-header px-4 pt-4">
-                                    <div class="card-actions float-right">
-                                    </div>
-                                    <h5 class="card-title text-uppercase mb-0"><a href="home.php?p=mywork&m=viewteam&area=<?php echo $userCoverage['cadt_id']; ?>&cycle=<?php echo $userCoverage['cycle_id'];  ?>&tab=coverage"><?php echo $userCoverage['cadt_name']; ?></a></h5>
-                                </div>
-                                <div class="card-body px-4 pt-2">
-                                    <?php 
-                                    //getAllMembers
-                                    foreach($app->getAllCadtMembers($userCoverage['cadt_id'],'act') as $member){
-                                        echo '<a href="home.php?p=mywork&m=viewUser&user='.$member['fk_username'].'&tab=coverage"><img src="resources/img/avatars/default.jpg" class="rounded-circle mr-1 p-1" alt="'.$member['fullName'].'" width="48" height="48"></a>';
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-                       <?php }
+                        echo '<div class="card-header">
+                            <h5 class="card-title"><a href="home.php?p=mywork&tab=main&tab=coverage">Coverage</a></h5>
+                            </div>';
+                        echo '<table class="table table-st"><tbody>';
+                        if ($userCoverages) {
+                            foreach ($userCoverages as $userCoverage) { ?>
+                                <tr>
+                                    <td>
+                                        <span style="font-size: 24px;"><a class="text-capitalize text-secondary p-2" href="home.php?p=mywork&m=viewteam&cadt_id=&cycle_id=&tab=coverage&cadt_name=<?php echo $userCoverage['cadt_name']; ?>"><?php echo $userCoverage['cadt_name'] ?></a></span>
+                                        <?php
+                                        //getAllMembers
+                                        foreach ($app->getAllCadtMembers($userCoverage['cadt_id'], 'act') as $member) {
+                                            echo '<a href="home.php?p=mywork&m=viewUser&user=' . $member['fk_username'] . '&tab=coverage"><img src="resources/img/avatars/default.jpg" class="rounded-circle mr-2 float-right" alt="' . $member['fullName'] . '" width="36" height="36"></a>';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                    <?php }
+                            echo '</tbody></table>';
+                        }
                     }
+                    //view team
+                    if (isset($_GET['m']) && $_GET['m'] == 'viewteam') {
+                        echo '<div class="card-header">
+                            <h5 class="card-title"><a href="home.php?p=mywork&tab=main&tab=coverage">Coverage</a> / ' . $_GET['cadt_name'] . '</h5></div>';
                     }
-                    if(isset($_GET['m']) && $_GET['m']=='viewUser'){
+                    //view team user
+                    if (isset($_GET['m']) && $_GET['m'] == 'viewUser') {
+                        echo '<div class="card-header">
+                            <h5 class="card-title"><a href="home.php?p=mywork&tab=main&tab=coverage">Coverage</a> / ' . $u = 'Username' . '</h5></div>';
+                        echo '<div class="text-center"><h1>Under development</h1></div>';
+                    }
 
-                    }
-                    
                     ?>
+
                 </div>
             </div>
             <div class="tab-pane fade show" id="activity" role="tabpanel">
