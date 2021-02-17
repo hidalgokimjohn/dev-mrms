@@ -331,15 +331,43 @@ if (!$auth->loggedIn()) {
 <!--Initialization-->
 <script type="text/javascript" src="vendor/PDFObject-master/pdfobject.min.js"></script>
 <script type="text/javascript" src="resources/js/dqa.js"></script>
+<script type="text/javascript" src="resources/js/search.js"></script>
 <script>
     $(document).ready(function () {
         var m = url.searchParams.get("m");
+        var p = url.searchParams.get("p");
         if (m == 'dqa_conducted') {
             new Choices(document.querySelector(".choices-muni"));
             new Choices(document.querySelector(".choicesCycle"));
             new Choices(document.querySelector(".choicesAc"));
             new Choices(document.querySelector(".editChoicesAc"));
+        }
 
+        if(p=='search'){
+            const choiceOfCadt = new Choices(".choices-multiple-cadt", {
+                removeItems: true,
+                removeItemButton: true
+            });
+            const choiceOfCycle = new Choices(".choices-multiple-cycle", {
+                removeItems: true,
+                removeItemButton: true
+            });
+            const choiceOfStage = new Choices(".choices-multiple-stage", {
+                removeItems: true,
+                removeItemButton: true
+            });
+            const choiceOfActivity = new Choices(".choices-multiple-activity", {
+                removeItems: true,
+                removeItemButton: true
+            });
+            const choiceOfForm = new Choices(".choices-multiple-form", {
+                removeItems: true,
+                removeItemButton: true
+            });
+            const choiceOfModality = new Choices(".choices-multiple-modality", {
+                removeItems: true,
+                removeItemButton: true
+            });
         }
         if (m == 'dqa_items') {
             new Choices(document.querySelector(".choices-dqa-level"));

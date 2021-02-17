@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
+    
     var tbl_dqa = $('#tbl_dqa').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
