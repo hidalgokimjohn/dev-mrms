@@ -250,6 +250,74 @@ class App
         }
     }
 
+    public function searchGetCadt($modalityGroup)
+    {
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+        lib_cadt.id,
+        lib_cadt.cadt_name
+        FROM
+        implementing_cadt_ipcdd
+        INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        INNER JOIN lib_cadt ON lib_cadt.id = implementing_cadt_ipcdd.fk_cadt
+        WHERE lib_modality.modality_group='$modalityGroup'
+        ORDER BY lib_cadt.cadt_name ASC");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public function searchGetCycles($modalityGroup){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+                cycles.id,
+                lib_cycle.cycle_name,
+                lib_modality.modality_name,
+                cycles.batch,
+                cycles.`year`,
+                cycles.`status`
+                FROM
+                cycles
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE  lib_modality.modality_group=?");
+        $q->bind_param('s', $modalityGroup);
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public function searchGetStage($modalityGroup){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("");
+        $q->bind_param('s', $modalityGroup);
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
     public function getCycle($status, $modalityGroup)
     {
         $mysql = $this->connectDatabase();
@@ -324,7 +392,7 @@ class App
     public function tbl_dqaConducted()
     {
         $mysql = $this->connectDatabase();
-
+        $modalityGroup = $mysql->real_escape_string($_GET['modality']);
         //TODO add where modality
         $q = "SELECT
                 DATE_FORMAT(m.created_at, '%Y/%m/%d'),
@@ -354,11 +422,17 @@ class App
             INNER JOIN lib_cycle ON cycles.fk_cycle = lib_cycle.id
             LEFT JOIN lib_cadt ON lib_cadt.id = m.fk_cadt_id
             INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-            WHERE m.conducted_by='$_SESSION[username]' ";
+            WHERE m.conducted_by='$_SESSION[username]'
+            AND lib_modality.modality_group='$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
-        while ($row = $result->fetch_row()) {
-            $data[] = $row;
+        if($result->num_rows>0){
+            while ($row = $result->fetch_row()) {
+                $data[] = $row;
+            }
+        }else{
+            $data='';
         }
+
         $json_data = array("data" => $data);
         echo json_encode($json_data);
     }
