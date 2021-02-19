@@ -9,6 +9,9 @@
                 <a class="list-group-item list-group-item-action <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'coverage') ? 'active' : ''; ?>" data-toggle="list" href="#coverage" role="tab">
                     Coverage
                 </a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" href="#reports" role="tab">
+                    Reports
+                </a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" href="#activity" role="tab">
                     Activity Log
                 </a>
@@ -133,7 +136,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 col-xl-12">
+                    <!--<div class="col-md-12 col-xl-12">
                         <div class="card mb-3">
                             <div class="card-header">
                                 <h5 class="card-title">KC-AF CRBC</h5>
@@ -173,7 +176,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-12 col-xl-12">
                         <div class="card mb-3">
                             <div class="card-header">
@@ -292,6 +295,17 @@
                         <img src="resources/img/avatars/default.jpg" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128" height="128" />
                         <h5 class="card-title mb-0 text-capitalize"><?php echo strtolower($_SESSION['user_fullname']);
                                                                     ?></h5>
+                        <div class="text-muted mb-2 text-capitalize">Monitoring & Evaluation Officer III</div>
+                        <div class="text-muted mb-2 text-capitalize">16-10371</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="reports" role="tabpanel">
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <img src="resources/img/avatars/default.jpg" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128" height="128" />
+                        <h5 class="card-title mb-0 text-capitalize"><?php echo strtolower($_SESSION['user_fullname']);
+                            ?></h5>
                         <div class="text-muted mb-2 text-capitalize">Monitoring & Evaluation Officer III</div>
                         <div class="text-muted mb-2 text-capitalize">16-10371</div>
                     </div>

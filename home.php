@@ -72,6 +72,9 @@ if (!$auth->loggedIn()) {
                         <li class="sidebar-item <?php $app->sidebar_active('af_cbrc', $_GET['modality']); ?>"><a
                                     class="sidebar-link" href="home.php?p=search&modality=af_cbrc">KC-AF CBRC</a>
                         </li>
+                        <li class="sidebar-item <?php $app->sidebar_active('ncddp_drom', $_GET['modality']); ?>"><a
+                                    class="sidebar-link" href="home.php?p=search&modality=ncddp_drom">NCDDP DROM</a>
+                        </li>
                         <li class="sidebar-item <?php $app->sidebar_active('ipcdd_drom', $_GET['modality']); ?>"><a
                                     class="sidebar-link" href="home.php?p=search&modality=ipcdd_drom">IPCDD DROM</a>
                         </li>
@@ -231,6 +234,7 @@ if (!$auth->loggedIn()) {
                     <div class="col-12">
                         <?php
                         //dashboards
+                        ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
                         ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
                         ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
                         ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
@@ -331,11 +335,11 @@ if (!$auth->loggedIn()) {
 <!--Initialization-->
 <script type="text/javascript" src="vendor/PDFObject-master/pdfobject.min.js"></script>
 <script type="text/javascript" src="resources/js/dqa.js"></script>
-<script type="text/javascript" src="resources/js/search.js"></script>
 <script>
     $(document).ready(function () {
         var m = url.searchParams.get("m");
         var p = url.searchParams.get("p");
+
         if (m == 'dqa_conducted') {
             new Choices(document.querySelector(".choices-muni"));
             new Choices(document.querySelector(".choicesCycle"));
@@ -343,32 +347,6 @@ if (!$auth->loggedIn()) {
             new Choices(document.querySelector(".editChoicesAc"));
         }
 
-        if(p=='search'){
-            const choiceOfCadt = new Choices(".choices-multiple-cadt", {
-                removeItems: true,
-                removeItemButton: true
-            });
-            const choiceOfCycle = new Choices(".choices-multiple-cycle", {
-                removeItems: true,
-                removeItemButton: true
-            });
-            const choiceOfStage = new Choices(".choices-multiple-stage", {
-                removeItems: true,
-                removeItemButton: true
-            });
-            const choiceOfActivity = new Choices(".choices-multiple-activity", {
-                removeItems: true,
-                removeItemButton: true
-            });
-            const choiceOfForm = new Choices(".choices-multiple-form", {
-                removeItems: true,
-                removeItemButton: true
-            });
-            const choiceOfModality = new Choices(".choices-multiple-modality", {
-                removeItems: true,
-                removeItemButton: true
-            });
-        }
         if (m == 'dqa_items') {
             new Choices(document.querySelector(".choices-dqa-level"));
             flatpickr(".flatpickr-minimum", {
@@ -409,5 +387,7 @@ if (!$auth->loggedIn()) {
         }
     });
 </script>
+<script type="text/javascript" src="resources/js/search.js"></script>
+
 
 </html>
