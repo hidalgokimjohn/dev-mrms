@@ -1,14 +1,14 @@
-<h1 class="h3 mb-3">Search / IPCDD DROM</h1>
+<h1 class="h3 mb-3">Search / NCDDP DROM</h1>
 <div class="row">
     <div class="col-sm-3 col-md-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-body">
-                <label class="form-label">CADT</label>
-                <select class="form-control choices-multiple-cadt" name="cadt_id[]" multiple>
-                    <option value="">Select CADT</option>
+                <label class="form-label">Municipality</label>
+                <select class="form-control choices-multiple-cadt" name="muni_id[]" multiple>
+                    <option value="">Select Municipality</option>
                     <?php
-                    foreach ($app->searchGetCadt($_GET['modality']) as $options) {
-                        echo '<option value="' . $options['id'] . '">' . ucfirst($options['cadt_name']) . '</option>';
+                    foreach ($app->searchGetMuni($_GET['modality']) as $options) {
+                        echo '<option value="' . $options['psgc_mun'] . '">' . ucfirst($options['mun_name']) . '</option>';
                     }
                     ?>
                 </select>
@@ -51,7 +51,7 @@
                         <thead>
                         <tr class="border-bottom-0">
                             <th style="width: 50%;">Filename</th>
-                            <th style="width: 20%;">Cadt/Muni</th>
+                            <th style="width: 20%;">Municipality</th>
                             <th style="width: 15%;">Barangay</th>
                             <th style="width: 15%x;">Status</th>
                         </tr>

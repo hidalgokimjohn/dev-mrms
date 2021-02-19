@@ -1,4 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
+    var p = url.searchParams.get("p");
+
+    if(p=='search'){
+        var choiceOfCadt = new Choices(".choices-multiple-cadt", {
+            removeItems: true,
+            removeItemButton: true
+        });
+        var choiceOfCycle = new Choices(".choices-multiple-cycle", {
+            removeItems: true,
+            removeItemButton: true
+        });
+        var choiceOfStage = new Choices(".choices-multiple-stage", {
+            removeItems: true,
+            removeItemButton: true,
+            shouldSort: false,
+            loadingText: 'Loading...'
+
+        });
+        var choiceOfActivity = new Choices(".choices-multiple-activity", {
+            removeItems: true,
+            removeItemButton: true,
+            shouldSort: false,
+            loadingText: 'Loading...'
+        }).disable();
+        var choiceOfForm = new Choices(".choices-multiple-form", {
+            removeItems: true,
+            removeItemButton: true,
+            loadingText: 'Loading...'
+        }).disable();
+    }
     var tbl_searchFileResult='';
     $('#tbl_searchFileResult thead tr').clone(true).appendTo('#tbl_searchFileResult thead');
     $('#tbl_searchFileResult thead tr:eq(1) th').each(function (i) {
@@ -74,17 +104,55 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         ],
     });
-    $('.choices-multiple-cadt').on('change', function() {
+    $('.choices-multiple-stage').on('change', function() {
+        var stage_id = $('.choices-multiple-stage').val();
+        var modality_id = url.searchParams.get("modality");
+         $.ajax({
+             type: 'POST',
+             url: 'resources/ajax/selectStageOnChange.php?modality='+modality_id,
+             data: {"stage_id":stage_id},
+             async: true,
+             dataType: 'json',
+             success: function(data) {
+                 //$('#selectActivity').html(data);
+                 console.log(data);
+                 if(data){
+                     choiceOfActivity.enable();
+                     choiceOfActivity.clearStore();
+                     choiceOfActivity.setChoices(data);
+                 }else{
+                     choiceOfForm.clearStore();
+                     choiceOfActivity.clearStore();
+                     choiceOfActivity.disable();
+                     choiceOfForm.disable();
+
+                 }
+             }
+           });
+      });
+    $('.choices-multiple-activity').on('change', function() {
+        var activity_id = $('.choices-multiple-activity').val();
+        //var modality_id = url.searchParams.get("modality");
         $.ajax({
             type: 'POST',
-            url: '/test',
-            data: json_data,
-            async: false,
+            url: 'resources/ajax/selectActivityOnChange.php',
+            data: {"activity_id":activity_id},
+            async: true,
+            dataType: 'json',
             success: function(data) {
-              result=data;
-            },
-            dataType: 'application/json'
-          });
-        alert( this.value );
-      });
+                //$('#selectActivity').html(data);
+                console.log(data);
+                if(data){
+                    choiceOfForm.enable();
+                    choiceOfForm.clearStore();
+                    choiceOfForm.setChoices(data);
+                }else{
+                    choiceOfForm.clearStore();
+                    choiceOfForm.disable();
+
+                }
+            }
+        });
+    });
 });
+

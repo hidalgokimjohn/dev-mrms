@@ -4,8 +4,9 @@ include_once("../../app/App.php");
 include_once("../../app/Auth.php");
 $auth = new \app\Auth();
 $app = new \app\App();
-echo '<pre>';
-echo '<br>';
-
-$modality_id=implode($_POST['modality_id'],"");
-$modality_id = '"'.implode(', ', $_POST['modality_id']).'"';
+if (isset($_POST['stage_id'])) {
+    $stage_id = implode(', ', $_POST['stage_id']);
+    echo $activities = $app->searchSelectActivity($_GET['modality'], $stage_id);
+} else {
+    echo 'false';
+}

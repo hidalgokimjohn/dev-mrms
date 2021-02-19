@@ -4,15 +4,11 @@ include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
 include_once('app/User.php');
-include_once('app/City.php');
-include_once('app/Ceac.php');
-include_once('app/Dqa.php');
+
 $app = new \app\App();
 $authen = new \app\Auth();
 $user = new \app\User();
-$city = new \app\City();
-$ceac = new \app\Ceac();
-$dqa = new \app\Dqa();
+
 
 require 'vendor/autoload.php';
 

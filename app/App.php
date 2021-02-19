@@ -9,6 +9,7 @@ class App
         $database = Database::getInstance();
         return $database->getConnection();
     }
+
     //generate GUID
     public function v4()
     {
@@ -183,6 +184,7 @@ class App
     {
         echo ($m == $url) ? 'active' : '';
     }
+
     public function sidebar_collapsed($m, $url)
     {
         echo ($m !== $url) ? 'collapsed' : '';
@@ -275,7 +277,33 @@ class App
         }
     }
 
-    public function searchGetCycles($modalityGroup){
+    public function searchGetMuni($modalityGroup)
+    {
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+        lib_municipality.psgc_mun,
+        lib_municipality.mun_name
+        FROM
+        implementing_muni_ncddp
+        INNER JOIN cycles ON cycles.id = implementing_muni_ncddp.fk_cycles
+        INNER JOIN lib_municipality ON lib_municipality.psgc_mun = implementing_muni_ncddp.fk_psgc_mun
+        INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+        WHERE lib_modality.modality_group='$modalityGroup'
+        ORDER BY lib_municipality.mun_name ASC");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public function searchGetCycles($modalityGroup)
+    {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
                 cycles.id,
@@ -302,9 +330,18 @@ class App
         }
     }
 
-    public function searchGetStage($modalityGroup){
+    public function searchSelectStage($modalityGroup)
+    {
         $mysql = $this->connectDatabase();
-        $q = $mysql->prepare("");
+        $modalityGroup = $mysql->real_escape_string($modalityGroup);
+        $q = $mysql->prepare("SELECT
+	lib_category.id,
+	lib_category.category_name
+FROM
+	lib_category
+	INNER JOIN lib_modality ON lib_category.fk_modality = lib_modality.id 
+WHERE
+	lib_modality.modality_group = ? ORDER BY lib_category.id ASC");
         $q->bind_param('s', $modalityGroup);
         $q->execute();
         $result = $q->get_result();
@@ -313,6 +350,51 @@ class App
                 $data[] = $row;
             }
             return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public function searchSelectActivity($modalityGroup, $stage_id)
+    {
+        $mysql = $this->connectDatabase();
+        $stage_id = $mysql->real_escape_string($stage_id);
+        $q = "SELECT
+	lib_activity.id as value,
+	lib_activity.activity_name as label
+FROM
+	lib_category
+	INNER JOIN lib_modality ON lib_category.fk_modality = lib_modality.id
+	INNER JOIN lib_activity ON lib_activity.fk_category = lib_category.id 
+WHERE
+	lib_modality.modality_group = '$modalityGroup' AND lib_category.id IN ($stage_id)";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return json_encode($data);
+        } else {
+            return false;
+        }
+    }
+
+    public function searchSelectForm($stage_id)
+    {
+        $mysql = $this->connectDatabase();
+        $stage_id = $mysql->real_escape_string($stage_id);
+        $q = "SELECT
+        lib_form.id as value,
+        lib_form.form_name as label
+    FROM
+        lib_form
+        WHERE lib_form.fk_activity IN ($stage_id)";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return json_encode($data);
         } else {
             return false;
         }
@@ -425,12 +507,12 @@ class App
             WHERE m.conducted_by='$_SESSION[username]'
             AND lib_modality.modality_group='$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
-        if($result->num_rows>0){
+        if ($result->num_rows > 0) {
             while ($row = $result->fetch_row()) {
                 $data[] = $row;
             }
-        }else{
-            $data='';
+        } else {
+            $data = '';
         }
 
         $json_data = array("data" => $data);
@@ -728,6 +810,7 @@ class App
             }
         }
     }
+
     public function submitWithFinding()
     {
         $mysql = $this->connectDatabase();
@@ -768,6 +851,7 @@ class App
             }
         }
     }
+
     public function submitGiveTa()
     {
         $mysql = $this->connectDatabase();
@@ -862,6 +946,7 @@ class App
             return $s;
         }
     }
+
     public function userInfo($username)
     {
         $mysql = $this->connectDatabase();
@@ -879,6 +964,7 @@ class App
             return $row['fullName'] = 'User not found';
         }
     }
+
     public function dueStatus($deadLineForCompliance)
     {
         $today = date("Y-m-d");
@@ -903,6 +989,7 @@ class App
             return false;
         }
     }
+
     public function noFindings($fileId)
     {
         $mysql = $this->connectDatabase();
@@ -1113,6 +1200,7 @@ class App
             return '0';
         }
     }
+
     public function thisWeekFindingsCompliedByUsername($username, $modalityGroup, $status)
     {
         $mysql = $this->connectDatabase();
@@ -1141,6 +1229,7 @@ class App
             return '0';
         }
     }
+
     public function thisDayFindingsCompliedByUsername($username, $modalityGroup, $status)
     {
         $mysql = $this->connectDatabase();
@@ -1194,6 +1283,7 @@ class App
             return '0';
         }
     }
+
     public function thisWeekReviewedByUsername($username, $modalityGroup, $status)
     {
         $mysql = $this->connectDatabase();
@@ -1220,6 +1310,7 @@ class App
             return '0';
         }
     }
+
     public function thisDayReviewedByUsername($username, $modalityGroup, $status)
     {
         $mysql = $this->connectDatabase();
@@ -1349,6 +1440,7 @@ class App
             return $data;
         }
     }
+
     //api for sdu
     public function apiForms($id)
     {
@@ -1380,6 +1472,7 @@ class App
             echo json_encode($json_data, JSON_PRETTY_PRINT);
         }
     }
+
     public function apiActivity($id)
     {
         $mysql = $this->connectDatabase();
@@ -1472,8 +1565,8 @@ class App
             while ($row = $result->fetch_assoc()) {
                 $row['reviewed'] = $this->countReviewedByUsername($row['cadt_id'], $row['fk_psgc_mun'], $row['cycle_id']);
                 $row['reviewedOverActual'] = number_format($row['reviewed'] / $row['actual'] * 100, 2);
-                $row['findings']= $this->countFindingByUsername($row['cadt_id'],$row['fk_psgc_mun'],$row['cycle_id']);
-                $row['complied'] = $this->countCompliedByUsername($row['cadt_id'],$row['fk_psgc_mun'],$row['cycle_id']);
+                $row['findings'] = $this->countFindingByUsername($row['cadt_id'], $row['fk_psgc_mun'], $row['cycle_id']);
+                $row['complied'] = $this->countCompliedByUsername($row['cadt_id'], $row['fk_psgc_mun'], $row['cycle_id']);
                 $data[] = $row;
             }
             return $data;
@@ -1505,6 +1598,7 @@ class App
             return $row['reviewed'];
         }
     }
+
     public function countFindingByUsername($area_id, $area_id2, $cycle_id)
     {
         $mysql = $this->connectDatabase();
@@ -1521,6 +1615,7 @@ class App
             return $row['countFinding'];
         }
     }
+
     public function countCompliedByUsername($area_id, $area_id2, $cycle_id)
     {
         $mysql = $this->connectDatabase();
@@ -1538,7 +1633,8 @@ class App
         }
     }
 
-    public function myWorkFindingAll($status){
+    public function myWorkFindingAll($status)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
         count(tbl_dqa_findings.added_by) as cntFinding
@@ -1555,7 +1651,9 @@ class App
             return $row['cntFinding'];
         }
     }
-    public function myWorkThisWeekFinding($status){
+
+    public function myWorkThisWeekFinding($status)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
         count(tbl_dqa_findings.added_by) as cntFindingThisWeek
@@ -1572,11 +1670,13 @@ class App
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['cntFindingThisWeek'];
-        }else{
+        } else {
             return 0;
         }
     }
-    public function myWorkThisDayFinding($status){
+
+    public function myWorkThisDayFinding($status)
+    {
         $mysql = $this->connectDatabase();
         $q = "SELECT
         count(tbl_dqa_findings.added_by) as cntFindingThisDay
@@ -1593,13 +1693,15 @@ class App
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['cntFindingThisDay'];
-        }else{
+        } else {
             return 0;
         }
     }
-    public function myWorkReviewedAll($username,$status){
+
+    public function myWorkReviewedAll($username, $status)
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
             COUNT(tbl_dqa_list.id) as myWorkReviewedAll
             FROM
             tbl_dqa_list
@@ -1617,15 +1719,15 @@ class App
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['myWorkReviewedAll'];
-        }else{
+        } else {
             return 0;
         }
-
     }
 
-    public function myWorkThisWeekReviewed($status){
+    public function myWorkThisWeekReviewed($status)
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
             COUNT(tbl_dqa_list.id) as myWorkThisWeekReviewed
             FROM
             tbl_dqa_list
@@ -1642,13 +1744,15 @@ class App
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['myWorkThisWeekReviewed'];
-        }else{
+        } else {
             return 0;
         }
     }
-    public function myWorkThisDayReviewed($status){
+
+    public function myWorkThisDayReviewed($status)
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
             COUNT(tbl_dqa_list.id) as myWorkThisDayReviewed
             FROM
             tbl_dqa_list
@@ -1665,7 +1769,7 @@ class App
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row['myWorkThisDayReviewed'];
-        }else{
+        } else {
             return 0;
         }
     }
@@ -1695,9 +1799,10 @@ class App
         }
     }
 
-    public function myWorkTaThisWeek($status){
+    public function myWorkTaThisWeek($status)
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
         count(tbl_dqa_findings.findings_guid) as myWorkTaThisWeek
         FROM
             tbl_dqa_findings
@@ -1721,9 +1826,10 @@ class App
         }
     }
 
-    public function myWorkTaThisDay($status){
+    public function myWorkTaThisDay($status)
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
         count(tbl_dqa_findings.findings_guid) as myWorkTaThisDay
         FROM
             tbl_dqa_findings
