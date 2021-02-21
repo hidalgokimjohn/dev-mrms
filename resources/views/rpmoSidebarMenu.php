@@ -117,8 +117,8 @@
                 </ul>
             </li>
             <li class="sidebar-item <?php $app->sidebar_active('user_mngt', $_GET['p']); ?>">
-                <a class="sidebar-link" href="home.php?p=user_mngt">
-                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">Users</span>
+                <a class="sidebar-link" href="home.php?p=user_mngt&tab=users">
+                    <i class="align-middle" data-feather="users"></i> <span class="align-middle">User Management</span>
                 </a>
             </li>
         </ul>
