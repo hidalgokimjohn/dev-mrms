@@ -1852,4 +1852,75 @@ WHERE
             return '0';
         }
     }
+
+    public function searchFileResults($modality,$cycle,$stage,$activity,$form,$area){
+        $mysql = $this->connectDatabase();
+        $modality = $mysql->real_escape_string($modality);
+        $cycle = $mysql->real_escape_string($cycle);
+        $stage = $mysql->real_escape_string($stage);
+        $activity = $mysql->real_escape_string($activity);
+        $form = $mysql->real_escape_string($form);
+        $area= $mysql->real_escape_string($area);
+        $where='';
+        if(!empty($area)){
+            $where = ' AND (form_target.fk_cadt IN ('.$area.') OR form_target.fk_psgc_mun IN ('.$area.'))';
+        }
+        if(!empty($cycle)){
+            $where .= ' AND form_target.fk_cycle IN ('.$cycle.')';
+        }
+        if(!empty($stage)){
+            $where .= ' AND lib_category.id IN ('.$stage.')';
+        }
+        if(!empty($activity)){
+            $where .= ' AND lib_activity.id IN ('.$activity.')';
+        }
+        if(!empty($form)){
+            $where .= ' AND lib_form.id IN ('.$form.')';
+        }
+
+        $q="SELECT
+            form_uploaded.file_id,
+            form_uploaded.original_filename,
+            form_uploaded.file_path,
+            form_uploaded.is_reviewed,
+            form_uploaded.with_findings,
+            lib_activity.activity_name,
+            lib_form.form_name,
+            COALESCE (
+                    lib_municipality.mun_name,
+                    lib_cadt.cadt_name,
+                    '-'
+                ) AS mun_name,
+            COALESCE (
+                    lib_barangay.brgy_name,
+                    '-'
+                ) AS brgy_name
+            FROM
+            form_target
+            LEFT JOIN form_uploaded ON form_target.ft_guid = form_uploaded.fk_ft_guid
+            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+            INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+            INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
+            INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
+            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
+            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
+            LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
+            WHERE lib_modality.modality_group = '$modality'
+            AND form_target.target > 0
+            AND (
+                form_uploaded.is_deleted = 0
+                OR form_uploaded.is_deleted IS NULL
+            )";
+            $q .=$where;
+            $result = $mysql->query($q) or die($mysql->error);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_row()) {
+                    $data[] = $row;
+                }
+            } else {
+                $data = '';
+            }
+            $json_data = array("data" => $data);
+            echo json_encode($json_data);
+    }
 }
