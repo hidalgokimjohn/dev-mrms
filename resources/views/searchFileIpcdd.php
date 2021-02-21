@@ -3,43 +3,47 @@
     <div class="col-sm-3 col-md-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-body">
-                <label class="form-label">CADT</label>
-                <select class="form-control choices-multiple-cadt" name="cadt_id[]" multiple>
-                    <option value="">Select CADT</option>
-                    <?php
-                    foreach ($app->searchGetCadt($_GET['modality']) as $options) {
-                        echo '<option value="' . $options['id'] . '">' . ucfirst($options['cadt_name']) . '</option>';
-                    }
-                    ?>
-                </select>
-                <label class="form-label">Cycle</label>
-                <select class="form-control choices-multiple-cycle" name="cycle_id[]" multiple>
-                    <option value="">Select Cycle</option>
-                    <?php
-                    foreach ($app->searchGetCycles($_GET['modality']) as $options) {
-                        echo '<option value="' . $options['id'] . '">' . ucfirst($options['batch'].' '.$options['cycle_name']) . '</option>';
-                    }
-                    ?>
-                </select>
-                <label class="form-label">Stage</label>
-                <select class="form-control choices-multiple-stage" name="stage_id[]" multiple>
-                    <option value="">Select Stage</option>
-                    <?php
-                    foreach ($app->searchSelectStage($_GET['modality']) as $options) {
-                        echo '<option value="' . $options['id'] . '">' . ucfirst($options['category_name']) . '</option>';
-                    }
-                    ?>
-                </select>
-                <label class="form-label">Activity</label>
+                <form method="post" id="submitSearch">
+                    <label class="form-label">CADT</label>
+                    <select class="form-control choices-multiple-area" name="area_id[]" multiple>
+                        <option value="">Select CADT</option>
+                        <?php
+                        foreach ($app->searchGetCadt($_GET['modality']) as $options) {
+                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['cadt_name']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label">Cycle</label>
+                    <select class="form-control choices-multiple-cycle" name="cycle_id[]" multiple>
+                        <option value="">Select Cycle</option>
+                        <?php
+                        foreach ($app->searchGetCycles($_GET['modality']) as $options) {
+                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['batch'].' '.$options['cycle_name']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label">Stage</label>
+                    <select class="form-control choices-multiple-stage" name="stage_id[]" multiple>
+                        <option value="">Select Stage</option>
+                        <?php
+                        foreach ($app->searchSelectStage($_GET['modality']) as $options) {
+                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['category_name']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <label class="form-label">Activity</label>
 
-                <select class="form-control choices-multiple-activity" name="activity_id[]" multiple id="selectActivity">
-                    <option value="">Select Activity</option>
+                    <select class="form-control choices-multiple-activity" name="activity_id[]" multiple id="selectActivity">
+                        <option value="">Select Activity</option>
 
-                </select>
-                <label class="form-label">Form</label>
-                <select class="form-control choices-multiple-form" name="form_id[]" multiple>
-                    <option value="">Select Form</option>
-                </select>
+                    </select>
+                    <label class="form-label">Form</label>
+                    <select class="form-control choices-multiple-form" name="form_id[]" multiple>
+                        <option value="">Select Form</option>
+                    </select>
+                    <input name="btnSearchFile" hidden value="1">
+                    <button type="submit" id="btnSearchFile" class="btn btn-primary">Search</button>
+                </form>
             </div>
         </div>
     </div>
@@ -57,12 +61,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Moa Chuvra ness ldfhsdilzkjdf asdsa sada asdasd asdsadadsdlgudhslv ddisuudfsen vl xbvzjkx bcxzj xbczkxc</td>
-                            <td>Libertad</td>
-                            <td>Libertad</td>
-                            <td>Reviewed</td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>

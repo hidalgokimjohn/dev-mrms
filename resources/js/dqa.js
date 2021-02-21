@@ -289,7 +289,6 @@ document.addEventListener("DOMContentLoaded", function () {
             var cycleId = $(e.relatedTarget).data('cycle');
             tbl_addFiles = $('#tbl_addFiles').DataTable({
                 orderCellsTop: true,
-                fixedHeader: true,
                 order: [
                     [5, "asc"]
                 ],
