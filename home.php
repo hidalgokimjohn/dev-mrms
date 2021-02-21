@@ -109,6 +109,7 @@ if (!$auth->loggedIn()) {
                         //($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ncddp' && $_GET['year'] == '2020') ? include('resources/views/movUploadingStatus.php') : '';
                         ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/dashboard_kcaf_cbrc.php') : '';
                         ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/dashboard_ipcdd_drom.php') : '';
+                        ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
 
                         //dqa module
                         $getModality = '';
