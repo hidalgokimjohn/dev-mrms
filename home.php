@@ -78,12 +78,12 @@ if (!$auth->loggedIn()) {
                                     class="text-dark text-capitalize"><?php echo strtolower($_SESSION['user_fullname']); ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1"
                                                                                   data-feather="user"></i> Profile</a>
                             <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i>
                                 Analytics</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="pages-settings.html"><i class="align-middle mr-1"
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1"
                                                                                    data-feather="settings"></i> Settings
                                 &
                                 Privacy</a>
@@ -99,17 +99,31 @@ if (!$auth->loggedIn()) {
         <main class="content">
             <div class="container-fluid p-0">
                 <div class="row">
+                    <div class="col-12 mb-2">
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-icon">
+                                <i class="far fa-fw fa-bell"></i>
+                            </div>
+                            <div class="alert-message">
+                                <strong>NOTICE #001: </strong> Sample alert! <strong>4PM Today. </strong> Char lang
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <?php
+                        if(!empty($_GET['p'])){
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
+                            ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
+                            //($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ncddp' && $_GET['year'] == '2020') ? include('resources/views/movUploadingStatus.php') : '';
+                            ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/dashboard_kcaf_cbrc.php') : '';
+                            ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/dashboard_ipcdd_drom.php') : '';
+                            ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
+                        }
                         //dashboards
-                        ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
-                        ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
-                        ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
-                        ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
-                        //($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ncddp' && $_GET['year'] == '2020') ? include('resources/views/movUploadingStatus.php') : '';
-                        ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/dashboard_kcaf_cbrc.php') : '';
-                        ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/dashboard_ipcdd_drom.php') : '';
-                        ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
+
 
                         //dqa module
                         $getModality = '';
