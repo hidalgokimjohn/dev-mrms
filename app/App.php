@@ -173,7 +173,11 @@ class App
                 if (isset($_GET['m']) && $_GET['m'] == 'exec_db') {
                     $title .= " - Executive | MRMS";
                 }
-                return $title;
+                case 'user_mngt';
+                    if (isset($_GET['p']) && $_GET['p'] == 'user_mngt') {
+                        $title = "User Management | MRMS";
+                    }
+                    return $title;
             default:
                 echo 'MRMS | Home';
                 break;

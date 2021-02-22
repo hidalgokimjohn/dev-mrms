@@ -9,6 +9,9 @@ $app = new \app\App();
 $authen = new \app\Auth();
 $user = new \app\User();
 
+if ($authen->loggedIn()) {
+    header('location: home.php?p=mywork&tab=main');
+}
 
 require 'vendor/autoload.php';
 
@@ -96,10 +99,6 @@ if(!$_SESSION['mrms_auth']){
     <title>Sign In | MRMS</title>
 
     <link href="resources/css/app.css" rel="stylesheet">
-
-    <!-- BEGIN SETTINGS -->
-    <script src="resources/js/settings.js"></script>
-    <!-- END SETTINGS -->
 </head>
 <!--
   HOW TO USE:
@@ -169,7 +168,7 @@ if(!$_SESSION['mrms_auth']){
                                             if ($app->login($_POST['username'], $_POST['password'])) {
                                                 $app->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
-                                                header('location: home.php');
+                                                header('location: home.php?p=mywork&tab=main');
                                                 exit;
                                             } else {
                                                 echo '<br><div class="alert alert-danger alert-dismissible" role="alert">

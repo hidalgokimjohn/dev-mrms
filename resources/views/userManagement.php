@@ -119,7 +119,7 @@
             <div class="tab-pane fade show" id="permission" role="tabpanel">
                 <div class="card mb-3">
                     <div class="card-body">
-                        
+
                     </div>
                 </div>
             </div>
