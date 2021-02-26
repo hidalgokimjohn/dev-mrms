@@ -2038,4 +2038,62 @@ WHERE
         $mysql = $this->connectDatabase();
         $q="";
     }
+
+    public function api_allFiles(){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            form_uploaded.file_id,
+            lib_modality.modality_name,
+            lib_municipality.mun_name,
+            lib_barangay.brgy_name,
+            lib_cycle.cycle_name,
+            lib_activity.activity_name,
+            lib_form.form_name,
+            form_uploaded.original_filename,
+            form_uploaded.generated_filename,
+            form_uploaded.file_path,
+            form_uploaded.date_uploaded
+            
+            FROM
+            form_target
+            INNER JOIN form_uploaded ON form_target.ft_guid = form_uploaded.fk_ft_guid
+            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
+            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
+            INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+            WHERE form_uploaded.is_deleted=0";
+        $result = $mysql->query($q) or die($mysql->error);
+
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        $json_data = array("mrms_files"=>$data);
+        echo json_encode($json_data,JSON_PRETTY_PRINT);
+    }
+
+    public function api_findings(){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            tbl_dqa_findings.fk_file_guid,
+            tbl_dqa_findings.findings,
+            tbl_dqa_findings.responsible_person,
+            tbl_dqa_findings.is_checked,
+            tbl_dqa_findings.added_by,
+            tbl_dqa_findings.created_at
+            FROM
+            tbl_dqa
+            INNER JOIN tbl_dqa_findings ON tbl_dqa_findings.fk_dqa_guid = tbl_dqa.dqa_guid
+            WHERE tbl_dqa_findings.is_deleted=0";
+        $result = $mysql->query($q) or die($mysql->error);
+
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        $json_data = array("mrms_findings"=>$data);
+        echo json_encode($json_data,JSON_PRETTY_PRINT);
+    }
 }
