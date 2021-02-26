@@ -58,6 +58,7 @@ if ($_SESSION['forIDNumber']!=='true') {
                 if (isset($_GET['r']) && $_GET['r'] == 'result') {
                     if (isset($_POST['id_number'])) {
                         if($info=$app->personInfo($_POST['id_number'])){
+                            $_SESSION['id_number']=$_POST['id_number'];
                             echo '<div class="d-table-cell align-middle">
                     <div class="text-center">
                         <h1 class="h2">Nice!</h1>
@@ -69,7 +70,7 @@ if ($_SESSION['forIDNumber']!=='true') {
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
-                                <form method="post" action="register.php?r=result" id="submitProfileRequest">
+                                <form method="post" action="register.php?r=process&id_num='.$_POST['id_number'].'" id="submitProfileRequest">
                                 <div class="text-center">
 									<img src="'.$app->getImage($_POST['id_number']).'" class="img-fluid rounded-circle mb-2" width="128" height="128">
 									<h3 class="mb-1 text-capitalize">'.strtolower($info['fname'].' '.$info['lname']).'</h3>
@@ -78,7 +79,7 @@ if ($_SESSION['forIDNumber']!=='true') {
 									<div class="text-muted mb-0">'.$info['position_name'].'</div>
 									<div class="badge bg-success mb-3">Active</div>
 									<br/>
-									<button type="submit" class="btn btn-primary mt-3 mb-3">Yes, it\'s me!</button>
+									<button type="submit" class="btn btn-primary mt-3 mb-3" name="processRegister">Yes, it\'s me!</button>
 									<br/>
 									<a href="register.php" class="">Not You?<a>
 								</div>
@@ -92,7 +93,13 @@ if ($_SESSION['forIDNumber']!=='true') {
                         }
 
                     }
-                } else {
+                } elseif(isset($_GET['r']) && $_GET['r']=='process') {
+                    if(isset($_SESSION['id_number'])){
+
+                    }else{
+                        header('location: register.php');
+                    }
+                }else{
                     echo '<div class="d-table-cell align-middle">
 
                     <div class="text-center">
