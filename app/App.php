@@ -4,10 +4,28 @@ namespace app;
 
 class App
 {
+    public $firstName;
+    public $midName;
+    public $lastName;
+    public $sectorName;
+    public $sectorDesc;
+    public $status;
+    public $posName;
+    public $posDesc;
+    public $officeName;
+    public $officeDesc;
+
+
     public function connectDatabase()
     {
         $database = Database::getInstance();
         return $database->getConnection();
+    }
+
+    public function connectHREDatabase()
+    {
+        $database = Database::getInstance();
+        return $database->getConnectionKCPIS();
     }
 
     //generate GUID
@@ -1926,5 +1944,98 @@ WHERE
             }
             $json_data = array("data" => $data);
             echo json_encode($json_data);
+    }
+
+    public function kcpis_activeUsers(){
+        $mysql = $this->connectHREDatabase();
+
+    }
+
+    public function register_sso($user_sso)
+    {
+        $mysql = $this->connectDatabase();
+        $user_sso = $user_sso->toArray();
+        $oauth = $user_sso['sub'];
+        $username = $user_sso['preferred_username'];
+        $fname = $user_sso['given_name'];
+        $lname = $user_sso['family_name'];
+        $name = $user_sso['name'];
+
+        $user = $username;
+        $pass = "default123$";
+        $name = $name;
+        $email = '';
+        $last_name = $lname;
+        $scenario = 'oauth_create';
+
+        $hash = password_hash($pass, PASSWORD_DEFAULT);
+        $q = "INSERT INTO `tbl_users` (`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) 
+        VALUES ('$user', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
+        $execute = $mysql->query($q) or die ($mysql->error);
+        $r = "INSERT INTO `tbl_person_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$fname', '$last_name','default.jpg')";
+        $execute = $mysql->query($r) or die($mysql->error);
+    }
+    public function sso_isExist($user_sso)
+    {
+        $mysql = $this->connectDatabase();
+        $user_sso = $user_sso->toArray();
+        $oauth = $user_sso['sub'];
+        $username = $user_sso['preferred_username'];
+        $fname = $user_sso['given_name'];
+        $lname = $user_sso['family_name'];
+        $name = $user_sso['name'];
+
+        $q = "SELECT
+            tbl_users.oauth_client
+            FROM
+            tbl_users where oauth_client='$oauth'";
+
+        $result = $mysql->query($q);
+        $row = $result->fetch_assoc();
+
+        if ($row['oauth_client']) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getImage($id_number){
+        $opts = array('http'=>array('header' => "User-Agent:MyAgent/1.0\r\n"));
+        $context = stream_context_create($opts);
+        $url =  json_decode(file_get_contents('http://crg-kcapps-svr.entdswd.local:8080/get_kalahi_staff',true,$context),true);
+        foreach ($url as $item){
+            if($item['id_number']==$id_number){
+                return $item['image_path'];
+            }
+        }
+    }
+
+    public function personInfo($id_number){
+        $mysql = $this->connectHREDatabase();
+        $id_number = $mysql->real_escape_string($id_number);
+        $q="SELECT view_active_staff.* FROM view_active_staff WHERE id_number='$id_number'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $this->firstName = $row['fname'];
+            $this->midName = $row['mname'];
+            $this->lastName = $row['lname'];
+            $this->sectorName = $row['sector_name'];
+            $this->sectorDesc = $row['sect_desc'];
+            $this->status = $row['status_name'];
+            $this->posName = $row['position_name'];
+            $this->posDesc = $row['position_desc'];
+            $this->officeName = $row['office_name'];
+            $this->officeDesc = $row['office_desc'];
+            return $row;
+        } else {
+            return '0';
+        }
+    }
+
+    public function saveUserInfo(){
+        $mysql = $this->connectDatabase();
+        $q="";
     }
 }

@@ -54,20 +54,26 @@ if(!$_SESSION['mrms_auth']){
             // We got an access token, let's now get the user's details
             $user_sso = $provider->getResourceOwner($token);
 
-            if ($user->sso_isExist($user_sso)) {
+            if ($app->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
                 $_SESSION['mrms_auth'] = $oauth;
                 $app->login_sso($user_sso['preferred_username']);
-                header('location: home.php');
+                header('location: home.php?p=mywork&tab=main');
                 exit;
             } else {
-                $user->register_sso($user_sso);
+                /*$app->register_sso($user_sso);
                 $user_sso = $user_sso->toArray();
                 $oauth = $user_sso['sub'];
-                $_SESSION['mrms_auth'] = $oauth;
+                $_SESSION['mrms_auth'] = $oauth;*/
+
+                // if no id_number found in db
+                $_SESSION['forIDNumber']='true';
+                //go add id_number >:]
+                header('location: register.php?p=id_number');
+                exit;
                 $app->login_sso($user_sso['preferred_username']);
-                header('location: home.php');
+                header('location: home.php?p=mywork&tab=main');
                 exit;
             }
 
