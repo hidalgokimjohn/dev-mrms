@@ -20,12 +20,20 @@
 
 		public function loggedIn()
 		{
+
 			if (isset($_SESSION['login']) && $_SESSION['login'] == 'logged_in') {
 				return true;
 			} else {
 				return false;
 			}
 		}
+
+		public function checkNewUser(){
+
+            if(isset($_SESSION['forIDNumber']) && $_SESSION['forIDNumber']=='true'){
+
+            }
+        }
 
 		public function redirectTo($directory)
 		{

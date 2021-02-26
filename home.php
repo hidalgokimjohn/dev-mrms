@@ -73,7 +73,7 @@ if (!$auth->loggedIn()) {
                         </a>
 
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                            <img src="resources/img/avatars/default.jpg" class="avatar img-fluid rounded mr-1"
+                            <img src="<?php $app->getImage('16-10371'); ?>" class="avatar img-fluid rounded mr-1"
                                  alt="userImage"/> <span
                                     class="text-dark text-capitalize"><?php echo strtolower($_SESSION['user_fullname']); ?></span>
                         </a>
