@@ -138,9 +138,8 @@ class App
                 return false;
             }
         } else {
-            // return false;
-            header('location: register.php?p=id_number');
-            exit();
+            return false;
+
         }
     }
 
