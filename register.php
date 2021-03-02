@@ -125,10 +125,12 @@ if ($_SESSION['forIDNumber']!=='true') {
                 </div>';
                         }else{
                             //it should be username in the first parameter
-                            //var_dump($_SESSION['user_sso']);
-                            if($app->register_sso($_SESSION['user_sso'],$_SESSION['id_number'])){
+                            var_dump($_SESSION['user_sso']);
+                            $r=$app->register_sso($_SESSION['user_sso'],$_SESSION['id_number'])
+                            if($r){
                                 header('location: home.php');
                             }
+                            var_dump($r);
                        }
                     }else{
                         header('location: register.php');
