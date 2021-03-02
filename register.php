@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -110,14 +109,11 @@ if ($_SESSION['forIDNumber']!=='true') {
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
-                               
                                     <div class="text-center mt-3">
                                     Account already exist.
                                     <br/>
                                     <a href="index.php">Go back</a>
                                     </div>
-                                
-                                
                             </div>
                         </div>
                     </div>
@@ -126,7 +122,7 @@ if ($_SESSION['forIDNumber']!=='true') {
                         }else{
                             //it should be username in the first parameter
                             var_dump($_SESSION['user_sso']);
-                            $r=$app->register_sso($_SESSION['user_sso'],$_SESSION['id_number']);
+                            $app->register_sso($_SESSION['user_sso'],$_SESSION['id_number']);
                             /*if($r){
                                 header('location: home.php');
                             }*/
