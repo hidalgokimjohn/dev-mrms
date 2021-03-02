@@ -1971,12 +1971,12 @@ WHERE
 
         //check existing account
         //$oauth = '';
-
+        echo $user_sso;
         $pass = "default123$";
         $scenario = 'oauth_create';
 
         //get Person Info from HIReS
-        var_dump($this->personInfo($id_number));
+        /*$this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
 
         $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) VALUES ('$id_number','$username', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
@@ -1993,7 +1993,7 @@ WHERE
         }else{
             echo 'no';
             //return false;
-        }
+        }*/
 
     }
 
