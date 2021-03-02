@@ -1960,25 +1960,20 @@ WHERE
         $mysql = $this->connectHREDatabase();
     }
 
-    public function register_sso($user_sso, $id_number)
+    public function register_sso($id_number)
     {
         $mysql = $this->connectDatabase();
         $id_number = $mysql->real_escape_string($id_number);
-        //UNCOMMENT these in production site.
-
-        $user_sso = $user_sso->toArray();
-
-        $oauth = $user_sso['sub'];
-        $username = $user_sso['preferred_username'];
+        $oauth = $_SESSION['sso_oauth'];
+        $username = $_SESSION['sso_username'];
         $pass = "default123$";
         $scenario = 'oauth_create';
-        var_dump($username);
         //get Person Info from HIReS
         $this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
 
 
-       /* $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`)
+        $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`)
                 VALUES ('$id_number','$username', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
         $execute = $mysql->query($q) or die($mysql->error);
         $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`) 
@@ -1986,7 +1981,7 @@ WHERE
         $execute = $mysql->query($r) or die($mysql->error);
         if($mysql->affected_rows>0){
             return true;
-        }*/
+        }
 
     }
 
