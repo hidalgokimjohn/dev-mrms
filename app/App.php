@@ -72,7 +72,8 @@ class App
             tbl_person_info.sector_name,
             tbl_person_info.sector_desc,
             tbl_users.id_number,
-            tbl_users.username
+            tbl_users.username,
+            tbl_person_info.avatar_path
             FROM
             tbl_users
             INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
@@ -87,6 +88,7 @@ class App
             $_SESSION['user_status'] = $row['status'];
             $_SESSION['login'] = 'logged_in';
             $_SESSION['username'] = $row['username'];
+            $_SESSION['avatar_path'] = $row['avatar_path'];
             $_SESSION['user_position'] = $row['position_name'];
             $_SESSION['user_position_desc'] = $row['position_desc'];
             $_SESSION['user_lvl'] = $row['office_name'];
