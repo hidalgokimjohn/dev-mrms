@@ -1972,7 +1972,7 @@ WHERE
         $username = $user_sso['preferred_username'];
         $pass = "default123$";
         $scenario = 'oauth_create';
-        var_dump($username;
+        var_dump($username);
         //get Person Info from HIReS
         $this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
