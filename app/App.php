@@ -1965,14 +1965,14 @@ WHERE
         $mysql = $this->connectDatabase();
         $id_number = $mysql->real_escape_string($id_number);
         //UNCOMMENT these in production site.
-        var_dump($user_sso);
+
        // $user_sso = $user_sso->toArray();
 
         $oauth = $user_sso['sub'];
         $username = $user_sso['preferred_username'];
         $pass = "default123$";
         $scenario = 'oauth_create';
-        echo $username.' '.$oauth;
+        var_dump($username;
         //get Person Info from HIReS
         $this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
