@@ -1,4 +1,5 @@
 <?php
+//error_reporting(0);
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
@@ -52,10 +53,10 @@ if (!$auth->loggedIn()) {
 <body data-theme="default" data-layout="fluid" data-sidebar="left">
 <div class="wrapper">
     <?php
-        if($_SESSION['user_lvl']=='field office' OR $_SESSION['user_lvl']=='field office head' OR $_SESSION['user_lvl']=='admin'){
+        if($_SESSION['user_lvl']=='RPMO'){
             include_once ("resources/views/rpmoSidebarMenu.php");
         }
-        if($_SESSION['user_lvl']=='act'){
+        if($_SESSION['user_lvl']=='ACT'){
             include_once ("resources/views/actSidebarMenu.php");
         }
     ?>
@@ -73,22 +74,16 @@ if (!$auth->loggedIn()) {
                         </a>
 
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                            <img src="<?php $app->getImage('16-10371'); ?>" class="avatar img-fluid rounded mr-1"
+                            <img src="<?php $app->getImage($_SESSION['id_number']); ?>" class="avatar img-fluid rounded mr-1"
                                  alt="userImage"/> <span
                                     class="text-dark text-capitalize"><?php echo strtolower($_SESSION['user_fullname']); ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="align-middle mr-1"
-                                                                                  data-feather="user"></i> Profile</a>
-                            <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i>
-                                Analytics</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i> Analytics</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#"><i class="align-middle mr-1"
-                                                                                   data-feather="settings"></i> Settings
-                                &
-                                Privacy</a>
-                            <a class="dropdown-item" href="#"><i class="align-middle mr-1"
-                                                                 data-feather="help-circle"></i> Help Center</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="help-circle"></i> Help Center</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="login/logout.php">Log out</a>
                         </div>
@@ -100,7 +95,7 @@ if (!$auth->loggedIn()) {
             <div class="container-fluid p-0">
                 <div class="row">
                     <div class="col-12 mb-2">
-                        <div class="alert alert-info alert-dismissible" role="alert">
+                       <!-- <div class="alert alert-info alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
                             <div class="alert-icon">
                                 <i class="far fa-fw fa-bell"></i>
@@ -108,68 +103,75 @@ if (!$auth->loggedIn()) {
                             <div class="alert-message">
                                 <strong>NOTICE #001: </strong> Sample alert! <strong>4PM Today. </strong> Char lang
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="col-12">
                         <?php
                         if(!empty($_GET['p'])){
-                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
-                            ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
-                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
-                            ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
+                            //dashboards
                             //($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ncddp' && $_GET['year'] == '2020') ? include('resources/views/movUploadingStatus.php') : '';
                             ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/dashboard_kcaf_cbrc.php') : '';
                             ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/dashboard_ipcdd_drom.php') : '';
                             ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
-                        }
-                        //dashboards
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
+                            ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
 
+                            if($_SESSION['user_lvl']=='RPMO'){
+                                ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
+                                //dqa module
+                                $getModality = '';
+                                if (isset($_GET['modality']) && ($_GET['modality'] == 'ipcdd_drom')) {
+                                    $getModality = 'IPCDD DROM';
+                                }
+                                if (isset($_GET['modality']) && ($_GET['modality'] == 'af_cbrc')) {
+                                    $getModality = 'KC-AF CBRC';
+                                }
+                                if (isset($_GET['m']) && $_GET['m'] == 'dqa_items') {
+                                    $l = '';
+                                    if (isset($_GET['modality'])) {
+                                        $l = "home.php?p=modules&m=dqa_conducted&modality=" . $_GET['modality'];
+                                    }
+                                    echo '<div class="row mb-2 mb-xl-3">
+                                                <div class="col-auto ml-auto text-right mt-n1">
+                                                    <nav aria-label="breadcrumb">
+                                                        <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
+                                                        <li class="breadcrumb-item"><a href="#">Module</a></li>
+                                                        <li class="breadcrumb-item"><a href="#">Data Quality Assessment</a></li>
+                                                        <li class="breadcrumb-item"><a href="' . $l . '">' . $getModality . '</a></li>
+                                                        <li class="breadcrumb-item active">' . $_GET['title'] . '</li>
+                                                        </ol>
+                                                    </nav>
+                                                </div>
+                                           </div>';
+                                    include('resources/views/viewDqaItems.php');
+                                }
+                                if (isset($_GET['m']) && $_GET['m'] == 'dqa_conducted') {
+                                    if (isset($_GET['modality'])) {
+                                        $l = "home.php?p=modules&m=dqa_conducted&modality=" . $_GET['modality'];
+                                    }
+                                    echo '<div class="row mb-2 mb-xl-3">
+                                                <div class="col-auto ml-auto text-right mt-n1">
+                                                    <nav aria-label="breadcrumb">
+                                                        <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
+                                                        <li class="breadcrumb-item"><a href="#">Module</a></li>
+                                                        <li class="breadcrumb-item"><a href="#">Data Quality Assessment</a></li>
+                                                        <li class="breadcrumb-item">' . $getModality . '</li>
+                                                        </ol>
+                                                    </nav>
+                                                </div>
+                                            </div>';
+                                    include('resources/views/tblDqa.php');
+                                }
 
-                        //dqa module
-                        $getModality = '';
-                        if (isset($_GET['modality']) && ($_GET['modality'] == 'ipcdd_drom')) {
-                            $getModality = 'IPCDD DROM';
-                        }
-                        if (isset($_GET['modality']) && ($_GET['modality'] == 'af_cbrc')) {
-                            $getModality = 'KC-AF CBRC';
-                        }
-                        if (isset($_GET['m']) && $_GET['m'] == 'dqa_items') {
-                            $l = '';
-                            if (isset($_GET['modality'])) {
-                                $l = "home.php?p=modules&m=dqa_conducted&modality=" . $_GET['modality'];
                             }
-                            echo '<div class="row mb-2 mb-xl-3">
-                            <div class="col-auto ml-auto text-right mt-n1">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
-                                    <li class="breadcrumb-item"><a href="#">Module</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Data Quality Assessment</a></li>
-                                    <li class="breadcrumb-item"><a href="' . $l . '">' . $getModality . '</a></li>
-                                    <li class="breadcrumb-item active">' . $_GET['title'] . '</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>';
 
-                            include('resources/views/viewDqaItems.php');
-                        }
-                        if (isset($_GET['m']) && $_GET['m'] == 'dqa_conducted') {
-                            if (isset($_GET['modality'])) {
-                                $l = "home.php?p=modules&m=dqa_conducted&modality=" . $_GET['modality'];
+                            if($_SESSION['user_lvl']=='ACT'){
+                                ($_GET['p'] == 'upload') ? include('resources/views/upload.php') : '';
                             }
-                            echo '<div class="row mb-2 mb-xl-3">
-                            <div class="col-auto ml-auto text-right mt-n1">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
-                                    <li class="breadcrumb-item"><a href="#">Module</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Data Quality Assessment</a></li>
-                                    <li class="breadcrumb-item">' . $getModality . '</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>';
-                            include('resources/views/tblDqa.php');
+
                         }
+
                         ?>
                     </div>
                 </div>
@@ -230,6 +232,12 @@ if (!$auth->loggedIn()) {
             new Choices(document.querySelector(".editChoicesAc"));
         }
 
+        if(p=='upload'){
+            var choiceTypeOfCadt = new Choices(".choices-of-cadt", {
+                shouldSort: false
+            });
+        }
+
         if (m == 'dqa_items') {
             new Choices(document.querySelector(".choices-dqa-level"));
             flatpickr(".flatpickr-minimum", {
@@ -268,9 +276,86 @@ if (!$auth->loggedIn()) {
             });
 
         }
+        $('#tbl_users thead tr').clone(true).appendTo('#tbl_users thead');
+        $('#tbl_users thead tr:eq(1) th').each(function (i) {
+            if (i !== 0) {
+                var title = $(this).text();
+                $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+                $('input', this).on('keyup change', function (e) {
+                    if (tbl_users.column(i).search() !== this.value) {
+                        tbl_users.column(i).search(this.value).draw();
+                    }
+                });
+            }
+        });
+        var tbl_users = $('#tbl_users').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true,
+            order: [
+                [1, "asc"]
+            ],
+            columnDefs: [{
+                orderable: false,
+                targets: 0
+            }],
+            dom: '<"html5buttons">bitpr',
+            ajax: {
+                url: "resources/ajax/tbl_users.php",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                cache: false,
+                dataType: 'json',
+                error: function () {
+                    $("post_list_processing").css("display", "none");
+                }
+            },
+            language: {
+                "emptyTable": "<b>No records <found class=''></found></b>"
+            },
+            columnDefs: [{
+                "targets": 0,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return '<div class="btn-group">' +
+                        '<button type="button" class="btn btn-pill btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>' +
+                        '<div class="dropdown-menu"><a class="dropdown-item" href="#">Action</a>' +
+                        '<a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a>' +
+                        '<div class="dropdown-divider"></div><a class="dropdown-item" href="#">ID-Number: '+data['id_number']+'</a></div></div>'
+                },
+            },{
+                "targets": 1,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return '<img src="resources/img/avatars/default.jpg" width="48" height="48" class="rounded-circle my-n1"></img> '+data['fname']+' '+data['lname'];
+                },
+            },{
+                "targets": 2,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return data['position_desc'];
+                },
+            },{
+                "targets": 3,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return data['office_name'];
+                },
+            },{
+                "targets": 4,
+                "data": null,
+                "render": function (data, type, row) {
+                    //<button class="btn btn-danger btn-sm">Delete</button>
+                    return '<div class="badge bg-success"><span class="fa fa-check-circle"></span> '+data['status_name']+'</div>';
+                },
+            }
+            ],
+        });
     });
 </script>
 <script type="text/javascript" src="resources/js/search.js"></script>
-
-
 </html>

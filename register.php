@@ -95,7 +95,40 @@ if ($_SESSION['forIDNumber']!=='true') {
                     }
                 } elseif(isset($_GET['r']) && $_GET['r']=='process') {
                     if(isset($_SESSION['id_number'])){
+                        //check existing account
+                        if($app->is_idNumberExist($_SESSION['id_number'])){
+                            echo '<div class="d-table-cell align-middle">
 
+                    <div class="text-center">
+                        <h1 class="h2">Get started</h1>
+                        <p class="lead">
+                            Enter your DSWD ID-NUMBER to connect with <strong>HIReS</strong>
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="m-sm-4">
+                               
+                                    <div class="text-center mt-3">
+                                    Account already exist.
+                                    <br/>
+                                    <a href="index.php">Go back</a>
+                                    </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>';
+                        }else{
+                            //it should be username in the first parameter
+                            var_dump($_SESSION['user_sso']);
+                            /*if($app->register_sso($_SESSION['user_sso'],$_SESSION['id_number'])){
+                                header('location: home.php');
+                            }*/
+                       }
                     }else{
                         header('location: register.php');
                     }
@@ -117,9 +150,6 @@ if ($_SESSION['forIDNumber']!=='true') {
                                         <label class="form-label">ID-NUMBER</label>
                                         <input class="form-control form-control-lg" type="text" name="id_number" placeholder="Ex. 16-00000" />
                                     </div>
-                                    <div class="mb-3" id="profileResult">
-
-                                    </div>
                                     <div class="text-center mt-3">
                                         <button type="submit" class="btn btn-lg btn-primary">Check</button>
                                     </div>
@@ -136,18 +166,6 @@ if ($_SESSION['forIDNumber']!=='true') {
         </div>
     </div>
 </main>
-<div class="waveWrapper waveAnimation">
-    <div class="waveWrapperInner bgTop">
-        <div class="wave waveTop" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"></div>
-    </div>
-    <div class="waveWrapperInner bgMiddle">
-        <div class="wave waveMiddle" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"></div>
-    </div>
-    <div class="waveWrapperInner bgBottom">
-        <div class="wave waveBottom" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"></div>
-    </div>
-</div>
-
 </body>
 
 <script src="resources/js/jquery-3.5.1.js"></script>
@@ -161,7 +179,6 @@ if ($_SESSION['forIDNumber']!=='true') {
 <!--Initialization-->
 <script type="text/javascript" src="vendor/PDFObject-master/pdfobject.min.js"></script>
 <script type="text/javascript" src="resources/js/dqa.js"></script>
-
 <script type="text/javascript" src="resources/js/search.js"></script>
 
 

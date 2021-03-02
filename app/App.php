@@ -61,32 +61,35 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-            users.username,
-            lib_user_positions.user_position,
-            lib_user_positions.user_position_abbrv,
-            lib_user_positions.user_group,
-            users.`status`,
-            personal_info.first_name,
-            personal_info.last_name,
-            personal_info.pic_url
+            tbl_person_info.first_name,
+            tbl_person_info.mid_name,
+            tbl_person_info.last_name,
+            tbl_person_info.`status`,
+            tbl_person_info.position_name,
+            tbl_person_info.position_desc,
+            tbl_person_info.office_name,
+            tbl_person_info.office_desc,
+            tbl_person_info.sector_name,
+            tbl_person_info.sector_desc,
+            tbl_users.id_number,
+            tbl_users.username
             FROM
-            users
-            INNER JOIN personal_info ON personal_info.fk_username = users.username
-            left JOIN lib_user_positions ON users.fk_position = lib_user_positions.id
-            WHERE users.username = ?");
+            tbl_users
+            INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
+            WHERE tbl_users.username = ?");
         $q->bind_param('s', $user);
         $q->execute();
 
         $result = $q->get_result();
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
+            $_SESSION['id_number'] = $row['id_number'];
             $_SESSION['user_status'] = $row['status'];
             $_SESSION['login'] = 'logged_in';
             $_SESSION['username'] = $row['username'];
-            $_SESSION['user_position'] = $row['user_position'];
-            $_SESSION['user_position_abbrv'] = $row['user_position_abbrv'];
-            $_SESSION['user_lvl'] = $row['user_group'];
-            $_SESSION['pic_url'] = $row['pic_url'];
+            $_SESSION['user_position'] = $row['position_name'];
+            $_SESSION['user_position_desc'] = $row['position_desc'];
+            $_SESSION['user_lvl'] = $row['office_name'];
             $_SESSION['user_fullname'] = $row['first_name'] . ' ' . $row['last_name'];
         } else {
             return false;
@@ -95,45 +98,49 @@ class App
 
     public function login($user, $pass)
     {
+
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-					users.username,
-					users.`password`,
-					lib_user_positions.user_position,
-					lib_user_positions.user_position_abbrv,
-					lib_user_positions.user_group,
-					users.`status`,
-                    personal_info.first_name,
-                    personal_info.last_name,
-                    personal_info.pic_url
-					FROM
-					users
-					INNER JOIN personal_info ON personal_info.fk_username = users.username
-					INNER JOIN lib_user_positions ON users.fk_position = lib_user_positions.id
-					WHERE users.username = ? AND users.status='active'");
+            tbl_person_info.first_name,
+            tbl_person_info.mid_name,
+            tbl_person_info.last_name,
+            tbl_person_info.`status`,
+            tbl_person_info.position_name,
+            tbl_person_info.position_desc,
+            tbl_person_info.office_name,
+            tbl_person_info.office_desc,
+            tbl_person_info.sector_name,
+            tbl_person_info.sector_desc,
+            tbl_users.id_number,
+            tbl_users.username,
+            tbl_users.password
+            FROM
+            tbl_users
+            INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
+            WHERE tbl_users.username = ?");
         $q->bind_param('s', $user);
         $q->execute();
-
         $result = $q->get_result();
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if (password_verify($pass, $row['password'])) {
                 session_regenerate_id();
+                $_SESSION['id_number'] = $row['id_number'];
                 $_SESSION['user_status'] = $row['status'];
                 $_SESSION['login'] = 'logged_in';
                 $_SESSION['username'] = $row['username'];
-                $_SESSION['user_position'] = $row['user_position'];
-                $_SESSION['user_position_abbrv'] = $row['user_position_abbrv'];
-                $_SESSION['user_lvl'] = $row['user_group'];
-                $_SESSION['pic_url'] = $row['pic_url'];
+                $_SESSION['user_position'] = $row['position_name'];
+                $_SESSION['user_position_desc'] = $row['position_desc'];
+                $_SESSION['user_lvl'] = $row['office_name'];
                 $_SESSION['user_fullname'] = $row['first_name'] . ' ' . $row['last_name'];
-
                 return true;
             } else {
                 return false;
             }
         } else {
-            return false;
+            // return false;
+            header('location: register.php?p=id_number');
+            exit();
         }
     }
 
@@ -191,11 +198,11 @@ class App
                 if (isset($_GET['m']) && $_GET['m'] == 'exec_db') {
                     $title .= " - Executive | MRMS";
                 }
-                case 'user_mngt';
-                    if (isset($_GET['p']) && $_GET['p'] == 'user_mngt') {
-                        $title = "User Management | MRMS";
-                    }
-                    return $title;
+            case 'user_mngt';
+                if (isset($_GET['p']) && $_GET['p'] == 'user_mngt') {
+                    $title = "User Management | MRMS";
+                }
+                return $title;
             default:
                 echo 'MRMS | Home';
                 break;
@@ -1384,11 +1391,11 @@ WHERE
         lib_cadt.id as cadt_id,
         cycles.id as cycle_id
         FROM
-        user_cadt_coverage
-        INNER JOIN implementing_cadt_ipcdd ON implementing_cadt_ipcdd.fk_cadt = user_cadt_coverage.fk_cadt
-        INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
-        INNER JOIN lib_cadt ON lib_cadt.id = user_cadt_coverage.fk_cadt
-        WHERE cycles.`status`='$status' AND user_cadt_coverage.fk_username='$username'";
+        tbl_user_coverage_ipcdd
+        INNER JOIN implementing_cadt_ipcdd ON implementing_cadt_ipcdd.fk_cadt = tbl_user_coverage_ipcdd.fk_cadt_id
+        INNER JOIN cycles ON cycles.id = tbl_user_coverage_ipcdd.fk_cycle_id
+        INNER JOIN lib_cadt ON lib_cadt.id = tbl_user_coverage_ipcdd.fk_cadt_id
+        WHERE cycles.`status`='$status' AND tbl_user_coverage_ipcdd.fk_username='$username'";
         $results = $mysql->query($q) or die($mysql->error);
         if ($results->num_rows > 0) {
             while ($row = $results->fetch_assoc()) {
@@ -1566,13 +1573,14 @@ WHERE
                 form_target
             INNER JOIN cycles ON cycles.id = form_target.fk_cycle
             INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-            INNER JOIN user_cadt_coverage ON user_cadt_coverage.fk_cadt = form_target.fk_cadt
+            INNER JOIN tbl_user_coverage_ipcdd ON tbl_user_coverage_ipcdd.fk_cadt_id = form_target.fk_cadt
             INNER JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
             INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
             LEFT JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
         WHERE
                 cycles.`status` = '$status'
-            AND user_cadt_coverage.fk_username = '$_SESSION[username]'
+            AND tbl_user_coverage_ipcdd.status='$status'
+            AND tbl_user_coverage_ipcdd.fk_username = '$_SESSION[username]'
             AND form_target.target > 0
             AND (
                 form_uploaded.is_deleted = 0
@@ -1875,32 +1883,33 @@ WHERE
         }
     }
 
-    public function searchFileResults($modality,$cycle,$stage,$activity,$form,$area){
+    public function searchFileResults($modality, $cycle, $stage, $activity, $form, $area)
+    {
         $mysql = $this->connectDatabase();
         $modality = $mysql->real_escape_string($modality);
         $cycle = $mysql->real_escape_string($cycle);
         $stage = $mysql->real_escape_string($stage);
         $activity = $mysql->real_escape_string($activity);
         $form = $mysql->real_escape_string($form);
-        $area= $mysql->real_escape_string($area);
-        $where='';
-        if(!empty($area)){
-            $where = ' AND (form_target.fk_cadt IN ('.$area.') OR form_target.fk_psgc_mun IN ('.$area.'))';
+        $area = $mysql->real_escape_string($area);
+        $where = '';
+        if (!empty($area)) {
+            $where = ' AND (form_target.fk_cadt IN (' . $area . ') OR form_target.fk_psgc_mun IN (' . $area . '))';
         }
-        if(!empty($cycle)){
-            $where .= ' AND form_target.fk_cycle IN ('.$cycle.')';
+        if (!empty($cycle)) {
+            $where .= ' AND form_target.fk_cycle IN (' . $cycle . ')';
         }
-        if(!empty($stage)){
-            $where .= ' AND lib_category.id IN ('.$stage.')';
+        if (!empty($stage)) {
+            $where .= ' AND lib_category.id IN (' . $stage . ')';
         }
-        if(!empty($activity)){
-            $where .= ' AND lib_activity.id IN ('.$activity.')';
+        if (!empty($activity)) {
+            $where .= ' AND lib_activity.id IN (' . $activity . ')';
         }
-        if(!empty($form)){
-            $where .= ' AND lib_form.id IN ('.$form.')';
+        if (!empty($form)) {
+            $where .= ' AND lib_form.id IN (' . $form . ')';
         }
 
-        $q="SELECT
+        $q = "SELECT
             form_uploaded.file_id,
             form_uploaded.original_filename,
             form_uploaded.file_path,
@@ -1933,66 +1942,70 @@ WHERE
                 form_uploaded.is_deleted = 0
                 OR form_uploaded.is_deleted IS NULL
             )";
-            $q .=$where;
-            $result = $mysql->query($q) or die($mysql->error);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_row()) {
-                    $data[] = $row;
-                }
-            } else {
-                $data = '';
+        $q .= $where;
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_row()) {
+                $data[] = $row;
             }
-            $json_data = array("data" => $data);
-            echo json_encode($json_data);
+        } else {
+            $data = '';
+        }
+        $json_data = array("data" => $data);
+        echo json_encode($json_data);
     }
 
-    public function kcpis_activeUsers(){
+    public function kcpis_activeUsers()
+    {
         $mysql = $this->connectHREDatabase();
-
     }
 
-    public function register_sso($user_sso)
+    public function register_sso($user_sso, $id_number)
     {
         $mysql = $this->connectDatabase();
+        $id_number = $mysql->real_escape_string($id_number);
+        //UNCOMMENT these in production site.
+        $user_sso = $user_sso;
         $user_sso = $user_sso->toArray();
         $oauth = $user_sso['sub'];
         $username = $user_sso['preferred_username'];
-        $fname = $user_sso['given_name'];
-        $lname = $user_sso['family_name'];
-        $name = $user_sso['name'];
 
-        $user = $username;
+        //check existing account
+        //$oauth = '';
+        $username;
         $pass = "default123$";
-        $name = $name;
-        $email = '';
-        $last_name = $lname;
         $scenario = 'oauth_create';
 
+        //get Person Info from HIReS
+        $this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $q = "INSERT INTO `tbl_users` (`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) 
-        VALUES ('$user', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
-        $execute = $mysql->query($q) or die ($mysql->error);
-        $r = "INSERT INTO `tbl_person_info` (`fk_username`, `first_name`, `last_name`,`pic_url`) VALUES ('$user', '$fname', '$last_name','default.jpg')";
-        $execute = $mysql->query($r) or die($mysql->error);
+
+        $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) VALUES ('$id_number','$username', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
+        $execute = $mysql->query($q) or die($mysql->error);
+        if($mysql->affected_rows>0){
+            $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`) VALUES ('$id_number','$this->firstName','$this->midName','$this->lastName','$this->sectorName','$this->sectorDesc','$this->status','$this->posName','$this->posDesc','$this->officeName','$this->officeDesc',NOW())";
+            $execute = $mysql->query($r) or die($mysql->error);
+            if($mysql->affected_rows>0){
+                return true;
+            }
+        }else{
+            return false;
+        }
     }
+
     public function sso_isExist($user_sso)
     {
         $mysql = $this->connectDatabase();
         $user_sso = $user_sso->toArray();
         $oauth = $user_sso['sub'];
-        $username = $user_sso['preferred_username'];
-        $fname = $user_sso['given_name'];
-        $lname = $user_sso['family_name'];
-        $name = $user_sso['name'];
 
         $q = "SELECT
             tbl_users.oauth_client
             FROM
-            tbl_users where oauth_client='$oauth'";
+            tbl_users where oauth_client='$user_sso'";
 
         $result = $mysql->query($q);
         $row = $result->fetch_assoc();
-
         if ($row['oauth_client']) {
             return 1;
         } else {
@@ -2000,21 +2013,40 @@ WHERE
         }
     }
 
-    public function getImage($id_number){
-        $opts = array('http'=>array('header' => "User-Agent:MyAgent/1.0\r\n"));
+    public function is_idNumberExist($id_number)
+    {
+        $mysql = $this->connectDatabase();
+        $id_number = $mysql->real_escape_string($id_number);
+
+        $q = "SELECT tbl_users.id_number FROM tbl_users where id_number='$id_number'";
+        $result = $mysql->query($q);
+        $row = $result->fetch_assoc();
+
+        if($result->num_rows>0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function getImage($id_number)
+    {
+        $opts = array('http' => array('header' => "User-Agent:MyAgent/1.0\r\n"));
         $context = stream_context_create($opts);
-        $url =  json_decode(file_get_contents('http://crg-kcapps-svr.entdswd.local:8080/get_kalahi_staff',true,$context),true);
-        foreach ($url as $item){
-            if($item['id_number']==$id_number){
+        $url = json_decode(file_get_contents('http://crg-kcapps-svr.entdswd.local:8080/get_kalahi_staff', true, $context), true);
+        foreach ($url as $item) {
+            if ($item['id_number'] == $id_number) {
                 return $item['image_path'];
             }
         }
     }
 
-    public function personInfo($id_number){
+    public function personInfo($id_number)
+    {
         $mysql = $this->connectHREDatabase();
         $id_number = $mysql->real_escape_string($id_number);
-        $q="SELECT view_active_staff.* FROM view_active_staff WHERE id_number='$id_number'";
+        $q = "SELECT view_active_staff.* FROM view_active_staff WHERE id_number='$id_number'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -2034,14 +2066,16 @@ WHERE
         }
     }
 
-    public function saveUserInfo(){
+    public function saveUserInfo()
+    {
         $mysql = $this->connectDatabase();
-        $q="";
+        $q = "";
     }
 
-    public function api_allFiles(){
+    public function api_allFiles()
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
             form_uploaded.file_id,
             lib_modality.modality_name,
             lib_municipality.mun_name,
@@ -2068,16 +2102,17 @@ WHERE
             WHERE form_uploaded.is_deleted=0";
         $result = $mysql->query($q) or die($mysql->error);
 
-        while($row = $result->fetch_assoc()){
+        while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
-        $json_data = array("mrms_files"=>$data);
-        echo json_encode($json_data,JSON_PRETTY_PRINT);
+        $json_data = array("mrms_files" => $data);
+        echo json_encode($json_data, JSON_PRETTY_PRINT);
     }
 
-    public function api_findings(){
+    public function api_findings()
+    {
         $mysql = $this->connectDatabase();
-        $q="SELECT
+        $q = "SELECT
             tbl_dqa_findings.fk_file_guid,
             tbl_dqa_findings.findings,
             tbl_dqa_findings.responsible_person,
@@ -2090,10 +2125,50 @@ WHERE
             WHERE tbl_dqa_findings.is_deleted=0";
         $result = $mysql->query($q) or die($mysql->error);
 
-        while($row = $result->fetch_assoc()){
+        while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
-        $json_data = array("mrms_findings"=>$data);
-        echo json_encode($json_data,JSON_PRETTY_PRINT);
+        $json_data = array("mrms_findings" => $data);
+        echo json_encode($json_data, JSON_PRETTY_PRINT);
+    }
+
+    public function getUserCoverage(){
+        $mysql = $this->connectDatabase();
+        $q="";
+    }
+
+    public function tbl_users(){
+        $mysql = $this->connectHREDatabase();
+        $q="SELECT * FROM kcpis.view_active_staff";
+        $mysql = $this->connectHREDatabase();
+        $q="SELECT * FROM kcpis.view_active_staff";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while ($row = $result->fetch_assoc()) {
+                $row['avatar_path'] ='';
+               // $row['avatar_path'] =$this->getImage($row['id_number']);
+                $data[] = $row;
+            }
+            $json_data = array("data" => $data);
+            echo json_encode($json_data);
+        }else{
+            return false;
+        }
+
+
+
+    }
+    public function activerUsers(){
+        $mysql = $this->connectHREDatabase();
+        $q="select COUNT(view_active_staff.id_number) as activeUser from view_active_staff";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            $row = $result->fetch_assoc();
+            return $row['activeUser'];
+        }else{
+            return false;
+        }
+
+
     }
 }
