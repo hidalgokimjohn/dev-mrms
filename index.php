@@ -53,15 +53,16 @@ if(!$_SESSION['mrms_auth']){
 
             // We got an access token, let's now get the user's details
             $user_sso = $provider->getResourceOwner($token);
+            $user_sso = $user_sso->toArray();
 
-            if ($app->sso_isExist($user_sso)) {
-                $user_sso = $user_sso->toArray();
+            if ($app->sso_isExist($user_sso['sub'])) {
+                //$user_sso = $user_sso->toArray();
                 $_SESSION['mrms_auth'] = $user_sso['sub'];
                 $app->login_sso($user_sso['preferred_username']);
                 header('location: home.php?p=mywork&tab=main');
                 exit;
             } else {
-                $user_sso = $user_sso->toArray();
+                //$user_sso = $user_sso->toArray();
                 $_SESSION['sso_username']=$user_sso['preferred_username'];
                 $_SESSION['sso_oauth']=$user_sso['sub'];
                 $_SESSION['forIDNumber']='true';
