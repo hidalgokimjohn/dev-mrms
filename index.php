@@ -62,11 +62,9 @@ if(!$_SESSION['mrms_auth']){
                 header('location: home.php?p=mywork&tab=main');
                 exit;
             } else {
-                //$user_sso = $user_sso->toArray();
                 $_SESSION['sso_username']=$user_sso['preferred_username'];
                 $_SESSION['sso_oauth']=$user_sso['sub'];
                 $_SESSION['forIDNumber']='true';
-                //var_dump($_SESSION['user_sso']);
                 header('location: register.php?p=id_number');
                 exit;
             }
