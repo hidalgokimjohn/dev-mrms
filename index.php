@@ -56,24 +56,15 @@ if(!$_SESSION['mrms_auth']){
 
             if ($app->sso_isExist($user_sso)) {
                 $user_sso = $user_sso->toArray();
-                $oauth = $user_sso['sub'];
-                $_SESSION['mrms_auth'] = $oauth;
+                $_SESSION['mrms_auth'] = $user_sso['sub'];
                 $app->login_sso($user_sso['preferred_username']);
                 header('location: home.php?p=mywork&tab=main');
                 exit;
             } else {
-                /*$app->register_sso($user_sso);
-                $user_sso = $user_sso->toArray();
-                $oauth = $user_sso['sub'];
-                $_SESSION['mrms_auth'] = $oauth;*/
-
-                // if no id_number found in db
+                $_SESSION['user_sso'] = $user_sso;
                 $_SESSION['forIDNumber']='true';
-                //go add id_number >:]
+                //var_dump($_SESSION['user_sso']);
                 header('location: register.php?p=id_number');
-                exit;
-                $app->login_sso($user_sso['preferred_username']);
-                header('location: home.php?p=mywork&tab=main');
                 exit;
             }
 
@@ -181,9 +172,7 @@ if(!$_SESSION['mrms_auth']){
 											<div class="alert-icon">
 												<i data-feather="alert-circle"></i>
 											</div>
-											<div class="alert-message">
-												<strong>Ops!</strong> Incorrect username or password. Please try again.
-											</div>
+											<div class="alert-message">Incorrect username or password. Please try again.</div>
 										    </div>';
                                             }
                                         }

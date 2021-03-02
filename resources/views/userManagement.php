@@ -35,7 +35,9 @@
                                     </div>
                                 </div>
                                 <h1 class="mt-1 mb-1">
-                                   -
+                                   <?php
+                                    echo $app->activerUsers();
+                                   ?>
                                 </h1>
                             </div>
                         </div>
@@ -86,12 +88,10 @@
                 <div class="row">
                     <div class="col-md-12 col-xl-12">
                         <div class="card mb-3">
-                            <div class="card-header">
-                                <h5 class="card-title">List</h5>
-                            </div>
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover" id="tbl_users">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th style="width: 300px;">Name</th>
                                         <th>Position</th>
                                         <th>Level</th>
@@ -100,6 +100,18 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-pill btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>KJAH</td>
                                         <td>Web Developer</td>
                                         <td>Super User</td>
