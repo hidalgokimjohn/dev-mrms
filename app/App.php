@@ -1968,32 +1968,20 @@ WHERE
         $user_sso = $user_sso->toArray();
         $oauth = $user_sso['sub'];
         $username = $user_sso['preferred_username'];
-
-        //check existing account
-        //$oauth = '';
-        echo $user_sso;
         $pass = "default123$";
         $scenario = 'oauth_create';
 
         //get Person Info from HIReS
-        /*$this->personInfo($id_number);
+        $this->personInfo($id_number);
         $hash = password_hash($pass, PASSWORD_DEFAULT);
 
         $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`) VALUES ('$id_number','$username', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
         $execute = $mysql->query($q) or die($mysql->error);
-        var_dump($execute);
+        $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`) VALUES ('$id_number','$this->firstName','$this->midName','$this->lastName','$this->sectorName','$this->sectorDesc','$this->status','$this->posName','$this->posDesc','$this->officeName','$this->officeDesc',NOW())";
+        $execute = $mysql->query($r) or die($mysql->error);
         if($mysql->affected_rows>0){
-            echo 's1';
-            $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`) VALUES ('$id_number','$this->firstName','$this->midName','$this->lastName','$this->sectorName','$this->sectorDesc','$this->status','$this->posName','$this->posDesc','$this->officeName','$this->officeDesc',NOW())";
-            $execute = $mysql->query($r) or die($mysql->error);
-            if($mysql->affected_rows>0){
-                echo 's1';
-                //return true;
-            }
-        }else{
-            echo 'no';
-            //return false;
-        }*/
+            return true;
+        }
 
     }
 
