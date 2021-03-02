@@ -1987,9 +1987,6 @@ WHERE
     public function sso_isExist($user_sso)
     {
         $mysql = $this->connectDatabase();
-        $user_sso = $user_sso->toArray();
-        $oauth = $user_sso['sub'];
-
         $q = "SELECT
             tbl_users.oauth_client
             FROM
