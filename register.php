@@ -57,8 +57,8 @@ if ($_SESSION['forIDNumber']!=='true') {
                 <?php
                 if (isset($_GET['r']) && $_GET['r'] == 'result') {
                     if (isset($_POST['id_number'])) {
+                        $_SESSION['id_number'] = $_POST['id_number'];
                         if($info=$app->personInfo($_POST['id_number'])){
-                            $_SESSION['id_number']=$_POST['id_number'];
                             echo '<div class="d-table-cell align-middle">
                     <div class="text-center">
                         <h1 class="h2">Nice!</h1>
@@ -109,11 +109,14 @@ if ($_SESSION['forIDNumber']!=='true') {
                     <div class="card">
                         <div class="card-body">
                             <div class="m-sm-4">
+                               
                                     <div class="text-center mt-3">
                                     Account already exist.
                                     <br/>
                                     <a href="index.php">Go back</a>
                                     </div>
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -121,12 +124,11 @@ if ($_SESSION['forIDNumber']!=='true') {
                 </div>';
                         }else{
                             //it should be username in the first parameter
-                            //var_dump($_SESSION['user_sso']);
 
-                            $app->register_sso($_SESSION['id_number']);
-                            /*if($r){
+
+                            if($app->register_sso($_SESSION['id_number'])){
                                 header('location: home.php');
-                            }*/
+                            }
                             //var_dump($r);
                        }
                     }else{
