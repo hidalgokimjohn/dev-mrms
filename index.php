@@ -63,8 +63,8 @@ if(!$_SESSION['mrms_auth']){
             } else {
                 $_SESSION['user_sso'] = $user_sso;
                 $_SESSION['forIDNumber']='true';
-                var_dump($_SESSION['user_sso']);
-                //header('location: register.php?p=id_number');
+                //var_dump($_SESSION['user_sso']);
+                header('location: register.php?p=id_number');
                 exit;
             }
 
