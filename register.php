@@ -59,6 +59,7 @@ if ($_SESSION['forIDNumber']!=='true') {
                     if (isset($_POST['id_number'])) {
                         $_SESSION['id_number'] = $_POST['id_number'];
                         if($info=$app->personInfo($_POST['id_number'])){
+                            $_SESSION['avatar_path'] = $app->getImage($_POST['id_number']);
                             echo '<div class="d-table-cell align-middle">
                     <div class="text-center">
                         <h1 class="h2">Nice!</h1>
