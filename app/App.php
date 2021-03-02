@@ -1987,11 +1987,11 @@ WHERE
             $execute = $mysql->query($r) or die($mysql->error);
             if($mysql->affected_rows>0){
                 echo s1;
-                return true;
+                //return true;
             }
         }else{
             echo 'no';
-            return false;
+            //return false;
         }
     }
 
