@@ -1971,7 +1971,7 @@ WHERE
 
         //check existing account
         //$oauth = '';
-        
+
         $pass = "default123$";
         $scenario = 'oauth_create';
 
