@@ -507,38 +507,15 @@ WHERE
         $modalityGroup = $mysql->real_escape_string($_GET['modality']);
         //TODO add where modality
         $q = "SELECT
-                DATE_FORMAT(m.created_at, '%Y/%m/%d'),
-                lib_municipality.mun_name,
-                m.title,
-                CONCAT(responsible_of.first_name,' ',responsible_of.last_name) AS responsible_person,
-                CONCAT(conducted_bys.first_name,' ',conducted_bys.last_name) AS conducted_by,
-                responsible_of.first_name,
-                responsible_of.last_name,
-                conducted_bys.first_name,
-                conducted_bys.last_name,
-                m.dqa_guid,
-                m.fk_psgc_mun,
-                m.fk_cycle,
-                lib_cadt.cadt_name,
-                lib_cadt.id,
-                lib_modality.modality_group,
-                m.id
-            FROM
-                tbl_dqa AS m
-            INNER JOIN users AS u1 ON (u1.username = m.responsible_person)
-            INNER JOIN users AS u2 ON (u2.username = m.conducted_by)
-            INNER JOIN personal_info AS conducted_bys ON conducted_bys.fk_username = u2.username
-            INNER JOIN personal_info AS responsible_of ON responsible_of.fk_username = u1.username
-            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = m.fk_psgc_mun
-            INNER JOIN cycles ON cycles.id = m.fk_cycle
-            INNER JOIN lib_cycle ON cycles.fk_cycle = lib_cycle.id
-            LEFT JOIN lib_cadt ON lib_cadt.id = m.fk_cadt_id
-            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-            WHERE m.conducted_by='$_SESSION[username]'
-            AND lib_modality.modality_group='$modalityGroup'";
+                *
+                FROM
+                    view_tbl_dqa_conducted
+                WHERE
+                    view_tbl_dqa_conducted.conducted_by = '$_SESSION[id_number]'
+                AND view_tbl_dqa_conducted.modality_group = '$modalityGroup'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_row()) {
+            while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
         } else {
@@ -553,42 +530,11 @@ WHERE
     {
         $mysql = $this->connectDatabase();
         $dqaId = $_GET['dqaId'];
-        $q = "SELECT
-                lib_municipality.mun_name,
-                lib_barangay.brgy_name,
-                CONCAT(lib_form.form_name,IF (lib_barangay.brgy_name IS NOT NULL,', ',''),COALESCE (lib_barangay.brgy_name,'')) AS forms,
-                form_uploaded.original_filename,
-                CONCAT(personal_info.first_name,' ',personal_info.last_name) AS fullname,
-                personal_info.first_name,
-                personal_info.last_name,
-                form_uploaded.reviewed_by,
-                form_uploaded.is_reviewed,
-                form_uploaded.with_findings,
-                form_uploaded.is_findings_complied,
-                form_uploaded.file_id,
-                form_uploaded.file_path,
-                lib_cadt.cadt_name,
-                form_target.ft_guid,
-                tbl_dqa_list.created_at,
-                tbl_dqa_list.id,
-                tbl_dqa_list.added_by
-            FROM
-            tbl_dqa
-            INNER JOIN tbl_dqa_list ON tbl_dqa.dqa_guid = tbl_dqa_list.fk_dqa_guid
-            LEFT JOIN form_uploaded ON form_uploaded.file_id = tbl_dqa_list.fk_file_guid
-            LEFT JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid OR form_target.ft_guid = form_uploaded.fk_ft_guid
-            LEFT JOIN users ON users.username = form_uploaded.uploaded_by
-            LEFT JOIN personal_info ON personal_info.fk_username = users.username
-            LEFT JOIN lib_form ON lib_form.form_code = form_target.fk_form
-            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
-            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
-            LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
-            WHERE
-             tbl_dqa.dqa_guid='$dqaId' AND tbl_dqa_list.is_delete='0' AND (form_uploaded.is_deleted='0' OR form_uploaded.is_deleted is null)";
+        $q = "SELECT * FROM view_tbl_dqa_items WHERE added_by='$_SESSION[id_number]' AND fk_dqa_guid='$dqaId'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_row()) {
-                $row['17'] = $this->userInfo($row['17']);
+            while ($row = $result->fetch_assoc()) {
+                //$row['added_by'] = $this->personInfo($_SESSION['id_number']);
                 $data[] = $row;
             }
         } else {
@@ -805,7 +751,7 @@ WHERE
             VALUES (?, ?, ?, ?, ?, ?, NOW(),'not complied')");
         }
 
-        $q->bind_param('siisss', $dqa_gui, $_POST['municipality'], $_POST['cycle'], $_POST['dqaTitle'], $_POST['staff'], $_SESSION['username']);
+        $q->bind_param('siisss', $dqa_gui, $_POST['municipality'], $_POST['cycle'], $_POST['dqaTitle'], $_POST['staff'], $_SESSION['id_number']);
         $q->execute();
         if ($q->affected_rows > 0) {
             return true;
@@ -853,7 +799,7 @@ WHERE
         $responsiblePerson = $_POST['responsiblePerson'];
         $typeOfFindings = $_POST['typeOfFindings'];
         $dateOfCompliance = $_POST['dateOfCompliance'];
-        $addedBy = $_SESSION['username'];
+        $addedBy = $_SESSION['id_number'];
         $dqaLevel = $_POST['dqaLevel'];
         $q = "";
         if ($_GET['file_name'] == 'Not Yet Uploaded') {
@@ -892,7 +838,7 @@ WHERE
         $fileId = $_GET['file_id'];
         $textFindings = $_POST['textFindings'];
         $listId = $_GET['list_id'];
-        $addedBy = $_SESSION['username'];
+        $addedBy = $_SESSION['id_number'];
         $dqaLevel = $_POST['dqaLevel'];
         $q = "";
         if ($_GET['file_name'] == 'Not Yet Uploaded') {
@@ -986,6 +932,25 @@ WHERE
         FROM
         personal_info
         WHERE personal_info.fk_username='$username'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['fullName'];
+        } else {
+            return $row['fullName'] = 'User not found';
+        }
+    }
+
+    public function responsiblePerson($id_number)
+    {
+        $mysql = $this->connectHREDatabase();
+        $q = "SELECT
+                view_active_staff.id_number,
+                CONCAT(view_active_staff.fname,' ',view_active_staff.lname) as fullName,
+                view_active_staff.fname,
+                view_active_staff.lname
+                FROM view_active_staff
+                WHERE view_active_staff.id_number='$id_number'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -1301,7 +1266,7 @@ WHERE
                 INNER JOIN cycles ON cycles.id = form_target.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
                 WHERE form_uploaded.reviewed_by='$username' 
-                AND form_uploaded.is_reviewed='r    eviewed' 
+                AND form_uploaded.is_reviewed='reviewed' 
                 AND form_uploaded.is_deleted=0 
                 AND lib_modality.modality_group='$modalityGroup' 
                 AND cycles.`status`='$status'";
@@ -1516,8 +1481,7 @@ WHERE
         FROM
         lib_activity
         INNER JOIN lib_category ON lib_category.id = lib_activity.fk_category
-        INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
-        WHERE lib_category.id ='$id'";
+        INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -1535,8 +1499,10 @@ WHERE
         $q = "SELECT
         lib_category.id as stage_id,
         lib_category.category_name as stage_name,
+        lib_category.stage_no,
         lib_modality.modality_group,
-        lib_category.acronym
+        lib_category.acronym,
+        lib_modality.mode
         FROM
         lib_category
         INNER JOIN lib_modality ON lib_modality.id = lib_category.fk_modality
@@ -2051,7 +2017,7 @@ WHERE
             $this->officeDesc = $row['office_desc'];
             return $row;
         } else {
-            return '0';
+            return false;
         }
     }
 
@@ -2157,7 +2123,45 @@ WHERE
         }else{
             return false;
         }
+    }
 
+    public function getACUser(){
+        $mysql = $this->connectHREDatabase();
+        $q="SELECT
+            view_active_staff.id_number,
+            view_active_staff.fname,
+            view_active_staff.mname,
+            view_active_staff.lname
+            FROM view_active_staff
+            WHERE view_active_staff.position_name='AC'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            return false;
+        }
+    }
 
+    public function getActUser(){
+        $mysql = $this->connectHREDatabase();
+        $q="SELECT
+            view_active_staff.id_number,
+            view_active_staff.fname,
+            view_active_staff.mname,
+            view_active_staff.lname
+            FROM view_active_staff
+            WHERE view_active_staff.sector_name='CD Sector' AND view_active_staff.office_name='ACT'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            return false;
+        }
     }
 }

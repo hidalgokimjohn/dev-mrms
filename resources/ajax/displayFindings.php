@@ -1,4 +1,5 @@
 <?php
+
 include_once "../../app/Database.php";
 include_once "../../app/App.php";
 include_once "../../app/Auth.php";
@@ -49,8 +50,8 @@ $app = new \app\App();
                             ' . $app->findingStatus($displayFinding['is_checked'],$displayFinding['deadline_for_compliance']) . '
                         </label>
                     </div>
-                    <p>Deadline for Compliance: ' . date("M d, Y", strtotime($displayFinding['deadline_for_compliance'])) . ' (' . $days . ' days)
-                    Posted: ' . date("M d, Y H:m:s a", strtotime($displayFinding['created_at'])) . '
+                    <p>RP: <a href="#">'.$app->responsiblePerson($displayFinding['responsible_person']). '</a> <br>Deadline for Compliance: ' . date("M d, Y", strtotime($displayFinding['deadline_for_compliance'])) . ' (' . $days . ' days)
+                    <br>Posted: ' . date("M d, Y H:m:s a", strtotime($displayFinding['created_at'])) .'
                     <p><strong>' . htmlentities($displayFinding['findings']) . '</strong></p>
                     <div class="float-right mt-n1">
                         <img src="resources/img/avatars/default.jpg" width="32" height="32" class="rounded-circle" alt="Avatar">
