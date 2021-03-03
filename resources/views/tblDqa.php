@@ -20,7 +20,7 @@
                             <h1 class="mt-1 mb-3">
                                 <?php
                                 if (isset($_GET['modality'])) {
-                                    echo $app->allreviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->allreviewedByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                 }
                                 ?>
                             </h1>
@@ -28,13 +28,13 @@
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php
                                     //thisDayReviewedByUsername
-                                    echo $app->thisWeekReviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->thisWeekReviewedByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     ?> </span>
                                 <span class="text-muted">This week,</span>
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php
                                     //thisDayReviewedByUsername
-                                    echo $app->thisDayReviewedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->thisDayReviewedByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     ?> </span>
                                 <span class="text-muted">Today</span>
                             </div>
@@ -59,18 +59,18 @@
                             <h1 class="mt-1 mb-3">
                                 <?php
                                 if (isset($_GET['modality'])) {
-                                    echo $app->allfindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->allfindingsByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                 }
                                 ?></h1>
                             <div class="mb-0">
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php if (isset($_GET['modality'])) {
-                                        echo $app->thisWeekFindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisWeekFindingsByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     } ?> </span>
                                 <span class="text-muted">This week,</span>
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php if (isset($_GET['modality'])) {
-                                        echo $app->thisDayFindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisDayFindingsByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     } ?> </span>
                                 <span class="text-muted">Today</span>
                             </div>
@@ -96,7 +96,7 @@
                                 <?php
 
                                 if (isset($_GET['modality'])) {
-                                    echo $app->allTaByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->allTaByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                 }
 
                                 ?></h1>
@@ -107,7 +107,7 @@
                                     <?php
 
                                     if (isset($_GET['modality'])) {
-                                        echo $app->thisWeekTaByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisWeekTaByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     }
 
                                     ?></span><span class="text-muted"> This week,</span>
@@ -115,7 +115,7 @@
                                     <?php
 
                                     if (isset($_GET['modality'])) {
-                                        echo $app->thisDayTaByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisDayTaByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     }
 
                                     ?>
@@ -143,21 +143,21 @@
                             <h1 class="mt-1 mb-3">
                                 <?php
                                 if (isset($_GET['modality'])) {
-                                    echo $app->allfindingsCompliedByUsername($_SESSION['username'], $_GET['modality'], 'active') . '/';
-                                    echo $app->allfindingsByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                    echo $app->allfindingsCompliedByUsername($_SESSION['id_number'], $_GET['modality'], 'active') . '/';
+                                    echo $app->allfindingsByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                 }
                                 ?></h1>
                             <div class="mb-0">
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php
                                     if (isset($_GET['modality'])) {
-                                        echo $app->thisWeekFindingsCompliedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisWeekFindingsCompliedByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     }
                                     ?> </span>
                                 <span class="text-muted">This week,</span>
                                 <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>
                                     <?php if (isset($_GET['modality'])) {
-                                        echo $app->thisDayFindingsCompliedByUsername($_SESSION['username'], $_GET['modality'], 'active');
+                                        echo $app->thisDayFindingsCompliedByUsername($_SESSION['id_number'], $_GET['modality'], 'active');
                                     } ?> </span>
                                 <span class="text-muted">Today</span>
                             </div>
@@ -247,8 +247,8 @@
                     <select id="choicesAC" class="form-control choicesAc" name="staff" required>
                         <option value="">Select Area Coordinator</option>
                         <?php
-                        foreach ($app->getStaffs("'ac'") as $ac) {
-                            echo '<option class="text-capitalize" value="' . $ac['fk_username'] . '">' . strtoupper($ac['fullname']) . '</option>';
+                        foreach ($app->getACUser() as $act) {
+                            echo '<option class="text-capitalize" value="' . $act['id_number'] . '">' . ucwords(strtolower($act['fname'].' '.$act['mname'].' '.$act['lname'])) . '</option>';
                         }
                         ?>
                     </select>

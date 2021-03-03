@@ -57,30 +57,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 "data": null,
                 "render": function (data, type, row) {
                     //<button class="btn btn-danger btn-sm">Delete</button>
-                    return ' <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data[9] + '" data-dqatitle="' + data[2] + '">Edit</button></span>';
+                    return ' <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data['dqa_guid'] + '" data-dqatitle="' + data['title'] + '">Edit</button></span>';
                 },
             }, {
                 "targets": 1,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<strong>#' + pad(data[15], 4) + '</strong>';
+                    return '<strong>#' + pad(data['dqa_id'], 4) + '</strong>';
                 },
             },
             {
                 "targets": 2,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class=" font-bold"><a href="home.php?p=modules&m=dqa_items&modality=' + data[14] + '&dqaid=' + data[9] + '&title=' + data['2'] + '"><strong>' + htmlspecialchars(data[2]) + '</strong></a></div>';
+                    return '<div class=" font-bold"><a href="home.php?p=modules&m=dqa_items&modality=' + data['modality_group'] + '&dqaid=' + data['dqa_guid'] + '&title=' + data['title'] + '"><strong>' + htmlspecialchars(data['title']) + '</strong></a></div>';
                 },
             },
             {
                 "targets": 3,
                 "data": null,
                 "render": function (data, type, row) {
-                    if (data[1] === null) {
-                        return '<div class="text-uppercase">' + data[12] + '</div>';
+                    if (data['fk_psgc_mun'] === null) {
+                        return '<div class="text-uppercase">' + data['cadt_name'] + '</div>';
                     } else {
-                        return '<div class="text-uppercase">' + data[1] + '</div>';
+                        return '<div class="text-uppercase">' + data['mun_name'] + '</div>';
                     }
                 },
             },
@@ -88,20 +88,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 4,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class="text-capitalize">' + data[3] + '</div>';
+                    return '<div class="text-capitalize">' + data['responsible_person'] + '</div>';
                 },
             },
             {
                 "targets": 5,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class="text-capitalize">' + data[4] + '</div>';
+                    return '<div class="text-capitalize">' + data['conducted_by'] + '</div>';
                 },
             }, {
                 "targets": 6,
                 "data": null,
                 "render": function (data, type, row) {
-                    return '<div class="text-capitalize">' + data[0] + '</div>';
+                    return '<div class="text-capitalize">' + data['created_at'] + '</div>';
                 },
             }
         ],
@@ -151,9 +151,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 "data": null,
                 "render": function (data, type, row) {
                     if (data[3] !== null) {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><b>' + titleCase(data[3]) + '</b></a>';
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><b>' + titleCase(data[3]) + '</b></a>';
                     } else {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data[14] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
+                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
                     }
                 },
             },
@@ -425,7 +425,10 @@ document.addEventListener("DOMContentLoaded", function () {
             listId = $(e.relatedTarget).data('list-id');
             console.log(fileId);
             ft_guid = $(e.relatedTarget).data('ft-guid');
+            file_path = 'http://apps2.caraga.dswd.gov.ph'+file_path;
+            console.log(file_path);
             PDFObject.embed(file_path, "#pdf", options);
+
             $.ajax({
                 type: "post",
                 url: "resources/ajax/getRelatedFiles.php",

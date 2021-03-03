@@ -95,7 +95,11 @@
                                     <label for="responsiblePerson" class="form-label">Responsible Person</label>
                                     <select id="responsiblePerson" class="form-control choices-staff" name="responsiblePerson">
                                         <option value="">Select Staff</option>
-                                        <option value="1">Kim</option>
+                                        <?php
+                                        foreach ($app->getActUser() as $act) {
+                                            echo '<option class="text-capitalize" value="' . $act['id_number'] . '">' . ucwords(strtolower($act['fname'].' '.$act['mname'].' '.$act['lname'])) . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                     <label class="form-label">Date of Compliance</label>
                                     <input type="text" name="dateOfCompliance" class="form-control flatpickr-minimum" id="dateOfCompliance" placeholder="Select date.." required>
@@ -115,6 +119,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="pdf" class="mb-3 bg-light">
+                                    
                                 </div>
                                 <div id="displayFindings">
 
