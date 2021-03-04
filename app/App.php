@@ -257,6 +257,36 @@ class App
         }
     }
 
+    public function selectGetModality(){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT * FROM lib_modality where id in (3,4,5)");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public function selectGetCycle(){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("");
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return json_encode($data);
+        } else {
+            return false;
+        }
+    }
+
     public function getCadt($status, $modalityGroup)
     {
         $mysql = $this->connectDatabase();
@@ -336,8 +366,8 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-                cycles.id,
-                lib_cycle.cycle_name,
+                cycles.id as value,
+                concat(cycles.batch,' ',lib_cycle.cycle_name) as label,
                 lib_modality.modality_name,
                 cycles.batch,
                 cycles.`year`,
@@ -346,15 +376,38 @@ class App
                 cycles
                 INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE  lib_modality.modality_group=?");
-        $q->bind_param('s', $modalityGroup);
+                WHERE  lib_modality.modality_group=? OR lib_modality.id=? AND cycles.`status`='active'");
+        $q->bind_param('si', $modalityGroup,$modalityGroup);
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
-            return $data;
+            return json_encode($data);
+        } else {
+            return false;
+        }
+    }
+
+    public function searchgetArea($cycle_id){
+        $mysql = $this->connectDatabase();
+        $q = $mysql->prepare("SELECT
+            implementing_cadt_ipcdd.fk_cycles as value,
+            lib_cadt.cadt_name as label
+            FROM
+            implementing_cadt_ipcdd
+            INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
+            INNER JOIN lib_cadt ON lib_cadt.id = implementing_cadt_ipcdd.fk_cadt
+            WHERE implementing_cadt_ipcdd.fk_cycles=?");
+        $q->bind_param('i', $cycle_id);
+        $q->execute();
+        $result = $q->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return json_encode($data);
         } else {
             return false;
         }
@@ -516,6 +569,8 @@ WHERE
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                $row['responsible_person'] = $this->getUsersName($row['responsible_person']);
+                $row['conducted_by'] = $this->getUsersName($row['conducted_by']);
                 $data[] = $row;
             }
         } else {
@@ -534,7 +589,8 @@ WHERE
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                //$row['added_by'] = $this->personInfo($_SESSION['id_number']);
+                $row['uploaded_by'] = $this->getUsersName($row['uploaded_by']);
+                $row['added_by'] = $this->getUsersName($_SESSION['id_number']);
                 $data[] = $row;
             }
         } else {
@@ -551,7 +607,7 @@ WHERE
         $fk_psgc_mun = $mysql->real_escape_string($fk_psgc_mun);
         $cadt_id = $mysql->real_escape_string($cadt_id);
         $cycle_id = $mysql->real_escape_string($cycle_id);
-        $username = $_SESSION['username'];
+        $username = $_SESSION['id_number'];
         $q = "SELECT
                 form_uploaded.file_id,
                 form_target.ft_guid,
@@ -656,10 +712,10 @@ WHERE
         $file_id = $mysql->real_escape_string($_POST['fileId']);
         if ($_POST['fileId'] !== '') {
             !$q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
-            VALUES ('$file_id','$dqa_id', '$_SESSION[username]', NOW(), '0','$ft_guid')";
+            VALUES ('$file_id','$dqa_id', '$_SESSION[id_number]', NOW(), '0','$ft_guid')";
         } else {
             $q = "INSERT INTO `tbl_dqa_list` (`fk_file_guid`,`fk_dqa_guid`, `added_by`, `created_at`, `is_delete`,`ft_guid`)
-            VALUES (null,'$dqa_id', '$_SESSION[username]', NOW(), '0','$ft_guid')";
+            VALUES (null,'$dqa_id', '$_SESSION[id_number]', NOW(), '0','$ft_guid')";
         }
         if ($ft_guid) {
             $result = $mysql->query($q) or die($mysql->error);
@@ -1640,7 +1696,7 @@ WHERE
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
         INNER JOIN cycles ON cycles.id = form_target.fk_cycle
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[id_number]'
         AND tbl_dqa_findings.technical_advice is NULL";
         $result = $mysql->query($q);
         if ($result->num_rows > 0) {
@@ -1659,7 +1715,7 @@ WHERE
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
         INNER JOIN cycles ON cycles.id = form_target.fk_cycle
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[id_number]'
         AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
         AND tbl_dqa_findings.technical_advice is NULL";
@@ -1682,7 +1738,7 @@ WHERE
         INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_findings.fk_ft_guid
         INNER JOIN cycles ON cycles.id = form_target.fk_cycle
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[username]'
+        WHERE cycles.`status`='$status' AND tbl_dqa_findings.is_deleted=0 AND tbl_dqa_findings.added_by='$_SESSION[id_number]'
         AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
         AND tbl_dqa_findings.technical_advice is NULL";
@@ -1731,7 +1787,7 @@ WHERE
             INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
             INNER JOIN cycles ON cycles.id = form_target.fk_cycle
             WHERE cycles.`status`='$status' 
-            AND tbl_dqa_list.added_by='$_SESSION[username]' 
+            AND tbl_dqa_list.added_by='$_SESSION[id_number]' 
             AND tbl_dqa_list.is_delete=0
             AND tbl_dqa_list.fk_file_guid is not NULL
             AND tbl_dqa_list.is_reviewed='reviewed'
@@ -1756,7 +1812,7 @@ WHERE
             INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
             INNER JOIN cycles ON cycles.id = form_target.fk_cycle
             WHERE cycles.`status`='$status' 
-            AND tbl_dqa_list.added_by='$_SESSION[username]' 
+            AND tbl_dqa_list.added_by='$_SESSION[id_number]' 
             AND tbl_dqa_list.is_delete=0
             AND tbl_dqa_list.fk_file_guid is not NULL
             AND tbl_dqa_list.is_reviewed='reviewed'
@@ -1784,7 +1840,7 @@ WHERE
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
                 WHERE
                 tbl_dqa_findings.is_deleted = 0
-                AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+                AND tbl_dqa_findings.added_by = '$_SESSION[id_number]'
                 AND cycles.`status` = '$status'
                 AND tbl_dqa_findings.technical_advice='technical advice'";
         $result = $mysql->query($q) or die($mysql->error);
@@ -1809,7 +1865,7 @@ WHERE
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
         WHERE
         tbl_dqa_findings.is_deleted = 0
-        AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+        AND tbl_dqa_findings.added_by = '$_SESSION[id_number]'
         AND cycles.`status` = '$status'
         AND WEEKOFYEAR(tbl_dqa_findings.created_at)=WEEKOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
@@ -1836,7 +1892,7 @@ WHERE
         INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
         WHERE
         tbl_dqa_findings.is_deleted = 0
-        AND tbl_dqa_findings.added_by = '$_SESSION[username]'
+        AND tbl_dqa_findings.added_by = '$_SESSION[id_number]'
         AND cycles.`status` = '$status'
         AND DAYOFYEAR(tbl_dqa_findings.created_at)=DAYOFYEAR(NOW()) 
         AND YEAR(tbl_dqa_findings.created_at) = YEAR(now())
@@ -2021,6 +2077,18 @@ WHERE
         }
     }
 
+    public function getUsersName($id_number){
+        $mysql = $this->connectHREDatabase();
+        $q = "SELECT concat(fname,' ',lname) as fullName FROM view_active_staff WHERE id_number='$id_number'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['fullName'];
+        }else{
+            return false;
+        }
+    }
+
     public function saveUserInfo()
     {
         $mysql = $this->connectDatabase();
@@ -2109,10 +2177,25 @@ WHERE
         }else{
             return false;
         }
-
-
-
     }
+
+    public function tbl_userCoverage($id_number){
+        $mysql = $this->connectDatabase();
+        $id_number = $mysql->real_escape_string($id_number);
+        $q="SELECT * FROM view_tbl_user_cadt_coverage where fk_username='$id_number'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            $json_data = array("data" => $data);
+            echo json_encode($json_data);
+        }else{
+            $json_data = array("data" => '');
+            echo json_encode($json_data);;
+        }
+    }
+
     public function activerUsers(){
         $mysql = $this->connectHREDatabase();
         $q="select COUNT(view_active_staff.id_number) as activeUser from view_active_staff";
@@ -2163,5 +2246,10 @@ WHERE
         }else{
             return false;
         }
+    }
+
+    public function submitCoverage(){
+        $mysql = $this->connectDatabase();
+
     }
 }

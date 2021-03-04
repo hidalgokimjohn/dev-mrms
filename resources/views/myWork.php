@@ -42,7 +42,7 @@
                                 </div>
                                 <h1 class="mt-1 mb-3">
                                     <?php
-                                    echo $app->myWorkReviewedAll($_SESSION['username'],'active');
+                                    echo $app->myWorkReviewedAll($_SESSION['id_number'],'active');
                                     ?>
                                 </h1>
                                 <div class="mb-0">
@@ -179,7 +179,7 @@
 
                        <?php
                             if (!isset($_GET['m'])) {
-                                $userCoverages = $app->getIpcddCoverage('active', $_SESSION['username']);
+                                $userCoverages = $app->getIpcddCoverage('active', $_SESSION['id_number']);
                             }
                             echo '<table class="table table-striped"><tbody>';
                                if ($userCoverages) {

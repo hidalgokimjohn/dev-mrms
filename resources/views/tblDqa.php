@@ -168,33 +168,25 @@
         </div>
     </div>
 </div>
-<div class="card">
-    <div class="card-body">
-        <a href="#modalCreateDqa" data-toggle="modal">
-            <button type="button" class="btn btn-primary">
-                <span class="fa fa-plus"></span> Created DQA
-            </button>
-        </a>
 
-        <div class="table-responsive">
-            <br />
-            <table id="tbl_dqa" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
-                <thead>
-                    <tr class="border-bottom-0">
-
-                        <th style="width: 30px;"></th>
-                        <th style="width: 80px;">DQA #</th>
-                        <th style="width: 230px;">Title</th>
-                        <th>City</th>
-                        <th title="Responsible Person">Area Coordinator</th>
-                        <th class="">Created by</th>
-                        <th class="">Created at</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+<div class="card mb-3">
+    <div class="table-responsive">
+        <table id="tbl_dqa" class="table table-striped table-hover" style="width:100%">
+            <thead>
+            <tr class="border-bottom-0">
+                <th style="width: 30px;"></th>
+                <th style="width: 80px;">DQA #</th>
+                <th style="width: 230px;">Title</th>
+                <th>City</th>
+                <th title="Responsible Person">Area Coordinator</th>
+                <th class="">Created by</th>
+                <th class="">Created at</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
+
 </div>
 
 <div class="modal fade" id="modalCreateDqa" tabindex="-1" role="dialog" aria-hidden="true">
@@ -248,7 +240,7 @@
                         <option value="">Select Area Coordinator</option>
                         <?php
                         foreach ($app->getACUser() as $act) {
-                            echo '<option class="text-capitalize" value="' . $act['id_number'] . '">' . ucwords(strtolower($act['fname'].' '.$act['mname'].' '.$act['lname'])) . '</option>';
+                            echo '<option class="text-capitalize" value="' . $act['id_number'] . '">' . ucwords(strtolower($act['fname'] . ' ' . $act['mname'] . ' ' . $act['lname'])) . '</option>';
                         }
                         ?>
                     </select>
@@ -285,7 +277,8 @@
                         ?>
                     </select>
                     <label class="form-label">Title</label>
-                    <input type="text" class="form-control dqaTitle" placeholder="Enter your title" name="dqaTitle" required>
+                    <input type="text" class="form-control dqaTitle" placeholder="Enter your title" name="dqaTitle"
+                           required>
                 </div>
 
                 <div class="modal-footer">

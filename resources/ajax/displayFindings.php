@@ -17,7 +17,7 @@ $app = new \app\App();
             $years = floor($diff / (365 * 60 * 60 * 24));
             $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
             $days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
-            if($displayFinding['is_checked']==0 && $displayFinding['added_by']==$_SESSION['username']){
+            if($displayFinding['is_checked']==0 && $displayFinding['added_by']==$_SESSION['id_number']){
                 $btnRemove = '<a class="btn btn-outline-danger" href="#" id="removeFinding" data-finding-id="'.$displayFinding['findings_guid'].'">Remove</a>';
             }else{
                 $btnRemove = '';

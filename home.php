@@ -111,12 +111,13 @@ if (!$auth->loggedIn()) {
                             //($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ncddp' && $_GET['year'] == '2020') ? include('resources/views/movUploadingStatus.php') : '';
                             ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/dashboard_kcaf_cbrc.php') : '';
                             ($_GET['p'] == 'dashboards' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/dashboard_ipcdd_drom.php') : '';
-                            ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
                             ($_GET['p'] == 'search' && $_GET['modality'] == 'ncddp_drom') ? include('resources/views/searchFileNcddp.php') : '';
                             ($_GET['p'] == 'search' && $_GET['modality'] == 'af_cbrc') ? include('resources/views/searchFileKcAf.php') : '';
                             ($_GET['p'] == 'search' && $_GET['modality'] == 'ipcdd_drom') ? include('resources/views/searchFileIpcdd.php') : '';
 
                             if($_SESSION['user_lvl']=='RPMO'){
+                                ($_GET['p'] == 'user_coverage') ? include('resources/views/userCoverage.php') : '';
+                                ($_GET['p'] == 'user_mngt') ? include('resources/views/userManagement.php') : '';
                                 ($_GET['p'] == 'mywork') ? include('resources/views/myWork.php') : '';
                                 //dqa module
                                 $getModality = '';
@@ -181,7 +182,7 @@ if (!$auth->loggedIn()) {
                 <div class="row text-muted">
                     <div class="col-6 text-left">
                         <p class="mb-0">
-                            <a href="#" class="text-muted"><strong>&copy; 2021 DSWD CARAGA Kalahi-CIDSS | Monitoring and
+                            <a href="#" class="text-muted"><strong>&copy; 2021 DSWD CARAGA KALAHI-CIDSS | Monitoring and
                                     Evaluation Unit.</strong></a>
                         </p>
                     </div>
@@ -219,142 +220,6 @@ if (!$auth->loggedIn()) {
 <!--Initialization-->
 <script type="text/javascript" src="vendor/PDFObject-master/pdfobject.min.js"></script>
 <script type="text/javascript" src="resources/js/dqa.js"></script>
-<script>
-    $(document).ready(function () {
-        var m = url.searchParams.get("m");
-        var p = url.searchParams.get("p");
-
-        if (m == 'dqa_conducted') {
-            new Choices(document.querySelector(".choices-muni"));
-            new Choices(document.querySelector(".choicesCycle"));
-            new Choices(document.querySelector(".choicesAc"));
-            new Choices(document.querySelector(".editChoicesAc"));
-        }
-
-        if(p=='upload'){
-            var choiceTypeOfCadt = new Choices(".choices-of-cadt", {
-                shouldSort: false
-            });
-        }
-
-        if (m == 'dqa_items') {
-            new Choices(document.querySelector(".choices-dqa-level"));
-            flatpickr(".flatpickr-minimum", {
-                minDate: 'today'
-            });
-            $("#dateOfCompliance").removeAttr('readonly')
-            const choicesFinding = new Choices(".choices-findings", {
-                shouldSort: false
-            });
-            const choiceTypeOfFindings = new Choices(".choices-type-of-findings", {
-                shouldSort: false
-            });
-            const choicesStaff = new Choices(".choices-staff");
-            document.getElementById("choicesFinding").addEventListener("change", function (e) {
-                if (this.value == 'no') {
-                    choiceTypeOfFindings.disable();
-                    choicesStaff.disable();
-                    document.getElementById("text_findings").disabled = true;
-                    document.getElementById("text_findings").value = '';
-                    document.getElementById("dateOfCompliance").value = '';
-                    document.getElementById("responsiblePerson").value = '';
-                    $("#dateOfCompliance").prop('disabled', true);
-                }
-                if (this.value == 'yes') {
-                    choiceTypeOfFindings.enable();
-                    choicesStaff.enable();
-                    document.getElementById("text_findings").disabled = false;
-                    $('.flatpickr-minimum').prop('disabled', false);
-                }
-                if (this.value == 'ta') {
-                    choiceTypeOfFindings.disable();
-                    choicesStaff.disable();
-                    $("#dateOfCompliance").prop('disabled', true);
-                    document.getElementById("text_findings").disabled = false;
-                }
-            });
-
-        }
-        $('#tbl_users thead tr').clone(true).appendTo('#tbl_users thead');
-        $('#tbl_users thead tr:eq(1) th').each(function (i) {
-            if (i !== 0) {
-                var title = $(this).text();
-                $(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
-                $('input', this).on('keyup change', function (e) {
-                    if (tbl_users.column(i).search() !== this.value) {
-                        tbl_users.column(i).search(this.value).draw();
-                    }
-                });
-            }
-        });
-        var tbl_users = $('#tbl_users').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-            order: [
-                [1, "asc"]
-            ],
-            columnDefs: [{
-                orderable: false,
-                targets: 0
-            }],
-            dom: '<"html5buttons">bitpr',
-            ajax: {
-                url: "resources/ajax/tbl_users.php",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                cache: false,
-                dataType: 'json',
-                error: function () {
-                    $("post_list_processing").css("display", "none");
-                }
-            },
-            language: {
-                "emptyTable": "<b>No records <found class=''></found></b>"
-            },
-            columnDefs: [{
-                "targets": 0,
-                "data": null,
-                "render": function (data, type, row) {
-                    //<button class="btn btn-danger btn-sm">Delete</button>
-                    return '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-pill btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>' +
-                        '<div class="dropdown-menu"><a class="dropdown-item" href="#">Action</a>' +
-                        '<a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a>' +
-                        '<div class="dropdown-divider"></div><a class="dropdown-item" href="#">ID-Number: '+data['id_number']+'</a></div></div>'
-                },
-            },{
-                "targets": 1,
-                "data": null,
-                "render": function (data, type, row) {
-                    //<button class="btn btn-danger btn-sm">Delete</button>
-                    return '<img src="resources/img/avatars/default.jpg" width="48" height="48" class="rounded-circle my-n1"></img> '+data['fname']+' '+data['lname'];
-                },
-            },{
-                "targets": 2,
-                "data": null,
-                "render": function (data, type, row) {
-                    //<button class="btn btn-danger btn-sm">Delete</button>
-                    return data['position_desc'];
-                },
-            },{
-                "targets": 3,
-                "data": null,
-                "render": function (data, type, row) {
-                    //<button class="btn btn-danger btn-sm">Delete</button>
-                    return data['office_name'];
-                },
-            },{
-                "targets": 4,
-                "data": null,
-                "render": function (data, type, row) {
-                    //<button class="btn btn-danger btn-sm">Delete</button>
-                    return '<div class="badge bg-success"><span class="fa fa-check-circle"></span> '+data['status_name']+'</div>';
-                },
-            }
-            ],
-        });
-    });
-</script>
+<script type="text/javascript" src="resources/js/home.js"></script>
 <script type="text/javascript" src="resources/js/search.js"></script>
 </html>
