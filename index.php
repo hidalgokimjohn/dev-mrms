@@ -1,5 +1,8 @@
 <?php
 ob_start();
+$ch = curl_init('http://crg-kcapps-svr.entdswd.local/mrms/index.php');
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
