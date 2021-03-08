@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
         language: {
-            "emptyTable": "<b>No records found. Click add files to create one.</b>"
+            "emptyTable": "<b>No records found.</b>"
         },
         columnDefs: [{
                 "targets": 0,
@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         "render": function (data, type, row) {
                             var file_id;
                             if (data['file_id'] !== null) {
-                                file_id = data[file_id];
+                                file_id = data['file_id'];
                             } else {
                                 file_id = '';
                             }
