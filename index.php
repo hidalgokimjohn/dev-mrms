@@ -1,13 +1,8 @@
 <?php
 ob_start();
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "http://crg-kcapps-svr.entdswd.local/mrms");
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-$result = curl_exec($ch);
-curl_close($ch);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 include_once('app/Database.php');
 include_once('app/App.php');
