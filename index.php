@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$ch = curl_init('http://crg-kcapps-svr.entdswd.local/mrms/index.php');
+$ch = curl_init('https://caraga-auth.dswd.gov.ph:8443/auth');
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 include_once('app/Database.php');
