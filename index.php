@@ -153,7 +153,7 @@ if(!$_SESSION['mrms_auth']){
                                     <?php
                                     if (isset($_POST['submit'])) {
 
-                                        if ($app->is_pending($_POST['username'])) {
+                                       /* if ($app->is_pending($_POST['username'])) {
                                             echo '<br><div class="alert alert-warning alert-dismissible" role="alert">
 											<div class="alert-icon">
 												<i data-feather="alert-circle"></i>
@@ -162,7 +162,7 @@ if(!$_SESSION['mrms_auth']){
 												<strong>Hey!</strong> This account is pending for activation.
 											</div>
 										    </div>';
-                                        } else {
+                                        } else {*/
                                             if ($app->login($_POST['username'], $_POST['password'])) {
                                                 $app->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
@@ -176,7 +176,7 @@ if(!$_SESSION['mrms_auth']){
 											<div class="alert-message">Incorrect username or password. Please try again.</div>
 										    </div>';
                                             }
-                                        }
+                                        /*}*/
                                     }
                                     ?>
                                 </form>
