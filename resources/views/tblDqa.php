@@ -168,7 +168,6 @@
         </div>
     </div>
 </div>
-
 <div class="card mb-3">
     <div class="table-responsive">
         <table id="tbl_dqa" class="table table-striped table-hover" style="width:100%">

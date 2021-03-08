@@ -332,20 +332,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         "data": null,
                         "render": function (data, type, row) {
                             var file_id;
-                            if (data[0] !== null) {
-                                file_id = data[0];
+                            if (data['file_id'] !== null) {
+                                file_id = data[file_id];
                             } else {
                                 file_id = '';
                             }
-                            return '<button class="btn btn-success file_id" data-file-id="' + file_id + '" data-ft-guid="' + data[1] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
+                            return '<button class="btn btn-success file_id" data-file-id="' + file_id + '" data-ft-guid="' + data['ft_guid'] + '" data-dqa-id="' + dqaId + '"><span class="fa fa-plus"></span> Add</button>';
                         },
                     },
                     {
                         "targets": 1,
                         "data": null,
                         "render": function (data, type, row) {
-                            if (data[0] !== null) {
-                                return '<a href="' + data[3] + '" target="_blank"><strong>' + data[2] + '</strong></a>';
+                            if (data['file_id'] !== null) {
+                                return '<a href="' + data['file_path'] + '" target="_blank"><strong>' + data['original_filename'] + '</strong></a>';
                             } else {
                                 return '<strong class="text-danger">Not Yet Uploaded</strong>';
                             }
@@ -354,20 +354,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         "targets": 2,
                         "data": null,
                         "render": function (data, type, row) {
-                            return data[6];
+                            return data['activity_name'];
                         },
                     }, {
                         "targets": 3,
                         "data": null,
                         "render": function (data, type, row) {
-                            return data[5];
+                            return data['form_name'];
                         },
                     }, {
                         "targets": 4,
                         "data": null,
                         "render": function (data, type, row) {
-                            if (data[8] !== null) {
-                                return '<span class="text-capitalize">' + data[8] + '</span>';
+                            if (data['location'] !== null) {
+                                return '<span class="text-capitalize">' + data['location'] + '</span>';
                             } else {
                                 return '<strong class="text-danger">N/A</strong>'
                             }
@@ -376,8 +376,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         "targets": 5,
                         "data": null,
                         "render": function (data, type, row) {
-                            if (data[4] !== null) {
-                                return data[4];
+                            if (data['uploaded_by'] !== null) {
+                                return data['uploaded_by'];
+                            } else {
+                                return '<strong class="text-danger">N/A</strong>'
+                            }
+                        },
+                    },{
+                        "targets": 6,
+                        "data": null,
+                        "render": function (data, type, row) {
+                            if (data['date_uploaded'] !== null) {
+                                return data['date_uploaded'];
                             } else {
                                 return '<strong class="text-danger">N/A</strong>'
                             }
