@@ -35,7 +35,6 @@
 
                     <select class="form-control choices-multiple-activity" name="activity_id[]" multiple id="selectActivity">
                         <option value="">Select Activity</option>
-
                     </select>
                     <label class="form-label">Form</label>
                     <select class="form-control choices-multiple-form" name="form_id[]" multiple>
@@ -49,9 +48,8 @@
     </div>
     <div class="col-sm-9 col-md-12 col-xl-9">
         <div class="card mb-3">
-            <div class="card-body">
                 <div class="table-responsive">
-                    <table id="tbl_searchFileResult" class="table border-bottom border-top border-left border-right table-striped table-hover" style="width:100%">
+                    <table id="tbl_searchFileResult" class="table table-striped table-hover" style="width:100%">
                         <thead>
                         <tr class="border-bottom-0">
                             <th style="width: 50%;">Filename</th>
@@ -64,7 +62,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
         </div>
     </div>
 </div>

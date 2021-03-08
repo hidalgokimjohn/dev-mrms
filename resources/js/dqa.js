@@ -25,6 +25,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     tbl_dqa.column(i).search(this.value).draw();
                 }
             });
+        }else{
+            var title = $(this).text();
+            $(this).html(' <a href="#modalCreateDqa" data-toggle="modal">\n' +
+                '                <button type="button" class="btn btn-primary">\n' +
+                '                    Add' +
+                '                </button>\n' +
+                '            </a>');
         }
     });
     
@@ -34,6 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
         order: [
             [1, "desc"]
         ],
+        dom: '<<t>ip>',
+        //dom: '<"html5buttons">btpr',
         columnDefs: [{
             orderable: false,
             targets: 0
@@ -57,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "data": null,
                 "render": function (data, type, row) {
                     //<button class="btn btn-danger btn-sm">Delete</button>
-                    return ' <span><button class="btn btn-primary btn-sm" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data['dqa_guid'] + '" data-dqatitle="' + data['title'] + '">Edit</button></span>';
+                    return ' <span><button class="btn btn-primary" id="btn_editDqaTitle" data-toggle="modal" data-target="#editDqaTitle" data-dqaguid="' + data['dqa_guid'] + '" data-dqatitle="' + data['title'] + '">Edit</button></span>';
                 },
             }, {
                 "targets": 1,
@@ -127,7 +136,8 @@ document.addEventListener("DOMContentLoaded", function () {
         order: [
             [2, "desc"]
         ],
-        dom: '<"html5buttons">lTgitpr',
+        dom: '<<t>ip>',
+        //dom: '<"html5buttons">btpr',
         columnDefs: [{
             orderable: false,
             targets: 0
@@ -144,16 +154,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
         language: {
-            "emptyTable": "<b>No files found in this item.</b>"
+            "emptyTable": "<b>No data found.</b>"
         },
         "columnDefs": [{
                 "targets": 0,
                 "data": null,
                 "render": function (data, type, row) {
-                    if (data[3] !== null) {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><b>' + titleCase(data[3]) + '</b></a>';
+                    if (data['original_filename'] !== null) {
+                        return '<a href="#modalViewFile" data-toggle="modal" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data['file_id'] + '" data-file-path="' +'http://apps2.caraga.dswd.gov.ph'+ data['file_path'] + '" data-file-name="' + data['original_filename'] + '" data-list-id="'+data['list_id']+'"><b>' + titleCase(data['original_filename']) + '</b></a>';
                     } else {
-                        return '<a href="#modalViewFile" data-toggle="modal" data-doc="' + data[15] + '" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data[11] + '" data-file-path="' + data[12] + '" data-file-name="' + data[3] + '" data-list-id="'+data[16]+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
+                        return '<a href="#modalViewFile" data-toggle="modal" data-ft-guid="' + data['ft_guid'] + '" data-file-id="' + data['file_id'] + '" data-file-path="' +'http://apps2.caraga.dswd.gov.ph'+ data['file_path'] + '" data-file-name="' + data['original_filename'] + '" data-list-id="'+data['list_id']+'"><strong class="text-danger">Not Yet Uploaded</strong></a>';
                     }
                 },
             },
@@ -161,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 1,
                 "data": null,
                 "render": function (data, type, row) {
-                    return data[2];
+                    return data['form_name']+'<br/><small>'+data['activity_name']+'</small>';
 
                 },
             },
@@ -169,15 +179,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 2,
                 "data": null,
                 "render": function (data, type, row) {
-                    return data[15];
+                    return data['created_at'];
                 },
             },
             {
                 "targets": 3,
                 "data": null,
                 "render": function (data, type, row) {
-                    if (data[4] !== null) {
-                        return '<div class="text-capitalize">' + data[4] + '</div>';
+                    if (data['uploaded_by'] !== null) {
+                        return '<div class="text-capitalize">' + data['uploaded_by'] + '</div>';
                     } else {
                         return 'N/A';
                     }
@@ -186,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 "targets": 4,
                 "data": null,
                 "render": function (data, type, row) {
-                    if (data[17] !== null) {
-                        return '<span class="text-capitalize">' + data[17] + '</span>';
+                    if (data['added_by'] !== null) {
+                        return '<span class="text-capitalize">' + data['added_by'] + '</span>';
                     } else {
                         return 'N/A';
                     }
@@ -199,18 +209,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 "render": function (data, type, row) {
                     complied = '';
                     stat = '';
-                    if (data[8] !== null) {
-                        if (data[8] == 'for review') {
+                    if (data['is_reviewed'] !== null) {
+                        if (data['is_reviewed'] == 'for review') {
                             stat += '<div class="badge bg-secondary text-center"><span class="fa fa-exclamation-circle"></span> For review</div>';
                         }
-                        if (data[9] == 'with findings') {
-                            if (data[10] == 'complied') {
+                        if (data['with_findings'] == 'with findings') {
+                            if (data['is_complied'] == 'complied') {
                                 stat += '<div class="badge bg-success"><span class="fa fa-check-circle"></span> Complied</div>'
                             } else {
                                 stat += '<div class="badge bg-danger text-center"><span class="fa fa-thumbs-down"></span> With findings</div>';
                             }
                         }
-                        if (data[9] == 'no findings') {
+                        if (data['with_findings'] == 'no findings') {
                             stat += '   <div class="badge bg-primary"><span class="fa fa-thumbs-up"></span> No findings</div>';
                         }
                         return stat;
@@ -293,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     [5, "asc"]
                 ],
                 bDestroy: true,
-                dom: '<"html5buttons">lTgitpr',
+                dom: '<<t>ip>',
                 columnDefs: [{
                     orderable: false,
                     targets: 0
@@ -311,7 +321,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 },
                 language: {
-                    "emptyTable": "<b>No files found in this item.</b>"
+                    "emptyTable": "<b>No data found.</b>"
+                },
+                initComplete: function(settings, json) {
+                    $('.dataTables_paginate').addClass('p-3');
+                    $('.dataTables_info').addClass('p-3');
                 },
                 "columnDefs": [{
                         "targets": 0,
@@ -423,9 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
             file_path = $(e.relatedTarget).data('file-path');
             fileId = $(e.relatedTarget).data('file-id');
             listId = $(e.relatedTarget).data('list-id');
-            console.log(fileId);
             ft_guid = $(e.relatedTarget).data('ft-guid');
-            file_path = 'http://apps2.caraga.dswd.gov.ph'+file_path;
             console.log(file_path);
             PDFObject.embed(file_path, "#pdf", options);
 

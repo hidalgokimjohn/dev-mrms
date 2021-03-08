@@ -121,6 +121,25 @@
                     <i class="align-middle" data-feather="users"></i> <span class="align-middle">User Management</span>
                 </a>
             </li>
+            <li class="sidebar-item <?php $app->sidebar_active('ceac_mngt', $_GET['p']); ?>">
+                <a data-target="#ceac-mngt" data-toggle="collapse"
+                   class="sidebar-link <?php $app->sidebar_collapsed('ceac_mngt', $_GET['p']); ?>">
+                    <i class="align-middle" data-feather="slack"></i> <span class="align-middle">CEAC</span>
+                </a>
+                <ul id="ceac-mngt"
+                    class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('ceac_mngt', $_GET['p']); ?>"
+                    data-parent="#sidebar">
+                    <li class="sidebar-item <?php $app->sidebar_active('af_cbrc', $_GET['modality']); ?>"><a
+                                class="sidebar-link" href="home.php?p=ceac_mngt&modality=af_cbrc">KC-AF CBRC</a>
+                    </li>
+                    <li class="sidebar-item <?php $app->sidebar_active('ncddp_drom', $_GET['modality']); ?>"><a
+                                class="sidebar-link" href="home.php?p=ceac_mngt&modality=ncddp_drom">NCDDP DROM</a>
+                    </li>
+                    <li class="sidebar-item <?php $app->sidebar_active('ipcdd_drom', $_GET['modality']); ?>"><a
+                                class="sidebar-link" href="home.php?p=ceac_mngt&modality=ipcdd_drom">IPCDD DROM</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
         <div class="sidebar-cta">
             <div class="sidebar-cta-content">

@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
     $('.choices-multiple-stage').on('change', function() {
         var stage_id = $('.choices-multiple-stage').val();
         var modality_id = url.searchParams.get("modality");
-
          $.ajax({
              type: 'POST',
              url: 'resources/ajax/selectStageOnChange.php?modality='+modality_id,
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                  }
              }
-           });
+         });
       });
     $('.choices-multiple-activity').on('change', function() {
         var activity_id = $('.choices-multiple-activity').val();
@@ -78,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }else{
                     choiceOfForm.clearStore();
                     choiceOfForm.disable();
-
                 }
             }
         });
@@ -101,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         order: [
             [0, "asc"]
         ],
-        dom: '<"html5buttons">lTgitpr',
+        dom: '<<t>ip>',
         columnDefs: [{
             orderable: false,
             targets: 0
@@ -109,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         language: {
             emptyTable: '<strong>No data available.</strong>'
         }
+
     });
 
     $("form#submitSearch").submit(function (event) {
@@ -127,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             order: [
                 [0, "asc"]
             ],
-            dom: '<"html5buttons">lTgitpr',
+            dom: '<<t>ip>',
             columnDefs: [{
                 orderable: false,
                 targets: 0
@@ -206,6 +205,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             ],
         });
+        $('.dataTables_paginate').addClass('p-3');
+        $('.dataTables_info').addClass('p-3');
     });
 });
 
