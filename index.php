@@ -1,8 +1,14 @@
 <?php
 ob_start();
-$ch = curl_init('https://caraga-auth.dswd.gov.ph:8443/auth');
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "http://crg-kcapps-svr.entdswd.local/mrms");
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+$result = curl_exec($ch);
+curl_close($ch);
+
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
