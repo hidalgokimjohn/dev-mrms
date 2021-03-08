@@ -638,7 +638,6 @@ WHERE
                 form_uploaded.uploaded_by,
                 tbl_dqa_list.fk_dqa_guid,
                 tbl_dqa_list.is_delete,
-                tbl_dqa_list.ft_guid,
                 lib_activity.activity_name
             FROM
                 form_target
