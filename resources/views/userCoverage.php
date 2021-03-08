@@ -24,9 +24,8 @@
                     <select id="choicesCycle" class="form-control choices-cycle" name="cycle" required>
                         <option value="">Select Cycle</option>
                     </select>
-                    <select id="choicesArea" class="form-control choices-area" name="area" multiple required>
+                    <select id="choicesArea" class="form-control choices-area" name="area[]" multiple required>
                         <option value="">Select Area</option>
-
                     </select>
                     <button type="submit" id="btnSubmitUserArea" class="btn btn-primary" name="addArea">Submit</button>
                 </form>
@@ -40,10 +39,10 @@
                     <thead>
                     <tr class="border-bottom-0">
                         <th style="width: 10%;"></th>
-                        <th style="width: 40%;">Area</th>
-                        <th style="width: 20%;">Cycle</th>
+                        <th style="width: 30%;">Area</th>
+                        <th style="width: 15%;">Cycle</th>
                         <th style="width: 15%;">Status</th>
-                        <th style="width: 15%x;">Last Update</th>
+                        <th style="width: 20%;">Created at</th>
                     </tr>
                     </thead>
                     <tbody>

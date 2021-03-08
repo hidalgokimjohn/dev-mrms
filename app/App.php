@@ -392,19 +392,18 @@ class App
 
     public function searchgetArea($cycle_id){
         $mysql = $this->connectDatabase();
-        $q = $mysql->prepare("SELECT
-            implementing_cadt_ipcdd.fk_cycles as value,
-            lib_cadt.cadt_name as label
-            FROM
-            implementing_cadt_ipcdd
-            INNER JOIN cycles ON cycles.id = implementing_cadt_ipcdd.fk_cycles
-            INNER JOIN lib_cadt ON lib_cadt.id = implementing_cadt_ipcdd.fk_cadt
-            WHERE implementing_cadt_ipcdd.fk_cycles=?");
-        $q->bind_param('i', $cycle_id);
-        $q->execute();
-        $result = $q->get_result();
+        $cycle_id = $mysql->real_escape_string($cycle_id);
+        $q = "SELECT
+                view_tbl_areas.`value`,
+                view_tbl_areas.label,
+                view_tbl_areas.fk_cycles,
+                view_tbl_areas.`status`
+                FROM
+                view_tbl_areas
+                WHERE fk_cycles='$cycle_id'";
+        $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
+            while($row = $result->fetch_assoc()){
                 $data[] = $row;
             }
             return json_encode($data);
@@ -2182,7 +2181,7 @@ WHERE
     public function tbl_userCoverage($id_number){
         $mysql = $this->connectDatabase();
         $id_number = $mysql->real_escape_string($id_number);
-        $q="SELECT * FROM view_tbl_user_cadt_coverage where fk_username='$id_number'";
+        $q="SELECT * FROM view_tbl_user_coverage where id_number='$id_number'";
         $result = $mysql->query($q) or die($mysql->error);
         if($result->num_rows>0){
             while ($row = $result->fetch_assoc()) {
@@ -2248,8 +2247,56 @@ WHERE
         }
     }
 
-    public function submitCoverage(){
+    public function addUserCoverage(){
         $mysql = $this->connectDatabase();
+        $id_number = $mysql->real_escape_string($_GET['id_number']);
+        $cycle = $mysql->real_escape_string($_POST['cycle']);
 
+        foreach ($_POST['area'] as $area_id){
+            //Check existing coverage
+            if(!$this->coverageExist($id_number,$cycle,$area_id)){
+                //check modality
+                if($this->modality($_POST['modality'])=='ipcdd'){
+                    $q="INSERT INTO `tbl_user_coverage_ipcdd` (`id_number`, `fk_cadt_id`, `fk_cycle_id`, `status`, `created_at`) 
+                VALUES ('$id_number', '$area_id', '$cycle', 'active', NOW())";
+                    $mysql->query($q);
+                }else{
+                    //for ncddp
+                    $q="INSERT INTO `tbl_user_coverage_ncddp` (`id_number`, `fk_psgc_mun`, `fk_cycle_id`, `status`, `created_at`) 
+                VALUES ('$id_number', '$area_id', '$cycle', 'active', NOW())";
+                    $mysql->query($q);
+                }
+            }
+        }
+        if($mysql->affected_rows>0){
+            echo 'coverage_added';
+        }else{
+            return false;
+        }
+    }
+
+    public function coverageExist($id_number,$cycle,$area){
+        $mysql = $this->connectDatabase();
+        $q="SELECT view_tbl_user_coverage.area_id FROM view_tbl_user_coverage WHERE (id_number='$id_number' OR username='$id_number') AND cycle_id='$cycle' AND area_id='$area'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function modality($id){
+        $mysql = $this->connectDatabase();
+        $id = $mysql->real_escape_string($id);
+        $q="SELECT * FROM lib_modality WHERE id='$id'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            $row = $result->fetch_assoc();
+            return $row['modality_name'];
+        }else{
+            return false;
+        }
     }
 }

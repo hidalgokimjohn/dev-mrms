@@ -16,6 +16,7 @@ $(document).ready(function () {
             shouldSort: false
         });
     }
+
     if(p=='user_coverage'){
         var id_number = url.searchParams.get("id");
         var choiceOfModality = new Choices(".choices-modality", {
@@ -35,6 +36,7 @@ $(document).ready(function () {
 
         $('.choices-modality').on('change', function() {
             var modality_id = $('.choices-modality').val();
+            choiceOfCycle.clearStore();
             choiceOfArea.clearStore();
             $.ajax({
                 type: 'POST',
@@ -55,7 +57,6 @@ $(document).ready(function () {
                 }
             });
         });
-
         $('.choices-cycle').on('change', function() {
             var cycle_id = $('.choices-cycle').val();
             choiceOfArea.clearStore();
@@ -72,6 +73,44 @@ $(document).ready(function () {
                         choiceOfArea.enable();
                         choiceOfArea.clearChoices();
                         choiceOfArea.setChoices(data);
+                    }
+                }
+            });
+        });
+
+        $("form#submitUserCoverage").submit(function (event) {
+            event.preventDefault();
+            var btn = this;
+            $('#btnSubmitUserArea').html('<i class="fa fa-circle-notch fa-spin"></i> Submitting, please wait...');
+            $('#btnSubmitUserArea').attr("disabled", "disabled");
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                url: 'resources/ajax/addUserCoverage.php?id_number='+id_number,
+                type: 'POST',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returndata) {
+                    if (returndata=='coverage_added') {
+                        notyf.success({
+                            message: '<strong>Coverage </strong>successfully added',
+                            duration: 10000,
+                            ripple: true,
+                            dismissible: true
+                        });
+                            $('#btnSubmitUserArea').prop('disabled', false);
+                            $('#btnSubmitUserArea').text('Submit');
+                        tbl_userCoverage.ajax.reload();
+                    }
+                    else {
+                        notyf.error({
+                            message: 'Something went wrong. Please try again',
+                            duration: 10000,
+                            ripple: true,
+                            dismissible: true
+                        });
                     }
                 }
             });
@@ -220,7 +259,7 @@ $(document).ready(function () {
         orderCellsTop: true,
         fixedHeader: true,
         order: [
-            [1, "asc"]
+            [4, "desc"]
         ],
         columnDefs: [{
             orderable: false,
@@ -239,6 +278,7 @@ $(document).ready(function () {
                 $("post_list_processing").css("display", "none");
             }
         },
+
         language: {
             "emptyTable": "<b>No records <found class=''></found></b>"
         },
@@ -250,7 +290,7 @@ $(document).ready(function () {
                 //<button class="btn btn-danger btn-sm">Delete</button>
                 return '<div class="btn-group">' +
                     '<button type="button" class="btn btn-pill btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>' +
-                    '<div class="dropdown-menu"><a class="dropdown-item" href="home.php?p=user_coverage&id='+data['id_number']+'">Active</a>' +
+                    '<div class="dropdown-menu"><a class="dropdown-item" href="home.php?p=user_coverage&id='+data['fk_username']+'">Active</a>' +
                     '<a class="dropdown-item" href="#">Open</a>' +
                     '<a class="dropdown-item" href="#">Close</a>'
             },
@@ -259,14 +299,14 @@ $(document).ready(function () {
             "data": null,
             "render": function (data, type, row) {
                 //<button class="btn btn-danger btn-sm">Delete</button>
-                return data['cadt_name'];
+                return data['area_name'];
             },
         },{
             "targets": 2,
             "data": null,
             "render": function (data, type, row) {
                 //<button class="btn btn-danger btn-sm">Delete</button>
-                return data['cycle_name'];
+                return '<div class="text-capitalize">'+data['batch']+' '+data['cycle_name']+'</div>';
             },
         },{
             "targets": 3,
@@ -280,12 +320,11 @@ $(document).ready(function () {
             "data": null,
             "render": function (data, type, row) {
                 //<button class="btn btn-danger btn-sm">Delete</button>
-                return data['updated_at'];
+                return data['created_at'];
             },
         }
         ],
     });
-
     $('.dataTables_paginate').addClass('p-3');
     $('.dataTables_info').addClass('p-3');
 });
