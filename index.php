@@ -17,10 +17,10 @@ require 'vendor/autoload.php';
 
 if(!$_SESSION['mrms_auth']){
     $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
-        'authServerUrl' => 'http://auth.caraga.dswd.gov.ph:8080/auth',
+        'authServerUrl' => 'https://caraga-auth.dswd.gov.ph:8443/auth',
         'realm' => 'entdswd.local',
         'clientId' => 'kalahi-apps',
-        'clientSecret' => '07788f27-8e6a-4729-a033-0eb5cb7c7389',
+        'clientSecret' => '139995d3-fa97-4772-8bb8-b8680afc1334',
         'redirectUri' => 'http://crg-kcapps-svr.entdswd.local/mrms/index.php'
     ]);
 
