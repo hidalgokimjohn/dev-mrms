@@ -1,8 +1,5 @@
 <?php
 ob_start();
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 include_once('app/Database.php');
 include_once('app/App.php');
