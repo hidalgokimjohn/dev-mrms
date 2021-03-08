@@ -846,7 +846,7 @@ WHERE
                 $q = "UPDATE `form_uploaded` SET `with_findings`='no findings', `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
                 $result = $mysql->query($q) or die($mysql->error);
                 if ($mysql->affected_rows > 0) {
-                    $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                    $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`id`='$listId') LIMIT 1";
                     $mysql->query($listUpdate);
                     return true;
                 }
@@ -876,7 +876,7 @@ WHERE
             $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`, `fk_findings`, `findings`, `responsible_person`, `is_deleted`, `created_at`, `is_checked`, `added_by`, `dqa_level`, `deadline_for_compliance`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$typeOfFindings', '$textFindings', '$responsiblePerson', '0', NOW(), '0', '$addedBy', '$dqaLevel', '$dateOfCompliance')";
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
-                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`in_hard_copy`='yes' WHERE (`id`='$listId') LIMIT 1";
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`in_hard_copy`='yes',`date_reviewed`=NOW() WHERE (`id`='$listId') LIMIT 1";
                 $resultFileUpdate = $mysql->query($listUpdate) or die($mysql->error);
                 return true;
             } else {
@@ -887,7 +887,7 @@ WHERE
             //Update file status
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
-                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`id`='$listId') LIMIT 1";
                 $resultFileUpdate = $mysql->query($listUpdate) or die($mysql->error);
                 $fileUpdate = "UPDATE `form_uploaded` SET `with_findings`='with findings', `is_reviewed`='reviewed', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
                 $mysql->query($fileUpdate) or die($mysql->error);
@@ -915,7 +915,7 @@ WHERE
             $q = "INSERT INTO `tbl_dqa_findings` (`findings_guid`, `fk_ft_guid`, `fk_dqa_guid`,`findings`, `is_deleted`, `created_at`, `added_by`, `dqa_level`,`technical_advice`) VALUES ('$finding_guid', '$fk_ft_guid', '$fk_dqa_guid', '$textFindings', '0',NOW(),'$addedBy','$dqaLevel','technical advice')";
             $result = $mysql->query($q) or die($mysql->error);
             if ($mysql->affected_rows > 0) {
-                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`id`='$listId') LIMIT 1";
                 $mysql->query($listUpdate);
                 return true;
             } else {
@@ -928,7 +928,7 @@ WHERE
             if ($mysql->affected_rows > 0) {
                 // $fileUpdate = "UPDATE `form_uploaded` SET `is_reviewed`='reviewed', `date_reviewed`=NOW() WHERE (`file_id`='$fileId') LIMIT 1";
                 // $resultFileUpdate = $mysql->query($fileUpdate) or die($mysql->error);
-                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed' WHERE (`id`='$listId') LIMIT 1";
+                $listUpdate = "UPDATE `tbl_dqa_list` SET `is_reviewed`='reviewed',`date_reviewed`=NOW() WHERE (`id`='$listId') LIMIT 1";
                 $mysql->query($listUpdate);
                 return true;
             } else {
@@ -1329,17 +1329,17 @@ WHERE
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
-                COUNT(form_uploaded.file_id) as allReviewedByUsername
+                Count(tbl_dqa_list.is_reviewed) as allReviewedByUsername
                 FROM
-                form_uploaded
-                INNER JOIN form_target ON form_target.ft_guid = form_uploaded.fk_ft_guid
+                tbl_dqa_list
+                INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
                 INNER JOIN cycles ON cycles.id = form_target.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE form_uploaded.reviewed_by='$username' 
-                AND form_uploaded.is_reviewed='reviewed' 
-                AND form_uploaded.is_deleted=0 
+                WHERE tbl_dqa_list.is_reviewed='reviewed' 
+                AND tbl_dqa_list.added_by='$username' 
                 AND lib_modality.modality_group='$modalityGroup' 
-                AND cycles.`status`='$status'";
+                AND cycles.`status`='$status' 
+                AND tbl_dqa_list.in_hard_copy is NULL";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -1354,19 +1354,20 @@ WHERE
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
-                COUNT(form_uploaded.file_id) as thisWeekReviewedByUsername
-                FROM
-                form_uploaded
-                INNER JOIN form_target ON form_target.ft_guid = form_uploaded.fk_ft_guid
-                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
-                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE form_uploaded.reviewed_by='$username' 
-                AND form_uploaded.is_reviewed='reviewed' 
-                AND form_uploaded.is_deleted=0 
-                AND lib_modality.modality_group='$modalityGroup' 
-                AND cycles.`status`='$status'
-                AND WEEKOFYEAR(form_uploaded.date_uploaded)=WEEKOFYEAR(NOW()) 
-                AND YEAR(form_uploaded.date_uploaded) = YEAR(now())";
+                Count(tbl_dqa_list.is_reviewed) AS thisWeekReviewedByUsername
+            FROM
+                tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            WHERE
+                is_reviewed = 'reviewed'
+            AND added_by = '$username'
+            AND lib_modality.modality_group = '$modalityGroup'
+            AND cycles.`status` = '$status'
+            AND tbl_dqa_list.in_hard_copy is NULL
+            AND WEEKOFYEAR(tbl_dqa_list.date_reviewed)=WEEKOFYEAR(NOW()) 
+            AND YEAR(tbl_dqa_list.date_reviewed) = YEAR(now())";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -1381,19 +1382,20 @@ WHERE
         $mysql = $this->connectDatabase();
         $modalityGroup = $mysql->real_escape_string($modalityGroup);
         $q = "SELECT
-                COUNT(form_uploaded.file_id) as thisDayReviewedByUsername
-                FROM
-                form_uploaded
-                INNER JOIN form_target ON form_target.ft_guid = form_uploaded.fk_ft_guid
-                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
-                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE form_uploaded.reviewed_by='$username' 
-                AND form_uploaded.is_reviewed='reviewed' 
-                AND form_uploaded.is_deleted=0 
-                AND lib_modality.modality_group='$modalityGroup' 
-                AND cycles.`status`='$status'
-                AND DAYOFYEAR(form_uploaded.date_uploaded)=DAYOFYEAR(NOW()) 
-                AND YEAR(form_uploaded.date_uploaded) = YEAR(now())";
+                Count(tbl_dqa_list.is_reviewed) AS thisDayReviewedByUsername
+            FROM
+                tbl_dqa_list
+            INNER JOIN form_target ON form_target.ft_guid = tbl_dqa_list.ft_guid
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            WHERE
+                is_reviewed = 'reviewed'
+            AND added_by = '$username'
+            AND lib_modality.modality_group = '$modalityGroup'
+            AND cycles.`status` = '$status'
+            AND tbl_dqa_list.in_hard_copy is NULL
+            AND DAYOFYEAR(tbl_dqa_list.date_reviewed)=DAYOFYEAR(NOW()) 
+            AND YEAR(tbl_dqa_list.date_reviewed) = YEAR(NOW())";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -2006,8 +2008,8 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         $q = "INSERT INTO `tbl_users` (`id_number`,`username`, `password`,`created_at`,`scenario`,`oauth_client`,`oauth_client_user_id`)
                 VALUES ('$id_number','$username', '$hash', NOW(), '$scenario', '$oauth', '$oauth')";
         $execute = $mysql->query($q) or die($mysql->error);
-        $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`,`avatar_path`) 
-                VALUES ('$id_number','$this->firstName','$this->midName','$this->lastName','$this->sectorName','$this->sectorDesc','$this->status','$this->posName','$this->posDesc','$this->officeName','$this->officeDesc',NOW(),'$_SESSION[avatar_path]')";
+        $r = "INSERT INTO `tbl_person_info` (`fk_id_number`, `first_name`,`mid_name`, `last_name`,`sector_name`,`sector_desc`,`status`,`position_name`,`position_desc`,`office_name`,`office_desc`,`created_at`,`avatar_path`,`fk_username`) 
+                VALUES ('$id_number','$this->firstName','$this->midName','$this->lastName','$this->sectorName','$this->sectorDesc','$this->status','$this->posName','$this->posDesc','$this->officeName','$this->officeDesc',NOW(),'$_SESSION[avatar_path]','$username')";
         $execute = $mysql->query($r) or die($mysql->error);
         if($mysql->affected_rows>0){
             return true;
