@@ -8,10 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
             removeItems: true,
             removeItemButton: true
         });
+
         var choiceOfCycle = new Choices(".choices-multiple-cycle", {
             removeItems: true,
             removeItemButton: true
         });
+
         var choiceOfStage = new Choices(".choices-multiple-stage", {
             removeItems: true,
             removeItemButton: true,

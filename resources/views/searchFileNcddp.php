@@ -18,7 +18,7 @@
                         <option value="">Select Cycle</option>
                         <?php
                         foreach ($app->searchGetCycles($_GET['modality']) as $options) {
-                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['batch'].' '.$options['cycle_name']) . '</option>';
+                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['cycle_name']) . '</option>';
                         }
                         ?>
                     </select>

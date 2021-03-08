@@ -6,7 +6,7 @@
                 <form method="post" id="submitSearch">
                     <label class="form-label">CADT</label>
                     <select class="form-control choices-multiple-area" name="area_id[]" multiple>
-                        <option value="">Select CADT</option>
+                        <option value="">Select CADT </option>
                         <?php
                         foreach ($app->searchGetCadt($_GET['modality']) as $options) {
                             echo '<option value="' . $options['id'] . '">' . ucfirst($options['cadt_name']) . '</option>';
@@ -18,7 +18,7 @@
                         <option value="">Select Cycle</option>
                         <?php
                         foreach ($app->searchGetCycles($_GET['modality']) as $options) {
-                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['batch'].' '.$options['cycle_name']) . '</option>';
+                            echo '<option value="' . $options['id'] . '">' . ucfirst($options['cycle_name']) . '</option>';
                         }
                         ?>
                     </select>
