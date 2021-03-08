@@ -186,9 +186,9 @@
                                    foreach ($userCoverages as $userCoverage) {
                                        echo '<tr>';
                                        echo '<td>';
-                                       echo '<span style="font-size: 24px;"><a class="text-capitalize text-secondary p-2" href="home.php?p=mywork&m=viewteam&cadt_id=&cycle_id=&tab=coverage&cadt_name='.$userCoverage['cadt_name'].'">'.$userCoverage['cadt_name'].'</a></span>';
+                                       echo '<span style="font-size: 24px;"><a class="text-capitalize text-secondary p-2" href="home.php?p=mywork&m=viewteam&cadt_id='.$userCoverage['cadt_id'].'&cycle_id='.$userCoverage['cycle_id'].'&tab=coverage&cadt_name='.$userCoverage['cadt_name'].'">'.$userCoverage['cadt_name'].'</a></span>';
                                        //getAllMembers
-                                       $members = $app->getAllCadtMembers($userCoverage['cadt_id'], 'act');
+                                       $members = $app->getAllCadtMembers($userCoverage['cadt_id'], $userCoverage['cycle_id']);
                                        if($members){
                                            foreach ($members as $member) {
                                                echo '<a href="home.php?p=mywork&m=viewUser&user=' . $member['fk_username'] . '&tab=coverage"><img src="resources/img/avatars/default.jpg" class="rounded-circle mr-2 float-right" alt="' . $member['fullName'] . '" width="36" height="36"></a>';

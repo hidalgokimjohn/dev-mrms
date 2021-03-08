@@ -115,7 +115,8 @@ class App
             tbl_person_info.sector_desc,
             tbl_users.id_number,
             tbl_users.username,
-            tbl_users.password
+            tbl_users.password,
+            tbl_person_info.avatar_path
             FROM
             tbl_users
             INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
@@ -135,6 +136,7 @@ class App
                 $_SESSION['user_position_desc'] = $row['position_desc'];
                 $_SESSION['user_lvl'] = $row['office_name'];
                 $_SESSION['user_fullname'] = $row['first_name'] . ' ' . $row['last_name'];
+                $_SESSION['avatar_path'] = $row['avatar_path'];
                 return true;
             } else {
                 return false;
@@ -1415,7 +1417,7 @@ WHERE
         }
     }
 
-    public function getIpcddCoverage($status, $username)
+    public function getIpcddCoverage($status, $id_number)
     {
         $mysql = $this->connectDatabase();
         $q = "SELECT
@@ -1428,7 +1430,7 @@ WHERE
         INNER JOIN implementing_cadt_ipcdd ON implementing_cadt_ipcdd.fk_cadt = tbl_user_coverage_ipcdd.fk_cadt_id
         INNER JOIN cycles ON cycles.id = tbl_user_coverage_ipcdd.fk_cycle_id
         INNER JOIN lib_cadt ON lib_cadt.id = tbl_user_coverage_ipcdd.fk_cadt_id
-        WHERE cycles.`status`='$status' AND tbl_user_coverage_ipcdd.fk_username='$username'";
+        WHERE cycles.`status`='$status' AND tbl_user_coverage_ipcdd.id_number='$id_number'";
         $results = $mysql->query($q) or die($mysql->error);
         if ($results->num_rows > 0) {
             while ($row = $results->fetch_assoc()) {
@@ -1477,23 +1479,18 @@ WHERE
         }
     }
 
-    public function getAllCadtMembers($cadt_id, $userGroup)
+    public function getAllCadtMembers($cadt_id, $cycle_id)
     {
         $mysql = $this->connectDatabase();
         $q = "SELECT
-        CONCAT(personal_info.first_name,' ',personal_info.last_name) as fullName,
-        personal_info.pic_url,
-        users.fk_position,
-        lib_user_positions.user_position,
-        lib_user_positions.user_position_abbrv,
-        lib_user_positions.user_group,
-        user_cadt_coverage.fk_username
-        FROM
-        user_cadt_coverage
-        INNER JOIN personal_info ON personal_info.fk_username = user_cadt_coverage.fk_username
-        INNER JOIN users ON users.username = user_cadt_coverage.fk_username
-        INNER JOIN lib_user_positions ON lib_user_positions.id = users.fk_position
-        WHERE user_cadt_coverage.fk_cadt='$cadt_id' AND lib_user_positions.user_group='$userGroup'";
+tbl_person_info.first_name,
+tbl_person_info.last_name,
+tbl_person_info.avatar_path
+FROM
+tbl_users
+INNER JOIN tbl_user_coverage_ipcdd ON tbl_user_coverage_ipcdd.id_number = tbl_users.id_number
+INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
+WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.fk_cycle_id='$cycle_id' AND tbl_person_info.office_name='ACT'";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -1614,7 +1611,7 @@ WHERE
         WHERE
                 cycles.`status` = '$status'
             AND tbl_user_coverage_ipcdd.status='$status'
-            AND tbl_user_coverage_ipcdd.fk_username = '$_SESSION[username]'
+            AND tbl_user_coverage_ipcdd.id_number = '$_SESSION[id_number]'
             AND form_target.target > 0
             AND (
                 form_uploaded.is_deleted = 0
@@ -1622,8 +1619,7 @@ WHERE
             )
         GROUP BY
                 form_target.fk_cadt,
-                form_target.fk_cycle
-        ";
+                form_target.fk_cycle";
         $result = $mysql->query($q) or die($mysql->error);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
