@@ -272,9 +272,21 @@ class App
         }
     }
 
-    public function selectGetCycle(){
+    public function searchGetCycles_json($modalityGroup){
         $mysql = $this->connectDatabase();
-        $q = $mysql->prepare("");
+        $q = $mysql->prepare("SELECT
+                cycles.id as value,
+                concat(cycles.batch,' ',lib_cycle.cycle_name) as label,
+                lib_modality.modality_name,
+                cycles.batch,
+                cycles.`year`,
+                cycles.`status`
+                FROM
+                cycles
+                INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE  (lib_modality.modality_group=? OR lib_modality.id=?) AND cycles.`status`='active'");
+        $q->bind_param('si', $modalityGroup,$modalityGroup);
         $q->execute();
         $result = $q->get_result();
         if ($result->num_rows > 0) {
@@ -366,8 +378,8 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-                cycles.id as value,
-                concat(cycles.batch,' ',lib_cycle.cycle_name) as label,
+                cycles.id,
+                concat(cycles.batch,' ',lib_cycle.cycle_name) as cycle_name,
                 lib_modality.modality_name,
                 cycles.batch,
                 cycles.`year`,
@@ -376,7 +388,7 @@ class App
                 cycles
                 INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
                 INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
-                WHERE  lib_modality.modality_group=? OR lib_modality.id=? AND cycles.`status`='active'");
+                WHERE  (lib_modality.modality_group=? OR lib_modality.id=?) AND cycles.`status`='active'");
         $q->bind_param('si', $modalityGroup,$modalityGroup);
         $q->execute();
         $result = $q->get_result();
@@ -384,7 +396,7 @@ class App
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row;
             }
-            return json_encode($data);
+            return $data;
         } else {
             return false;
         }
