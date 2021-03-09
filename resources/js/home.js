@@ -331,16 +331,19 @@ $(document).ready(function () {
 
     $('#tbl_uploading_progress_ipcdd').DataTable({
         dom: '',
-        paging: false,
         order: [
-            [3, "desc"]
+            [2, "desc"]
         ],
+        scrollY:        '50vh',
+        scrollCollapse: true,
+        paging:         false,
+        scrollResize: true
     });
     $('#tbl_uploading_progress_af').DataTable({
         dom: '',
         paging: false,
         order: [
-            [3, "desc"]
+            [2, "desc"]
         ],
     });
     $('.dataTables_paginate').addClass('p-3');
