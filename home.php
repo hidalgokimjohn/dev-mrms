@@ -1,5 +1,4 @@
 <?php
-
 include_once('app/Database.php');
 include_once('app/App.php');
 include_once('app/Auth.php');
