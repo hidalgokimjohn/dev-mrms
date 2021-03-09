@@ -19,10 +19,10 @@ require 'vendor/autoload.php';
 if(!$_SESSION['mrms_auth']){
     $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
             'authServerUrl' => 'https://caraga-auth.dswd.gov.ph:8443/auth',
-        'realm' => 'entdswd.local',
-        'clientId' => 'kalahi-apps',
-        'clientSecret' => '139995d3-fa97-4772-8bb8-b8680afc1334',
-        'redirectUri' => 'http://crg-kcapps-svr.entdswd.local/mrms/index.php'
+            'realm' => 'entdswd.local',
+            'clientId' => 'kalahi-apps',
+            'clientSecret' => '139995d3-fa97-4772-8bb8-b8680afc1334',
+            'redirectUri' => 'http://crg-kcapps-svr.entdswd.local/mrms/index.php'
     ]);
 
     if (!isset($_GET['code'])) {
@@ -60,13 +60,13 @@ if(!$_SESSION['mrms_auth']){
                 //$user_sso = $user_sso->toArray();
                 $_SESSION['mrms_auth'] = $user_sso['sub'];
                 $app->login_sso($user_sso['preferred_username']);
-                header('location: home.php?p=mywork&tab=main');
+                header('location: home.php?p=search&modality=ipcdd_drom');
                 exit;
             } else {
                 $_SESSION['sso_username']=$user_sso['preferred_username'];
                 $_SESSION['sso_oauth']=$user_sso['sub'];
                 $_SESSION['forIDNumber']='true';
-                header('location: register.php?p=id_number');
+                header('location: home.php?p=search&modality=ipcdd_drom');
                 exit;
             }
 
