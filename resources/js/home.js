@@ -346,6 +346,14 @@ $(document).ready(function () {
             [2, "desc"]
         ],
     });
+    $('#tbl_milestone').DataTable({
+        dom: '',
+        paging: false,
+        order: [
+            [2, "desc"]
+        ],
+    });
+
     $('.dataTables_paginate').addClass('p-3');
     $('.dataTables_info').addClass('p-3');
 
