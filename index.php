@@ -10,11 +10,8 @@ $app = new \app\App();
 $authen = new \app\Auth();
 $user = new \app\User();
 
-//The URL we are connecting to.
-$url = 'https://google.com';
-
 //Initiate cURL.
-$ch = curl_init($url);
+$ch = curl_init('http://crg-kcapps-svr.entdswd.local/mrms/');
 
 //Disable CURLOPT_SSL_VERIFYHOST and CURLOPT_SSL_VERIFYPEER by
 //setting them to false.
