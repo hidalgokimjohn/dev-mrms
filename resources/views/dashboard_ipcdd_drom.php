@@ -120,7 +120,7 @@
             <table class="table table-striped table-hover" id="tbl_uploading_progress_af" style="width:100%;">
                 <thead>
                 <tr class="border-bottom-0">
-                    <th style="width: 50%;">CADT Area</th>
+                    <th style="width: 50%;">AF Area</th>
                     <th style="width: 25%;">Cycle</th>
                     <th style="width: 25%;">Progress</th>
                 </tr>
