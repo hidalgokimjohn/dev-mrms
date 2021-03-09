@@ -50,7 +50,7 @@
             </li>
             <li class="sidebar-item <?php $app->sidebar_active('modules', $_GET['p']); ?>">
                 <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Modules</span>
+                    <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Data Quality Assessment</span>
                 </a>
                 <ul id="pages"
                     class="sidebar-dropdown list-unstyled collapse <?php if ($_GET['m'] == 'dqa_conducted' || $_GET['m'] == 'dqa_items') {

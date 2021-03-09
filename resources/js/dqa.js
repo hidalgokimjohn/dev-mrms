@@ -448,7 +448,8 @@ document.addEventListener("DOMContentLoaded", function () {
             fileId = $(e.relatedTarget).data('file-id');
             listId = $(e.relatedTarget).data('list-id');
             ft_guid = $(e.relatedTarget).data('ft-guid');
-            console.log(file_path);
+            //console.log(file_path);
+            //alert(fileId+': listId:'+listId);
             PDFObject.embed(file_path, "#pdf", options);
 
             $.ajax({
@@ -517,10 +518,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var hasError = formValidated.classList.contains('has-error');
         $("#btnSubmitFinding").html('<i class="fa fa-circle-notch fa-spin"></i> Submitting');
         $("#btnSubmitFinding").prop('disabled', true);
-        console.log(fileId + ' submitFindings');
+        //console.log(fileId +": listId:"+listId+ ' submitFindings');
         if (!hasError) {
             $.ajax({
-                url: 'resources/ajax/submitFinding.php?dqa_id=' + dqaId + '&ft_guid=' + ft_guid + '&file_name=' + fileName + '&file_id=' + fileId+'&list_id='+listId,
+                url: 'resources/ajax/submitFinding.php?dqa_id=' + dqaId + '&ft_guid=' + ft_guid + '&file_name=' + encodeURIComponent(fileName) + '&file_id=' + fileId +'&list_id=' + listId,
                 type: 'POST',
                 data: formData,
                 async: true,
@@ -546,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             url: "resources/ajax/displayFindings.php",
                             data: {
                                 "file_id": fileId,
-                                "ft_guid": ft_guid
+                                "ft_guid": ft_guid,
                             },
                             dataType: 'html',
                             success: function (data) {

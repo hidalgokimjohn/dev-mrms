@@ -167,7 +167,7 @@ if(!$_SESSION['mrms_auth']){
                                             if ($app->login($_POST['username'], $_POST['password'])) {
                                                 $app->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
-                                                header('location: home.php?p=mywork&tab=main');
+                                                header('location: home.php?p=dashboards&modality=ipcdd_drom');
                                                 exit;
                                             } else {
                                                 echo '<br><div class="alert alert-danger alert-dismissible" role="alert">
