@@ -1,4 +1,4 @@
-<h1 class="h3 mb-3">Milestone Status</h1>
+<!--<h1 class="h3 mb-3">Milestone Status</h1>
 <div class="row">
     <div class="col-12">
         <div class="card mb-3">
@@ -37,7 +37,7 @@
                     </thead>
                     <tbody>
                     <?php
-                    if(!empty($ipcdd = $app->view_tbl_milestone_uploading_progress('ipcdd_drom'))) {
+/*                    if(!empty($ipcdd = $app->view_tbl_milestone_uploading_progress('ipcdd_drom'))) {
                         foreach ($ipcdd as $item){
                             echo '<tr>';
                             echo '<td>'.$item['cadt_name'].'</td>';
@@ -70,14 +70,14 @@
                             echo '</tr>';
                         }
                     }
-                    ?>
+                    */?>
                     </tbody>
                 </table>
 
             </div>
         </div>
     </div>
-</div>
+</div>-->
 <h1 class="h3 mb-3">Uploading Status</h1>
 <div class="row">
     <div class="col-6">
