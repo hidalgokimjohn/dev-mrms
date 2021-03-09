@@ -10,23 +10,6 @@ $app = new \app\App();
 $authen = new \app\Auth();
 $user = new \app\User();
 
-//Initiate cURL.
-$ch = curl_init('http://crg-kcapps-svr.entdswd.local/mrms/');
-
-//Disable CURLOPT_SSL_VERIFYHOST and CURLOPT_SSL_VERIFYPEER by
-//setting them to false.
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-//Execute the request.
-curl_exec($ch);
-
-//Check for errors.
-if(curl_errno($ch)){
-    throw new Exception(curl_error($ch));
-}
-
-
 if ($authen->loggedIn()) {
     header('location: home.php?p=mywork&tab=main');
 }
@@ -35,7 +18,7 @@ require 'vendor/autoload.php';
 
 if(!$_SESSION['mrms_auth']){
     $provider = new \Stevenmaguire\OAuth2\Client\Provider\Keycloak([
-        'authServerUrl' => 'https://caraga-auth.dswd.gov.ph:8443/auth',
+            'authServerUrl' => 'https://caraga-auth.dswd.gov.ph:8443/auth',
         'realm' => 'entdswd.local',
         'clientId' => 'kalahi-apps',
         'clientSecret' => '139995d3-fa97-4772-8bb8-b8680afc1334',
