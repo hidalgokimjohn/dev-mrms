@@ -11,7 +11,7 @@ $authen = new \app\Auth();
 $user = new \app\User();
 
 //The URL we are connecting to.
-$url = 'http://crg-kcapps-svr.entdswd.local/mrms';
+$url = 'https://google.com';
 
 //Initiate cURL.
 $ch = curl_init($url);
