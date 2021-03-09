@@ -11,7 +11,7 @@ $authen = new \app\Auth();
 $user = new \app\User();
 
 //The URL we are connecting to.
-$url = 'https://caraga-auth.dswd.gov.ph:8443/auth';
+$url = 'http://crg-kcapps-svr.entdswd.local/mrms';
 
 //Initiate cURL.
 $ch = curl_init($url);
