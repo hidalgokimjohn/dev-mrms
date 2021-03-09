@@ -66,7 +66,7 @@ if(!$_SESSION['mrms_auth']){
                 $_SESSION['sso_username']=$user_sso['preferred_username'];
                 $_SESSION['sso_oauth']=$user_sso['sub'];
                 $_SESSION['forIDNumber']='true';
-                header('location: home.php?p=search&modality=ipcdd_drom');
+                header('location: register.php');
                 exit;
             }
 

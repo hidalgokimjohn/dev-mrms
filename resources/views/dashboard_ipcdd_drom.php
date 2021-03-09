@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card mb-3">
             <div class="table-responsive">
-                <table class="table table-striped table-hover" id="" style="width:100%;">
+                <table class="table table-striped table-hover" id="tbl_milestone" style="width:100%;">
                     <thead>
                     <tr class="border-bottom-0">
                         <th>CADT Area</th>
