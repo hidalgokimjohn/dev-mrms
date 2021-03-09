@@ -4,6 +4,8 @@ $(document).ready(function () {
     var m = url.searchParams.get("m");
     var p = url.searchParams.get("p");
 
+
+
     if (m == 'dqa_conducted') {
         new Choices(document.querySelector(".choices-muni"));
         new Choices(document.querySelector(".choicesCycle"));
@@ -325,6 +327,23 @@ $(document).ready(function () {
         }
         ],
     });
+
+
+    $('#tbl_uploading_progress_ipcdd').DataTable({
+        dom: '',
+        paging: false,
+        order: [
+            [3, "desc"]
+        ],
+    });
+    $('#tbl_uploading_progress_af').DataTable({
+        dom: '',
+        paging: false,
+        order: [
+            [3, "desc"]
+        ],
+    });
     $('.dataTables_paginate').addClass('p-3');
     $('.dataTables_info').addClass('p-3');
+
 });

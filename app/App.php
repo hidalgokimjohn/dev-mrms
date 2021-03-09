@@ -2310,4 +2310,19 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
             return false;
         }
     }
+
+    public function tbl_uploading_progress($modalityGroup){
+        $mysql = $this->connectDatabase();
+        $q="SELECT * FROM view_tbl_uploading_progress WHERE view_tbl_uploading_progress.modality_group='$modalityGroup'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            return false;
+        }
+
+    }
 }
