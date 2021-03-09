@@ -10,6 +10,26 @@ $app = new \app\App();
 $authen = new \app\Auth();
 $user = new \app\User();
 
+//The URL we are connecting to.
+$url = 'https://caraga-auth.dswd.gov.ph:8443/auth';
+
+//Initiate cURL.
+$ch = curl_init($url);
+
+//Disable CURLOPT_SSL_VERIFYHOST and CURLOPT_SSL_VERIFYPEER by
+//setting them to false.
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+//Execute the request.
+curl_exec($ch);
+
+//Check for errors.
+if(curl_errno($ch)){
+    throw new Exception(curl_error($ch));
+}
+
+
 if ($authen->loggedIn()) {
     header('location: home.php?p=mywork&tab=main');
 }
