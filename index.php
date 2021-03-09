@@ -59,7 +59,7 @@ if(!$_SESSION['mrms_auth']){
             if ($app->sso_isExist($user_sso['sub'])) {
                 //$user_sso = $user_sso->toArray();
                 $_SESSION['mrms_auth'] = $user_sso['sub'];
-                $app->login_sso($user_sso['pre  ferred_username']);
+                $app->login_sso($user_sso['preferred_username']);
                 header('location: home.php?p=dashboards&modality=ipcdd_drom');
                 exit;
             } else {
