@@ -86,9 +86,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-0">
-                                <h5 class="card-title">Batch 3 IPCDD<br><small>(Overall Uploaded)</small></h5>
+                                <h5 class="card-title"><strong>Batch 3 IPCDD</strong><br><small>(Overall Uploaded)</small></h5>
                             </div>
-
                             <div class="col-auto">
                                 <div class="avatar">
                                     <div class="avatar-title rounded-circle bg-primary-light">
@@ -97,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">-</h1>
+                        <h1 class="mt-1 mb-3"><?php echo $app->overAll('ipcdd_drom','b3').'%';  ?></h1>
                         <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
@@ -110,7 +109,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-0">
-                                <h5 class="card-title">Batch 2 IPCDD <br><small>(Overall Uploaded)</small></h5>
+                                <h5 class="card-title"><strong>Batch 2 IPCDD</strong> <br><small>(Overall Uploaded)</small></h5>
                             </div>
 
                             <div class="col-auto">
@@ -121,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">-</h1>
+                        <h1 class="mt-1 mb-3"><?php echo $app->overAll('ipcdd_drom','b2').'%';  ?></h1>
                         <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
@@ -134,7 +133,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col mt-0">
-                                <h5 class="card-title">KC-AF CBRC <br><small>(Overall Uploaded)</small></h5>
+                                <h5 class="card-title"><strong>KC-AF CBRC</strong> <br><small>(Overall Uploaded)</small></h5>
                             </div>
 
                             <div class="col-auto">
@@ -145,7 +144,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">-</h1>
+                        <h1 class="mt-1 mb-3"><?php echo $app->overAll('af_cbrc','').'%';  ?></h1>
                         <div class="mb-0">
                             <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
@@ -177,8 +176,8 @@
            <!-- <div class="card-header">
                 <strong>MOV Uploading Status</strong>
             </div>-->
-            <div class="table-responsive" style="display:block; width:100%; height:400px;">
-                <table class="table table-sm table-striped table-hover" id="tbl_uploading_progress_ipcdd" style="width:100%; ">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover " id="tbl_uploading_progress_ipcdd" style="width:100%; height: 400px; display: block; margin: 0 auto;">
                     <thead>
                     <tr class="border-bottom-0">
                         <th style="width: 50%;">CADT Area</th>
