@@ -14,7 +14,7 @@ class App
     public $posDesc;
     public $officeName;
     public $officeDesc;
-
+    public $tot_target;
 
     public function connectDatabase()
     {
@@ -2344,6 +2344,7 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
     public function overAll($modality,$batch){
         $mysql = $this->connectDatabase();
         $q="SELECT
+                SUM(form_target.target) as tot_target,
                 FORMAT(SUM(form_target.actual)/SUM(form_target.target)*100,2) as overallUploading
                 FROM
                 form_target
@@ -2353,7 +2354,32 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         $result = $mysql->query($q) or die($mysql->error);
         if($result->num_rows>0){
            $row = $result->fetch_assoc();
+           $this->tot_target = $row['tot_target'];
            return $row['overallUploading'];
+        }else{
+            return false;
+        }
+    }
+    public function prevWeekUpload($modality,$batch,$week){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            SUM(form_target.actual) prevWeekUpload
+            FROM
+                form_target
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            INNER JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
+            WHERE
+                lib_modality.modality_group = '$modality'
+            AND form_target.target > 0
+            AND cycles.batch = '$batch'
+            AND cycles.`status` = 'active'
+            AND form_uploaded.is_deleted=0
+            AND YEARWEEK(form_uploaded.date_uploaded) = YEARWEEK(NOW()) - '$week'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            $row = $result->fetch_assoc();
+            return $row['prevWeekUpload'];
         }else{
             return false;
         }
