@@ -157,9 +157,10 @@
     <div class="col-sm-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-header">
-                <strong>Findings Complied <span class="badge bg-success float-right">Online DQA</span></strong>
+                <strong>Data Quality Assessment <span class="badge bg-success float-right">Online</span></strong>
+                <p><i><small>F.Y 2021</small></i></p>
             </div>
-            <div class="card-body">
+            <div class="card-body pt-0 pb-0">
                 <div id="chart"></div>
             </div>
         </div>
