@@ -98,7 +98,7 @@
                         </div>
                         <h1 class="mt-1 mb-3"><?php echo $app->overAll('ipcdd_drom','b3').'%';  ?></h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> <?php echo number_format($app->prevWeekUpload('ipcdd_drom','b3',1)/$app->tot_target*100,2).'%'; ?> </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                         </div>
                         <h1 class="mt-1 mb-3"><?php echo $app->overAll('ipcdd_drom','b2').'%';  ?></h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> <?php echo number_format($app->prevWeekUpload('ipcdd_drom','b2',1)/$app->tot_target*100,2).'%'; ?> </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                         </div>
                         <h1 class="mt-1 mb-3"><?php echo $app->overAll('af_cbrc','').'%';  ?></h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> <?php echo number_format($app->prevWeekUpload('af_cbrc','',1)/$app->tot_target*100,2).'%'; ?> </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <strong>Data Quality Assessment <span class="badge bg-success float-right">Online</span></strong>
-                <p><i><small>F.Y 2021</small></i></p>
+                <p><small>(F.Y 2021)</small></p>
             </div>
             <div class="card-body pt-0 pb-0">
                 <div id="chart"></div>
