@@ -1611,16 +1611,12 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
             INNER JOIN tbl_user_coverage_ipcdd ON tbl_user_coverage_ipcdd.fk_cadt_id = form_target.fk_cadt
             INNER JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
             INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
-            LEFT JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
         WHERE
                 cycles.`status` = '$status'
             AND tbl_user_coverage_ipcdd.status='$status'
             AND tbl_user_coverage_ipcdd.id_number = '$_SESSION[id_number]'
             AND form_target.target > 0
-            AND (
-                form_uploaded.is_deleted = 0
-                OR form_uploaded.is_deleted IS NULL
-            )
+           
         GROUP BY
                 form_target.fk_cadt,
                 form_target.fk_cycle";
