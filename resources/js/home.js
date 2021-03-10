@@ -335,7 +335,6 @@ $(document).ready(function () {
             [2, "desc"]
         ],
         paging: false,
-        scrollResize: true,
         fixedHeader: true,
     });
     $('#tbl_uploading_progress_af').DataTable({

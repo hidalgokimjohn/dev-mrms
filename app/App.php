@@ -2340,4 +2340,22 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         }
 
     }
+
+    public function overAll($modality,$batch){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+                FORMAT(SUM(form_target.actual)/SUM(form_target.target)*100,2) as overallUploading
+                FROM
+                form_target
+                INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+                INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+                WHERE lib_modality.modality_group='$modality' AND form_target.target>0 AND cycles.batch='$batch' AND cycles.`status`='active'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+           $row = $result->fetch_assoc();
+           return $row['overallUploading'];
+        }else{
+            return false;
+        }
+    }
 }
