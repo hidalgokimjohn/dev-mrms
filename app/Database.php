@@ -20,7 +20,7 @@ class Database
         //$this->_db_con = new mysqli('127.0.0.1', 'root', '', 'kalahi_mrmsv11');
         //$this->_db_con_kcpis = new mysqli('127.0.0.1', 'root', '', 'kcpis');
         if (mysqli_connect_error()) {
-            trigger_error('Failed to connect to MYSQL. ' . mysqli_connect_error(), E_USER_ERROR);
+            trigger_error('Faitled to connect to MYSQL. ' . mysqli_connect_error(), E_USER_ERROR);
         } else {
             $this->_db_con->set_charset("utf8");
             $this->_db_con_kcpis->set_charset("utf8");
