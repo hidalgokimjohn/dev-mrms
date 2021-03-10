@@ -1,49 +1,61 @@
 var options = {
-    series: [3],
+    series: [0, 0],
     chart: {
-        height: 350,
+        height: 300,
         type: 'radialBar',
-        offsetY: -10
     },
     plotOptions: {
         radialBar: {
-            startAngle: -135,
-            endAngle: 135,
+            offsetY: 0,
+            startAngle: 0,
+            endAngle: 270,
+            hollow: {
+                margin: 5,
+                size: '50%',
+                background: 'transparent',
+                image: undefined,
+            },
             dataLabels: {
                 name: {
-                    fontSize: '16px',
-                    color: undefined,
-                    offsetY: 120
+                    show: false,
                 },
                 value: {
-                    offsetY: 76,
-                    fontSize: '22px',
-                    color: undefined,
-                    formatter: function (val) {
-                        return val + "%";
-                    }
+                    show: false,
                 }
             }
         }
     },
-    fill: {
-        type: 'gradient',
-        gradient: {
-            shade: 'dark',
-            shadeIntensity: 0.15,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 65, 91]
+    colors: ['#1ab7ea', '#0084ff',],
+    labels: ['Reviewed', 'Compliance'],
+    legend: {
+        show: true,
+        floating: true,
+        fontSize: '12px',
+        position: 'left',
+        offsetX: -30,
+        offsetY: 5,
+        labels: {
+            useSeriesColors: true,
         },
+        markers: {
+            size: 0
+        },
+        formatter: function(seriesName, opts) {
+            return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]+'%'
+        },
+        itemMargin: {
+            vertical: 3
+        }
     },
-    stroke: {
-        dashArray: 3
-    },
-    labels: ['Complied'],
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            legend: {
+                show: false
+            }
+        }
+    }]
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
-
-
