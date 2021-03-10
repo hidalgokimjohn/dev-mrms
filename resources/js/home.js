@@ -334,10 +334,9 @@ $(document).ready(function () {
         order: [
             [2, "desc"]
         ],
-        scrollY:        '50vh',
-        scrollCollapse: true,
-        paging:         false,
-        scrollResize: true
+        paging: false,
+        scrollResize: true,
+        fixedHeader: true,
     });
     $('#tbl_uploading_progress_af').DataTable({
         dom: '',

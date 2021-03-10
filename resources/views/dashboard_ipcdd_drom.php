@@ -97,9 +97,9 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">47.48%</h1>
+                        <h1 class="mt-1 mb-3">-</h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 3.65% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -121,9 +121,9 @@
                                 </div>
                             </div>
                         </div>
-                        <h1 class="mt-1 mb-3">$47.482</h1>
+                        <h1 class="mt-1 mb-3">-</h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 3.65% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                         </div>
                         <h1 class="mt-1 mb-3">-</h1>
                         <div class="mb-0">
-                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 3.65% </span>
+                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 0% </span>
                             <span class="text-muted">Since last week</span>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
             </div>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-sm-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-header">
                 <strong>DQA Conducted <span class="badge bg-success float-right">Online</span></strong>
@@ -172,13 +172,13 @@
 
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-sm-12 col-xl-6">
         <div class="card mb-3">
            <!-- <div class="card-header">
                 <strong>MOV Uploading Status</strong>
             </div>-->
-            <div class="table-responsive">
-                <table class="table table-sm table-striped table-hover" id="tbl_uploading_progress_ipcdd" style="width:100%;">
+            <div class="table-responsive" style="display:block; width:100%; height:400px;">
+                <table class="table table-sm table-striped table-hover" id="tbl_uploading_progress_ipcdd" style="width:100%; ">
                     <thead>
                     <tr class="border-bottom-0">
                         <th style="width: 50%;">CADT Area</th>
@@ -186,7 +186,7 @@
                         <th style="width: 25%;">Uploaded</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                     <?php
                     if(!empty($af_cbrc = $app->tbl_uploading_progress('ipcdd_drom'))) {
                         foreach ($app->tbl_uploading_progress('ipcdd_drom') as $item) {
@@ -241,7 +241,7 @@
             </table>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-sm-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-header">
                  <strong>Activities</strong>
