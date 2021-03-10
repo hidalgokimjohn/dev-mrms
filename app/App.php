@@ -187,9 +187,9 @@ class App
             case 'dashboards';
                 $title = '';
                 if (isset($_GET['p'])) {
-                    $title = "Dashboard";
+                    $title = "Dashboard | MRMS";
                 }
-                if (isset($_GET['m']) && $_GET['m'] == 'mov_uploading_2021') {
+                /*if (isset($_GET['m']) && $_GET['m'] == 'mov_uploading_2021') {
                     $title .= " - MOV Uploading 2021 | MRMS";
                 }
                 if (isset($_GET['m']) && $_GET['m'] == 'mov_uploading_2020') {
@@ -200,7 +200,8 @@ class App
                 }
                 if (isset($_GET['m']) && $_GET['m'] == 'exec_db') {
                     $title .= " - Executive | MRMS";
-                }
+                }*/
+
             case 'user_mngt';
                 if (isset($_GET['p']) && $_GET['p'] == 'user_mngt') {
                     $title = "User Management | MRMS";

@@ -12,7 +12,7 @@
                 <a class="sidebar-link" href="home.php?p=dashboards&modality=ipcdd_drom">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                 </a>
-            </li>   
+            </li>
             <li class="sidebar-item <?php $app->sidebar_active('search', $_GET['p']); ?>">
                 <a data-target="#search" data-toggle="collapse"
                    class="sidebar-link <?php $app->sidebar_collapsed('search', $_GET['p']); ?>">
