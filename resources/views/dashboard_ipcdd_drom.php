@@ -157,10 +157,10 @@
     <div class="col-sm-12 col-xl-3">
         <div class="card mb-3">
             <div class="card-header">
-                <strong>DQA Conducted <span class="badge bg-success float-right">Online</span></strong>
+                <strong>Findings Complied <span class="badge bg-success float-right">Online DQA</span></strong>
             </div>
             <div class="card-body">
-                <strong>Complied Findings: 13/23</strong>
+                <div id="chart"></div>
             </div>
         </div>
         <div class="card mb-3">

@@ -222,4 +222,5 @@ if (!$auth->loggedIn()) {
 <script type="text/javascript" src="resources/js/dqa.js"></script>
 <script type="text/javascript" src="resources/js/home.js"></script>
 <script type="text/javascript" src="resources/js/search.js"></script>
+<script type="text/javascript" src="resources/js/apex.js"></script>
 </html>
