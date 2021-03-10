@@ -76,7 +76,7 @@ if(!$_SESSION['mrms_auth']){
         // Use this to interact with an API on the users behalf
     }
 }else{
-    header('location: home.php');
+    header('location: home.php?p=dashboards&modality=ipcdd_drom');
 }
 
 ?>
