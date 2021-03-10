@@ -243,71 +243,9 @@
     </div>
     <div class="col-3">
         <div class="card mb-3">
-            <!-- <div class="card-header">
-                 <strong>MOV Uploading Status</strong>
-             </div>-->
-            <div class="table-responsive">
-                <table class="table table-sm table-striped table-hover" id="tbl_uploading_progress_ipcdd" style="width:100%;">
-                    <thead>
-                    <tr class="border-bottom-0">
-                        <th style="width: 50%;">CADT Area</th>
-                        <th style="width: 25%;">Cycle</th>
-                        <th style="width: 25%;">Uploaded</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if(!empty($af_cbrc = $app->tbl_uploading_progress('ipcdd_drom'))) {
-                        foreach ($app->tbl_uploading_progress('ipcdd_drom') as $item) {
-                            echo '<tr>';
-                            echo '<td>' . strtoupper($item['cadt_name']) . '</td>';
-                            echo '<td>' . ucwords($item['batch'] . ' ' . $item['cycle_name']) . '</td>';
-                            echo '<td title="'.$item['actual'].'/'.$item['target'].'">
-										<span class=""><strong>'.$item['progress'].'%</strong></span>
-										<div class="progress progress-sm">
-											<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: '.$item['progress'].'%;">
-											</div>
-										</div>
-									</td>';
-                            echo '</tr>';
-                        }
-                    }
-                    ?>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <table class="table table-sm table-striped table-hover" id="tbl_uploading_progress_af" style="width:100%;">
-                <thead>
-                <tr class="border-bottom-0">
-                    <th style="width: 50%;">AF Area</th>
-                    <th style="width: 25%;">Cycle</th>
-                    <th style="width: 25%;">Progress</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                if(!empty($af_cbrc = $app->tbl_uploading_progress('af_cbrc'))){
-                    foreach ($app->tbl_uploading_progress('af_cbcr') as $item){
-                        echo '<tr>';
-                        echo '<td>'.strtoupper($item['cadt_name']).'</td>';
-                        echo '<td>' . ucwords($item['batch'] . ' ' . $item['cycle_name']) . '</td>';
-                        echo '<td title="'.$item['actual'].'/'.$item['target'].'">
-										<span class=""><strong>'.$item['progress'].'%</strong></span>
-										<div class="progress progress-sm">
-											<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: '.$item['progress'].'%;">
-											</div>
-										</div>
-									</td>';
-                        echo '</tr>';
-                    }
-                }
-                ?>
-                </tbody>
-            </table>
+            <div class="card-header">
+                 <strong>Activities</strong>
+             </div>
         </div>
     </div>
 </div>

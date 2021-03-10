@@ -8,6 +8,11 @@
             <li class="sidebar-header">
                 Pages
             </li>
+            <li class="sidebar-item <?php $app->sidebar_active('dashboards', $_GET['p']); ?>">
+                <a class="sidebar-link" href="home.php?p=dashboards&modality=ipcdd_drom">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>   
             <li class="sidebar-item <?php $app->sidebar_active('search', $_GET['p']); ?>">
                 <a data-target="#search" data-toggle="collapse"
                    class="sidebar-link <?php $app->sidebar_collapsed('search', $_GET['p']); ?>">
@@ -32,47 +37,39 @@
                     <i class="align-middle" data-feather="monitor"></i> <span class="align-middle">My Work</span>
                 </a>
             </li>
-            <li class="sidebar-item <?php $app->sidebar_active('dashboards', $_GET['p']); ?>">
+           <!-- <li class="sidebar-item <?php /*$app->sidebar_active('dashboards', $_GET['p']); */?>">
                 <a data-target="#dashboards" data-toggle="collapse"
-                   class="sidebar-link <?php $app->sidebar_collapsed('dashboards', $_GET['p']); ?>">
+                   class="sidebar-link <?php /*$app->sidebar_collapsed('dashboards', $_GET['p']); */?>">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboards</span>
                 </a>
                 <ul id="dashboards"
-                    class="sidebar-dropdown list-unstyled collapse <?php $app->sidebar_showList('dashboards', $_GET['p']); ?>"
+                    class="sidebar-dropdown list-unstyled collapse <?php /*$app->sidebar_showList('dashboards', $_GET['p']); */?>"
                     data-parent="#sidebar">
-                    <li class="sidebar-item <?php $app->sidebar_active('af_cbrc', $_GET['modality']); ?>"><a
+                    <li class="sidebar-item <?php /*$app->sidebar_active('af_cbrc', $_GET['modality']); */?>"><a
                                 class="sidebar-link" href="home.php?p=dashboards&modality=af_cbrc">KC-AF CBRC</a>
                     </li>
-                    <li class="sidebar-item <?php $app->sidebar_active('ipcdd_drom', $_GET['modality']); ?>"><a
+                    <li class="sidebar-item <?php /*$app->sidebar_active('ipcdd_drom', $_GET['modality']); */?>"><a
                                 class="sidebar-link" href="home.php?p=dashboards&modality=ipcdd_drom">IPCDD DROM</a>
                     </li>
                 </ul>
-            </li>
+            </li>-->
             <li class="sidebar-item <?php $app->sidebar_active('modules', $_GET['p']); ?>">
-                <a data-target="#pages" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Data Quality Assessment</span>
+                <a data-target="#dqa" data-toggle="collapse"
+                   class="sidebar-link <?php $app->sidebar_collapsed('dqa_conducted', $_GET['m']); ?>">
+                        <i class="align-middle" data-feather="edit-3"></i> <span class="align-middle">DQA</span>
                 </a>
-                <ul id="pages"
+                <ul id="dqa"
                     class="sidebar-dropdown list-unstyled collapse <?php if ($_GET['m'] == 'dqa_conducted' || $_GET['m'] == 'dqa_items') {
                         echo 'show';
-                    } ?>" data-parent="#sidebar">
-                    <a data-target="#multi-3" data-toggle="collapse" class="sidebar-link <?php
-                    if ($_GET['m'] !== 'dqa_conducted' or $_GET['m'] == 'dqa_items') {
-                        echo 'collapsed';
-                    }
-                    $app->sidebar_collapsed('dqa_conducted', $_GET['m']); ?>">DQA
-                    </a>
-                    <ul id="multi-3"
-                        class="sidebar-dropdown list-unstyled collapse <?php if ($_GET['m'] == 'dqa_conducted' || $_GET['m'] == 'dqa_items') {
-                            echo 'show';
-                        } ?>">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="home.php?p=modules&m=dqa_conducted&modality=af_cbrc">KC-AF
-                                CBRC</a>
-                            <a class="sidebar-link" href="home.php?p=modules&m=dqa_conducted&modality=ipcdd_drom">IPCDD
-                                DROM</a>
-                        </li>
-                    </ul>
+                    } ?>">
+                    <li class="sidebar-item <?php $app->sidebar_active('af_cbrc', $_GET['modality']); ?>">
+                        <a class="sidebar-link" href="home.php?p=modules&m=dqa_conducted&modality=af_cbrc">KC-AF
+                            CBRC</a>
+                    </li>
+                    <li class="sidebar-item <?php $app->sidebar_active('ipcdd_drom', $_GET['modality']); ?>">
+                        <a class="sidebar-link"  href="home.php?p=modules&m=dqa_conducted&modality=ipcdd_drom">IPCDD
+                            DROM</a>
+                    </li>
                 </ul>
             </li>
             <!-- <li class="sidebar-header">
