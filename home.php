@@ -207,13 +207,19 @@ if (!$auth->loggedIn()) {
     </div>
 </div>
 </body>
+<!--Start of Tawk.to Script-->
 <script type="text/javascript">
-    window._chatlio = window._chatlio||[];
-    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline", "page", "open", "showOrHide"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.3");
-        n.setAttribute('data-widget-id','f599c9b6-02ea-454f-5e9a-bf08f03c93c2');
-        c.parentNode.insertBefore(n,c);
-    }();
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/604990d6385de407571edc94/1f0flriid';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
 </script>
+<!--End of Tawk.to Script-->
 
 
 
