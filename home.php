@@ -218,12 +218,14 @@ if (!$auth->loggedIn()) {
         s1.setAttribute('crossorigin','*');
         s0.parentNode.insertBefore(s1,s0);
     })();
+
+    var Tawk_API=Tawk_API||{};
+    Tawk_API.visitor = {
+        name : '<?php echo $_SESSION['user_fullname'].' - '.$_SESSION['id_number']; ?>',
+        email : '<?php echo 'nouser@tawk.to'; ?>'
+    };
 </script>
 <!--End of Tawk.to Script-->
-
-
-
-
 <script src="resources/js/jquery-3.5.1.js"></script>
 <script src="resources/js/app.js"></script>
 <!-- 3rd Party Plugin-->
