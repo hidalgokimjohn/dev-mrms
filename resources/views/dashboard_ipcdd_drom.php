@@ -246,55 +246,65 @@
             <div class="card-header">
                  <strong>Weekly Upload </strong><span class="float-right"><div class="badge bg-success">IPCDD</div></span>
              </div>
-            <table class="table table-sm table-striped table-hover" id="tbl_weekly_upload_ipcdd" style="width:100%; height: 200px; display: block; margin: 0 auto;">
-                <thead>
-                <tr class="border-bottom-0">
-                    <th style="width: 50%;">Week</th>
-                    <th style="width: 25%;">Uploaded</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                if($wk=$app->weeklyUpload('ipcdd_drom',2021)){
-                    foreach ($wk as $item){
-                        echo '<tr>';
-                        echo '<td>'.$item['week'].'</td>';
-                        echo '<td>'.number_format($item['weeklyUpload']).'</td>';
-                        echo '</tr>';
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover" id="tbl_weekly_upload_ipcdd" style="width:100%; height: 200px; display: block; margin: 0 auto;">
+                    <thead>
+                    <tr class="border-bottom-0">
+                        <th style="width: 50%;">Week</th>
+                        <th style="width: 25%;">Uploaded</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    if($wk=$app->weeklyUpload('ipcdd_drom',2021)){
+                        foreach ($wk as $item){
+                            echo '<tr>';
+                            echo '<td>'.$item['week'].'</td>';
+                            echo '<td>'.number_format($item['weeklyUpload']).'</td>';
+                            echo '</tr>';
+                        }
                     }
-                }
-                ?>
-                </tbody>
-            </table>
+                    ?>
+                    </tbody>
+                </table>
 
+            </div>
         </div>
         <div class="card mb-3">
             <div class="card-header">
-                <strong>Weekly Upload </strong><span class="float-right"><div class="badge bg-success">KC-AF</div></span>
+                <strong>Monthly </strong><span class="float-right"><div class="badge bg-success">KC-AF</div></span>
             </div>
-            <table class="table table-sm table-striped table-hover" id="tbl_weekly_upload_af" style="width:100%; height: 200px; display: block; margin: 0 auto;">
-                <thead>
-                <tr class="border-bottom-0">
-                    <th style="width: 50%;">Week</th>
-                    <th style="width: 25%;">Uploaded</th>
-                </tr>
-                </thead>
-                <tbody>
+            <!--<div class="card-body">
+                <div class="chartWeekly">
+
+                </div>
+            </div>-->
+
+
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover" id="tbl_weekly_upload_af" style="width:100%; height: 200px; display: block; margin: 0 auto;">
+                    <thead>
+                    <tr class="border-bottom-0">
+                        <th style="width: 50%;">Week</th>
+                        <th style="width: 25%;">Uploaded</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
                     <?php
-                        if($wk=$app->weeklyUpload('af_cbrc',2021)){
-                            foreach ($wk as $item){
-                                echo '<tr>';
-                                echo '<td>'.$item['week'].'</td>';
-                                echo '<td>'.number_format($item['weeklyUpload']).'</td>';
-                                echo '</tr>';
-                            }
+                    if($wk=$app->weeklyUpload('af_cbrc',2021)){
+                        foreach ($wk as $item){
+                            echo '<tr>';
+                            echo '<td>'.$item['week'].'</td>';
+                            echo '<td>'.number_format($item['weeklyUpload']).'</td>';
+                            echo '</tr>';
                         }
+                    }
                     ?>
 
-                </tbody>
-            </table>
-
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -335,7 +335,7 @@ $(document).ready(function () {
             [2, "desc"]
         ],
         paging: false,
-        fixedHeader: true,
+        //fixedHeader: true,
     });
     $('#tbl_uploading_progress_af').DataTable({
         dom: '',
@@ -368,5 +368,5 @@ $(document).ready(function () {
 
     $('.dataTables_paginate').addClass('p-3');
     $('.dataTables_info').addClass('p-3');
-
+    console.log(localStorage);
 });
