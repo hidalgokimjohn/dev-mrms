@@ -306,7 +306,7 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-        lib_cadt.id,
+        DISTINCT (lib_cadt.id) as id,
         lib_cadt.cadt_name
         FROM
         implementing_cadt_ipcdd
@@ -331,7 +331,7 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-        lib_cadt.id,
+        DISTINCT (lib_cadt.id) as id,
         lib_cadt.cadt_name
         FROM
         implementing_cadt_ipcdd
@@ -356,7 +356,7 @@ class App
     {
         $mysql = $this->connectDatabase();
         $q = $mysql->prepare("SELECT
-        lib_municipality.psgc_mun,
+        DISTINCT (lib_municipality.psgc_mun) as psgc_mun,
         lib_municipality.mun_name
         FROM
         implementing_muni_ncddp
@@ -2379,5 +2379,44 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         }else{
             return false;
         }
+    }
+
+    public function weeklyUpload($modality,$year){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            WEEK(form_uploaded.date_uploaded) week_no,
+            SUM(form_target.actual) weeklyUpload
+            FROM
+                form_target
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON lib_modality.id = cycles.fk_modality
+            INNER JOIN form_uploaded ON form_uploaded.fk_ft_guid = form_target.ft_guid
+            INNER JOIN lib_cycle ON lib_cycle.id = cycles.fk_cycle
+            WHERE
+                lib_modality.modality_group = '$modality'
+            AND form_target.target > 0
+            AND cycles.`status` = 'active'
+            AND form_uploaded.is_deleted=0
+            AND YEAR(form_uploaded.date_uploaded) = $year
+			GROUP BY WEEK(form_uploaded.date_uploaded)";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $row['week'] = $this->getWeekStartEndDate($year,$row['week_no']);
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            return false;
+        }
+    }
+
+    public function getWeekStartEndDate($year,$week_no){
+        $dateTime = new \DateTime();
+        $dateTime->setISODate($year,$week_no);
+        $start_date=$result['start_date'] = $dateTime->format('m/d');
+        $dateTime->modify('+6 days');
+        $end_date = $result['end_date'] = $dateTime->format('m/d');
+        return $start_date.' - '.$end_date;
     }
 }
