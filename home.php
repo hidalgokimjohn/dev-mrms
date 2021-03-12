@@ -64,7 +64,7 @@ if (!$auth->loggedIn()) {
                 <i class="hamburger align-self-center"></i>
             </a>
             <img src="resources/img/logo/kclogos.jpg" height="36">
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapsed">
                 <ul class="navbar-nav navbar-align">
                     <li class="nav-item dropdown">
                         <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">

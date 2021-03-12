@@ -1,4 +1,6 @@
-<nav id="sidebar" class="sidebar">
+<nav id="sidebar" class="sidebar <?php if(isset($_GET['p']) && $_GET['p']=='dashboards'){
+    echo 'collapsed';
+} ?>">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="index.php">
             <span class="align-middle">M&E | MRMS</span>
