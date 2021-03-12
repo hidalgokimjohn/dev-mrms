@@ -344,6 +344,20 @@ $(document).ready(function () {
             [2, "desc"]
         ],
     });
+    $('#tbl_weekly_upload_af').DataTable({
+        dom: '',
+        paging: false,
+        order: [
+            [0, "desc"]
+        ],
+    });
+    $('#tbl_weekly_upload_ipcdd').DataTable({
+        dom: '',
+        paging: false,
+        order: [
+            [0, "desc"]
+        ],
+    });
     $('#tbl_milestone').DataTable({
         dom: '',
         paging: false,
