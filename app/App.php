@@ -2510,19 +2510,19 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         $file_id = $this->v4();
 
         if ($this->check_modality($fk_ft) == 'ncddp_drom') {
-            $dir = '../../storage/ncddp_drom_2020';
+            $dir = '../../resources/storage/ncddp_drom_2020/';
             $mov_path = '/mrms/storage/ncddp_drom_2020/' . $uniqueFileName;
         }
         if ($this->check_modality($fk_ft) == 'ncddp') {
-            $dir = '../../storage' . '\ncddp';
+            $dir = '../../resources/storage/ncddp/';
             $mov_path = '/mrms/storage/ncddp/' . $uniqueFileName;
         }
         if ($this->check_modality($fk_ft) == 'ipcdd') {
-            $dir = '../../../storage' . '\ipcdd';
+            $dir = '../../resources/storage/ipcdd/';
             $mov_path = '/mrms/resources/storage/ipcdd/' . $uniqueFileName;
         }
         if ($this->check_modality($fk_ft) == 'ipcdd_drom') {
-            $dir = '../../resources/storage' . '\ipcdd';
+            $dir = '../../resources/storage/ipcdd/';
             $mov_path = '/mrms/resources/storage/ipcdd/' . $uniqueFileName;
         }
 
