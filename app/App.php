@@ -121,9 +121,11 @@ class App
             tbl_users
             INNER JOIN tbl_person_info ON tbl_person_info.fk_id_number = tbl_users.id_number
             WHERE tbl_users.username = ?");
+
         $q->bind_param('s', $user);
         $q->execute();
         $result = $q->get_result();
+        echo $result->num_rows;
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if (password_verify($pass, $row['password'])) {
@@ -2203,6 +2205,22 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         }
     }
 
+    public function userCoverage($id_number){
+        $mysql = $this->connectDatabase();
+        $id_number = $mysql->real_escape_string($id_number);
+        $q="SELECT * FROM view_tbl_user_coverage where id_number='$id_number'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data;
+        }else{
+            $json_data = array("data" => '');
+            echo json_encode($json_data);;
+        }
+    }
+
     public function activerUsers(){
         $mysql = $this->connectHREDatabase();
         $q="select COUNT(view_active_staff.id_number) as activeUser from view_active_staff";
@@ -2419,4 +2437,187 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         $end_date = $result['end_date'] = $dateTime->format('m/d');
         return $start_date.' - '.$end_date;
     }
+
+    public function getCeacActivity($area_id,$cycle_id){
+        $mysql = $this->connectDatabase();
+        $q="SELECT
+            lib_activity.activity_name as label,
+            lib_activity.id as value
+            FROM
+            form_target
+            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
+            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+            LEFT JOIN lib_sitio ON lib_sitio.psgc_sitio = form_target.fk_psgc_sitio
+            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
+            INNER JOIN lib_activity ON lib_activity.id = lib_form.fk_activity
+            WHERE (form_target.fk_psgc_mun = '$area_id' OR form_target.fk_cadt = '$area_id') AND form_target.fk_cycle = '$cycle_id'
+            GROUP BY lib_activity.id
+            ORDER BY lib_activity.id ASC";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return json_encode($data);
+        }else{
+            return false;
+        }
+    }
+
+    public function getCeacForm($area_id,$cycle_id,$activity_id){
+        $mysql = $this->connectDatabase();
+        $area_id = $mysql->real_escape_string($area_id);
+        $cycle_id = $mysql->real_escape_string($cycle_id);
+        $activity_id = $mysql->real_escape_string($activity_id);
+        $q="SELECT
+            form_target.ft_guid as value,
+            CONCAT(COALESCE(lib_barangay.brgy_name,lib_municipality.mun_name,lib_cadt.cadt_name),': ',lib_form.form_name) as label,
+            lib_barangay.brgy_name,
+            form_target.can_upload,
+            lib_barangay.psgc_brgy,
+            lib_sitio.sitio_name,
+            lib_municipality.mun_name,
+            lib_cadt.cadt_name
+            FROM
+            form_target
+            LEFT JOIN lib_barangay ON lib_barangay.psgc_brgy = form_target.fk_psgc_brgy
+            INNER JOIN lib_form ON lib_form.form_code = form_target.fk_form
+            LEFT JOIN lib_sitio ON lib_sitio.psgc_sitio = form_target.fk_psgc_sitio
+            LEFT JOIN lib_municipality ON lib_municipality.psgc_mun = form_target.fk_psgc_mun
+            LEFT JOIN lib_cadt ON lib_cadt.id = form_target.fk_cadt
+            INNER JOIN lib_activity ON lib_form.fk_activity = lib_activity.id
+            WHERE (form_target.fk_psgc_mun = '$area_id' OR form_target.fk_cadt = '$area_id') AND form_target.fk_cycle = '$cycle_id' and lib_activity.id = '$activity_id'
+            ORDER BY lib_form.form_name,lib_barangay.brgy_name ASC";
+        $result = $mysql->query($q) or die($mysql->error);
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $data[] = $row;
+            }
+            return json_encode($data);
+        }else{
+            return false;
+        }
+    }
+
+    public function uploadFile()
+    {
+        $fileName = basename($_FILES['fileToUpload']['name']);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $fk_ft = $_GET['form_id'];
+        $date = new \DateTime();
+        $mysql = $this->connectDatabase();
+        $uniqueFileName = uniqid($date->getTimestamp(), false) . "." . $extension;
+        $file_id = $this->v4();
+
+        if ($this->check_modality($fk_ft) == 'ncddp_drom') {
+            $dir = '../../storage/ncddp_drom_2020';
+            $mov_path = '/mrms/storage/ncddp_drom_2020/' . $uniqueFileName;
+        }
+        if ($this->check_modality($fk_ft) == 'ncddp') {
+            $dir = '../../storage' . '\ncddp';
+            $mov_path = '/mrms/storage/ncddp/' . $uniqueFileName;
+        }
+        if ($this->check_modality($fk_ft) == 'ipcdd') {
+            $dir = '../../storage' . '\ipcdd';
+            $mov_path = '/mrms/storage/ipcdd/' . $uniqueFileName;
+        }
+        if ($this->check_modality($fk_ft) == 'ipcdd_drom') {
+            $dir = '../../storage' . '\ipcdd';
+            $mov_path = '/mrms/storage/ipcdd/' . $uniqueFileName;
+        }
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $dir . '/' . $uniqueFileName)) {
+            $q = $mysql->prepare("INSERT INTO `form_uploaded`(`file_id`, `fk_ft_guid`, `original_filename`, `generated_filename`, `file_path`, `date_uploaded`, `with_findings`, `is_findings_complied`, `is_reviewed`,`is_deleted`,`uploaded_by`,is_compliance) VALUES (?, ?, ?, ?,?,NOW(),NULL,NULL,'for review',0,?,'compliance')");
+            $q->bind_param('ssssss', $file_id, $fk_ft, $fileName, $uniqueFileName, $mov_path, $_SESSION['username']);
+            $q->execute();
+            if ($q->affected_rows > 0) {
+                if ($this->update_count($fk_ft) && $this->set_canUpload($fk_ft))
+                    echo 'uploaded';
+            } else {
+                echo 'Something went upon saving';
+            }
+        } else {
+            echo 'Something went wrong while uploading the file';
+        }
+    }
+
+    public function check_modality($fk_ft)
+    {
+        $mysql = $this->connectDatabase();
+        $id = $mysql->escape_string($fk_ft);
+        $q = "SELECT
+            lib_modality.modality_name,
+            lib_modality.modality_group
+            FROM
+            form_target
+            INNER JOIN cycles ON cycles.id = form_target.fk_cycle
+            INNER JOIN lib_modality ON cycles.fk_modality = lib_modality.id
+            WHERE form_target.ft_guid='$fk_ft'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['modality_group'];
+        }
+    }
+
+    public function set_canUpload($fk_target)
+    {
+        $mysql = $this->connectDatabase();
+        $id = $mysql->escape_string($fk_target);
+        $q_actual = "SELECT
+            form_target.actual
+        FROM
+            form_target
+            WHERE form_target.ft_guid='$id'";
+        $q_actual_result = $mysql->query($q_actual) or die($mysql->error);
+        $actual = $q_actual_result->fetch_assoc();
+
+        $q = "UPDATE `form_target` SET `can_upload`=1 WHERE `ft_guid` = '$id'";
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result) {
+            return true;
+        }
+    }
+
+    public function update_count($fk_target)
+    {
+        $mysql = $this->connectDatabase();
+        $id = $mysql->escape_string($fk_target);
+        $q_actual = "SELECT
+            COUNT(form_uploaded.file_id) as file_count
+            FROM
+            form_uploaded
+            WHERE is_deleted=0 AND fk_ft_guid='$fk_target'";
+        //with_findings='no findings' AND is_reviewed='reviewed'
+        $q_actual_result = $mysql->query($q_actual) or die($mysql->error);
+        $actual = $q_actual_result->fetch_assoc();
+        $update_actual = $actual['file_count'];
+
+        //get target
+        $get_t = "SELECT
+                    form_target.target,
+                    form_target.actual
+                    FROM
+                    form_target
+                    WHERE ft_guid='$fk_target'";
+        $result = $mysql->query($get_t);
+        $r_t = $result->fetch_assoc();
+        //check if actual is greater than target or equal
+        if ($update_actual >= $r_t['target']) {
+            //then update target base on actual's value
+            $update_target = $update_actual;
+            $q = "UPDATE `form_target` SET  `actual` = '$update_actual',`can_upload`=1,`target`='$update_target' WHERE `ft_guid` = '$id'";
+        } else {
+            $q = "UPDATE `form_target` SET  `actual` = '$update_actual',`can_upload`=1 WHERE `ft_guid` = '$id'";
+        }
+        $result = $mysql->query($q) or die($mysql->error);
+        if ($result) {
+            return true;
+        }
+    }
+
 }
