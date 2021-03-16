@@ -2518,12 +2518,12 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
             $mov_path = '/mrms/storage/ncddp/' . $uniqueFileName;
         }
         if ($this->check_modality($fk_ft) == 'ipcdd') {
-            $dir = '../../storage' . '\ipcdd';
-            $mov_path = '/mrms/storage/ipcdd/' . $uniqueFileName;
+            $dir = '../../../storage' . '\ipcdd';
+            $mov_path = '/mrms/resources/storage/ipcdd/' . $uniqueFileName;
         }
         if ($this->check_modality($fk_ft) == 'ipcdd_drom') {
-            $dir = '../../storage' . '\ipcdd';
-            $mov_path = '/mrms/storage/ipcdd/' . $uniqueFileName;
+            $dir = '../../resources/storage' . '\ipcdd';
+            $mov_path = '/mrms/resources/storage/ipcdd/' . $uniqueFileName;
         }
 
         if (!is_dir($dir)) {
