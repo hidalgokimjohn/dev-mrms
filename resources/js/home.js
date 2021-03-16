@@ -17,6 +17,161 @@ $(document).ready(function () {
         var choiceTypeOfCadt = new Choices(".choices-of-cadt", {
             shouldSort: false
         });
+        var choiceTypeOfCycle = new Choices(".choices-of-cycle", {
+            shouldSort: false
+        }).disable();
+
+        var choiceTypeOfActivity= new Choices(".choices-of-activity", {
+            shouldSort: false
+        }).disable();
+
+        var choiceTypeOfForm= new Choices(".choices-of-form", {
+            shouldSort: false
+        }).disable();
+
+        var choiceTypeOfrp= new Choices(".choices-of-rp", {
+            shouldSort: false
+        });
+
+        $('.choices-of-cadt').on('change', function() {
+            choiceTypeOfCycle.enable();
+            var area = $('.choices-of-cadt').val();
+            if(area==''){
+                choiceTypeOfCycle.clearChoices();
+                choiceTypeOfCycle.disable();
+            }
+        });
+
+        $('.choices-of-cycle').on('change', function() {
+            var cycle_id = $('.choices-of-cycle').val();
+            var area_id = $('.choices-of-cadt').val();
+            choiceTypeOfActivity.clearStore();
+            choiceTypeOfForm.clearStore();
+
+            $.ajax({
+                type: 'POST',
+                url: 'resources/ajax/uploadCycleOnChange.php',
+                data: {"cycle_id":cycle_id,"area_id":area_id},
+                async: true,
+                dataType: 'json',
+                success: function(data) {
+                    //$('#selectActivity').html(data);
+                    console.log(data);
+                    if(data){
+                        choiceTypeOfActivity.enable();
+                        choiceTypeOfActivity.setChoices(data);
+                    }
+                }
+            });
+        });
+        $('.choices-of-activity').on('change', function() {
+            var cycle_id = $('.choices-of-cycle').val();
+            var area_id = $('.choices-of-cadt').val();
+            var activity_id = $('.choices-of-activity').val();
+            choiceTypeOfForm.clearStore();
+            $.ajax({
+                type: 'POST',
+                url: 'resources/ajax/uploadActivityOnChange.php',
+                data: {"cycle_id":cycle_id,"area_id":area_id,"activity_id":activity_id},
+                async: true,
+                dataType: 'json',
+                success: function(data) {
+                    //$('#selectActivity').html(data);
+                    console.log(data);
+                    if(data){
+                        choiceTypeOfForm.enable();
+                        choiceTypeOfForm.setChoices(data);
+                    }
+                }
+            });
+        });
+
+        $('.choices-of-form').on('change', function() {
+            $("#fileInfo").prop('hidden',false);
+            setTimeout(function() {
+                $('.fileInfo_body').prop('hidden',false)
+            }, 2000);
+            setTimeout(function() {
+                $('.spinner-border').prop('hidden',true)
+            }, 2000);
+
+        });
+
+
+
+        $("form#formFileUpload").submit(function (event) {
+            event.preventDefault();
+            var btn = this;
+            var form_id = $('.choices-of-form').val();
+            $('.btn-upload-file').prop('disabled', true);
+            $('.btn-upload-file-text').text(' Uploading...');
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                url: 'resources/ajax/uploadFile.php?form_id='+form_id,
+                type: 'POST',
+                dataType: 'html',
+                data: formData,
+                async: true,
+                cache: false,
+                contentType: false,
+                processData: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            percentComplete = parseInt(percentComplete * 100);
+                            console.log(percentComplete);
+                            $(".upload_percent").text(+' ' + percentComplete + "%");
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function (returndata) {
+                    /*alert(returndata);*/
+                    if (returndata === 'uploaded') {
+                        window.notyf.open({
+                            type: 'success',
+                            message: '<strong>File uploaded </strong>successfully',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+
+                        $("#status").text('');
+                        $("#fileToUpload").val('');
+                        $('.btn-upload-file-text').text(' Upload');
+                        $(".upload_percent").text('');
+                        $('.btn-upload-file').prop('disabled', false);
+                        //tbl_latest_upload.row($(btn).parents('tr')).remove().draw(false);
+                    } else {
+                        window.notyf.open({
+                            type: 'error',
+                            message: 'Something went wrong please try again.',
+                            duration: '5000',
+                            ripple: true,
+                            dismissible: true,
+                            position: {
+                                x: 'center',
+                                y: 'top'
+                            }
+                        });
+
+                        $(".upload_percent").text('');
+                        $('.btn-upload-file-text').text(' Upload');
+                        $('.btn-upload-file').prop('disabled', false);
+                    }
+                }
+            });
+        });
+
+        function clearFileInput() {
+            $("#fileToUpload").val('');
+        }
     }
 
     if(p=='user_coverage'){

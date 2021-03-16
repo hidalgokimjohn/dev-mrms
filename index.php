@@ -153,7 +153,6 @@ if(!$_SESSION['mrms_auth']){
                                     </div>
                                     <?php
                                     if (isset($_POST['submit'])) {
-
                                        /* if ($app->is_pending($_POST['username'])) {
                                             echo '<br><div class="alert alert-warning alert-dismissible" role="alert">
 											<div class="alert-icon">
@@ -164,7 +163,8 @@ if(!$_SESSION['mrms_auth']){
 											</div>
 										    </div>';
                                         } else {*/
-                                            if ($app->login($_POST['username'], $_POST['password'])) {
+                                            if ($z=$app->login($_POST['username'], $_POST['password'])) {
+
                                                 $app->permission($_SESSION['username']);
                                                 $log = $app->log($_SESSION['username'], 'login', 'has logged in', null, null);
                                                 header('location: home.php?p=dashboards&modality=ipcdd_drom');
