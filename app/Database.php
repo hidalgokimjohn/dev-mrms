@@ -15,10 +15,10 @@ class Database
     public function __construct()
     {
         //$this->_db_con = @new mysqli('172.26.158.250', 'admin', 'dswd123$', 'kalahi_mrms');
-        //$this->_db_con = new mysqli('172.26.158.126', 'kalahi_apps', 'ufXBAY2upABl8li0', 'kalahi_mrms');
-        //$this->_db_con_kcpis = new mysqli('172.26.158.126', 'kalahi_apps', 'ufXBAY2upABl8li0', 'kcpis');
-        $this->_db_con = new mysqli('127.0.0.1', 'root', '', 'kalahi_mrmsv11');
-        $this->_db_con_kcpis = new mysqli('127.0.0.1', 'root', '', 'kcpis');
+        $this->_db_con = new mysqli('172.26.158.126', 'kalahi_apps', 'ufXBAY2upABl8li0', 'kalahi_mrms');
+        $this->_db_con_kcpis = new mysqli('172.26.158.126', 'kalahi_apps', 'ufXBAY2upABl8li0', 'kcpis');
+        //$this->_db_con = new mysqli('127.0.0.1', 'root', '', 'kalahi_mrmsv11');
+        //$this->_db_con_kcpis = new mysqli('127.0.0.1', 'root', '', 'kcpis');
         if (mysqli_connect_error()) {
             trigger_error('Faitled to connect to MYSQL. ' . mysqli_connect_error(), E_USER_ERROR);
         } else {
