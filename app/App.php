@@ -2531,7 +2531,7 @@ WHERE tbl_user_coverage_ipcdd.fk_cadt_id='$cadt_id' AND tbl_user_coverage_ipcdd.
         }
 
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $dir . '/' . $uniqueFileName)) {
-            $q = $mysql->prepare("INSERT INTO `form_uploaded`(`file_id`, `fk_ft_guid`, `original_filename`, `generated_filename`, `file_path`, `date_uploaded`, `with_findings`, `is_findings_complied`, `is_reviewed`,`is_deleted`,`uploaded_by`,is_compliance) VALUES (?, ?, ?, ?,?,NOW(),NULL,NULL,'for review',0,?,'compliance')");
+            $q = $mysql->prepare("INSERT INTO `form_uploaded`(`file_id`, `fk_ft_guid`, `original_filename`, `generated_filename`, `file_path`, `date_uploaded`, `with_findings`, `is_findings_complied`, `is_reviewed`,`is_deleted`,`uploaded_by`) VALUES (?, ?, ?, ?,?,NOW(),NULL,NULL,'for review',0,?)");
             $q->bind_param('ssssss', $file_id, $fk_ft, $fileName, $uniqueFileName, $mov_path, $_SESSION['username']);
             $q->execute();
             if ($q->affected_rows > 0) {
